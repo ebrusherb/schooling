@@ -1,4 +1,4 @@
-function p=payoffs(strategy,numsigs_permove,nummoves,radius,b)
+function [meanscore scorevar]=payoffs(strategy,numsigs_permove,nummoves,radius,b)
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
@@ -16,16 +16,29 @@ for i=1:nummoves
     end
     M(1:N+1:end)=-1; %sets diagonal equal to -1
     receivers=randsample(N,numsigs_permove,'true');
-    for j=1:numsigs_permove
+    j=1;
+    while j<=numsigs_permove
         beta=zeros(N,1);
         receiver=receivers(j);
         allreceivers=d(receiver,:)<=radius;
         beta(allreceivers)=b;
-        scores(:,(i-1)*numsigs_permove+j)=expected_spin(M,1,beta);
-        if sum(abs(scores(:,(i-1)*numsigs_permove+j))>1000)>=1
-            break
+        v=real(expected_spin(M,1,beta));
+        
+        if sum(abs(v)>1000)>=1
+            j=j;
+        elseif sum(isnan(v))>=1
+            j=j;
+        else j=j+1; 
+            scores(:,(i-1)*numsigs_permove+j)=v;
         end
     end
 end
-p=mean(scores,2);
+weird=max(abs(scores),[],1)>1000;
+scores(:,weird)=[];
+meanscore=mean(scores,2);
+scorevar=var(scores,[],2);
+subplot(2,1,1)
+plot((meanscore))
+subplot(2,1,2)
+plot(scorevar)
 end

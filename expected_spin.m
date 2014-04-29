@@ -26,24 +26,28 @@ if sum(~nonzero)>1
     end
 end
 
+% mu=pinv(V)*beta;
+
 c=zeros(N,1);
 c(where(1))=1;
-
-l=1./nonzerovals.*(exp(nonzerovals*T)-1);
-Linhom=zeros(1,N);
-Linhom(nonzero)=l;
-Linhom(~nonzero)=T;
-Linhom=diag(Linhom);
-U=V*Linhom/V;
 
 l=exp(nonzerovals*T);
 Lhom=zeros(1,N);
 Lhom(nonzero)=l;
 Lhom(~nonzero)=1;
 Lhom=diag(Lhom);
-Phi=V*Lhom*c;
+Phi=V*Lhom;
+Uhom=Phi;
 
-instantaneous=U*beta+Phi;
+l=1./nonzerovals.*(exp(nonzerovals*T)-1);
+Linhom=zeros(1,N);
+Linhom(nonzero)=l;
+Linhom(~nonzero)=T;
+Linhom=diag(Linhom);
+% Uinhom=V*Linhom/V;
+Uinhom=V*Linhom*pinv(V);
+
+instantaneous=Uinhom*beta+Uhom*c;
 
 % l=1./power(nonzerovals,2).*(exp(nonzerovals*T)-1)-T./nonzerovals;
 % L=zeros(1,N);

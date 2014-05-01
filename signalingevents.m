@@ -33,9 +33,9 @@ for i=1:nummoves
             j=j;
         else  
             scores(:,(i-1)*numsigs_permove+j)=v;
-            [h,s]=networkprops(M,'uniform',beta);
-            H2norms((i-1)*numsigs_permove+j)=h;
-            susceptvals((i-1)*numsigs_permove+j)=s;
+%             [h,s]=networkprops(M,'uniform',beta);
+%             H2norms((i-1)*numsigs_permove+j)=h;
+%             susceptvals((i-1)*numsigs_permove+j)=s;
             j=j+1;
         end
     end
@@ -44,8 +44,8 @@ weird=max(abs(scores),[],1)>1000;
 scores(:,weird)=[];
 meanscore=mean(scores,2);
 scorevar=var(scores,[],2);
-meanH2=mean(H2norms);
-meansuscept=mean(susceptvals);
+% meanH2=mean(H2norms);
+% meansuscept=mean(susceptvals);
 subplot(3,1,1)
 plot(strategy,(meanscore)','o')
 subplot(3,1,2)

@@ -1,4 +1,4 @@
-function [meanscore scorevar meanH2 meansuscept]=signalingevents(strategy,numsigs_permove,nummoves,radius,b)
+function [meanscore scorevar probeaten]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 % strategy=randi([1 N/2-1],1,N)*2;
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
@@ -25,7 +25,7 @@ for i=1:nummoves
         receiver=receivers(j);
         allreceivers=d(receiver,:)<=radius;
         beta(allreceivers)=b;
-        v=real(expected_spin(M,1,beta));
+        v=real(expected_spin(M,T,beta));
         
         if sum(abs(v)>1000)>=1
             j=j;
@@ -44,12 +44,24 @@ weird=max(abs(scores),[],1)>1000;
 scores(:,weird)=[];
 meanscore=mean(scores,2);
 scorevar=var(scores,[],2);
+
+[minvals,~]=min(scores);
+minmat=repmat(minvals,N,1);
+[rows,cols]=find(abs(scores-minmat)<0.00001);
+minscorer=zeros(N,size(scores,2));
+
+for i=1:size(scores,2)
+    look=find(cols==i);
+    minscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
+end
+probeaten=sum(minscorer,2);
+
 % meanH2=mean(H2norms);
 % meansuscept=mean(susceptvals);
-subplot(3,1,1)
-plot(strategy,(meanscore)','o')
-subplot(3,1,2)
-plot(strategy,scorevar','o')
-subplot(3,1,3)
-plot(H2norms)
+% subplot(3,1,1)
+% plot(strategy,(meanscore)','o')
+% subplot(3,1,2)
+% plot(strategy,scorevar','o')
+% subplot(3,1,3)
+% plot(H2norms)
 end

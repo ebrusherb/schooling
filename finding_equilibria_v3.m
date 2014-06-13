@@ -10,12 +10,15 @@ markercol='white';
 fontname='Times New Roman';
 %%
 % find ESS, NIS, possible dimorphisms, CSS
-
+numsigs_permove=1;
+nummoves=1000;
+N=20;
 b=1;
 
-Tvals=[.01 1];
+Tvals=[.01];
 NT=length(Tvals);
-radvals=[.1 .5 1];
+% radvals=[.1 .5 1];
+radvals=.1;
 Nr=length(radvals);
 
 ESSseaten=cell(NT,Nr);

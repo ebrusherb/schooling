@@ -14,6 +14,8 @@ vals=diag(vals);
 nonzero=abs(vals)>0.00001;
 nonzerovals=vals(nonzero);
 
+%if there are two eigenvectors for eigenvalue 0 I specify what they should
+%be here
 indices=1:N;
 where=indices(~nonzero);
 vhat=1/sqrt(N)*ones(N,1);
@@ -26,7 +28,7 @@ if sum(~nonzero)>1
     end
 end
 
-% mu=pinv(V)*beta;
+% mu=pinv(V)*beta;s
 
 c=zeros(N,1);
 c(where(1))=1;

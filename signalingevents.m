@@ -1,4 +1,4 @@
-function [meanscore scorevar probeaten]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
+function [meanscore scorevar probeaten probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 % strategy=randi([1 N/2-1],1,N)*2;
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
@@ -53,8 +53,21 @@ minscorer=zeros(N,size(scores,2));
 for i=1:size(scores,2)
     look=find(cols==i);
     minscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
+%     minscorer(rows(cols==i),i)=1/numsigs_tot;
 end
 probeaten=sum(minscorer,2);
+
+[maxvals,~]=max(scores);
+maxmat=repmat(maxvals,N,1);
+[rows,cols]=find(abs(scores-maxmat)<0.00001);
+maxscorer=zeros(N,size(scores,2));
+
+for i=1:size(scores,2)
+%     look=find(cols==i);
+%     maxscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
+    maxscorer(rows(cols==i),i)=1/numsigs_tot;
+end
+probgettoeat=sum(maxscorer,2);
 
 % meanH2=mean(H2norms);
 % meansuscept=mean(susceptvals);

@@ -49,12 +49,10 @@ Birds in flocks, like animals in many types of social groups, can use their peer
 \section{Learning dynamics}
 In this model, an individual's opinion changes with a probability that depends on its social interactions and the strength of the environmental stimulus. Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{q}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
 \begin{equation*}
-\frac{d\vec{q}}{dt}=A\vec{q}+\vec{\beta}^T(\vec{1}-\vec{q}).
+\frac{d\vec{q}}{dt}=M\vec{q}+\vec{\beta}^T(\vec{1}-\vec{q}).
 \end{equation*}
-%Similarly, the matrix $R(t)$ of covariances, $R_{ij}(t)=\langle \sigma_i(t)\sigma_j\rangle$, satisfies the following differential equations:
-%\begin{equation*}
-%\frac{dR}{dt}=AR+RA^T
-%\end{equation*}
+We simplify this by writing $\frac{d\vec{q}}{dt}=A\vec{q}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal.
+
 These stochastic dynamics will lead to an equilibrium probability distribution over sets of opinions that agrees with the Boltzmann equilibrium distribution for a system with energy or Hamiltonian given by 
 \begin{equation*}
 E(\vec{q})=-\vec{q}^TA\vec{q}+\vec{\beta}^T(\vec{1}-\vec{q})
@@ -84,59 +82,63 @@ To understand what strategies we might expect to find, we are interested in iden
 \section{Discussion}
 
 \section{Appendix}
+\subsection{Equivalence of dynamics and Hamiltonian }
 
+\subsection{Numerically evaluating dynamics }
+
+\subsection{Calculating correlations }
 \begin{align*}
-H(\vec{v}))&=-\vec{v}^TA\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v})
+H(\vec{v})&=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
 %\\&=\vec{v}A\vec{v}-\vec{\beta}^T\vec{v}+\vec{\beta}^T\vec{1}
 \end{align*}
 Define $V=\sum_kv_k/N$ and $\vec{y}=(\vec{v}-V\vec{1})/V$.  Then $\vec{v}=V(\vec{1}+\vec{y})$.  
 \begin{align*}
-H(\vec{y},V)&=-V^2(\vec{1}^T+\vec{y}^T)A(\vec{1}+\vec{y})+\vec{\beta}^T(\vec{1}-V(\vec{1}+\vec{y}))
-\\&=-V^2(\vec{1}^T+\vec{y}^T)A\vec{y}-V\vec{\beta}^T\vec{y}+(1-V)\vec{\beta}^T\vec{1} \text{ since $A\vec{1}=\vec{0}$}
-\\&=-V^2\vec{y}^TA\vec{y}+(-V^2\vec{1}^TA-V\vec{\beta}^T)\vec{y}+(1-V)\vec{\beta}^T\vec{1}
+H(\vec{y},V)&=-V^2(\vec{1}^T+\vec{y}^T)A(\vec{1}+\vec{y})-\vec{\beta}^TV(\vec{1}+\vec{y})
+\\&=-V^2(\vec{1}^T+\vec{y}^T)A\vec{y}-V\vec{\beta}^T\vec{y}-V\vec{\beta}^T\vec{1} \text{ since $A\vec{1}=\vec{0}$}
+\\&=-V^2\vec{y}^TA\vec{y}+(-V^2\vec{1}^TA-V\vec{\beta}^T)\vec{y}-V\vec{\beta}^T\vec{1}
 \end{align*}
 Define $Q\in M_{N-1,N}$ that rotates an $N$-vector away from the consensus vector and define $\vec{z}=Q\vec{y}$ so that $\vec{y}=Q^T\vec{z}$ since $\sum_ky_k=0$.
 \begin{align*}
-H(\vec{z},V)&=-V^2\vec{z}^TQAQ^T\vec{z}+(-V^2\vec{1}^TAQ^T-V\vec{\beta}^TQ^T)\vec{z}+(1-V)\vec{\beta}^T\vec{1}
-\\&=-V^2\vec{z}^TM\vec{z}+(-V^2\vec{\sigma}_1^T-V\vec{\sigma}_2^T)\vec{z}+(1-V)\vec{\beta}^T\vec{1}
-\\ \Rightarrow P(\vec{z},V)&=\exp\left(V^2\vec{z}^TM\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+(V-1)\vec{\beta}^T\vec{1}\right)
+H(\vec{z},V)&=-V^2\vec{z}^TQAQ^T\vec{z}+(-V^2\vec{1}^TAQ^T-V\vec{\beta}^TQ^T)\vec{z}-V\vec{\beta}^T\vec{1}
+\\&=V^2\vec{z}^TP\vec{z}+(-V^2\vec{\sigma}_1^T-V\vec{\sigma}_2^T)\vec{z}-V\vec{\beta}^T\vec{1}
+\\ \Rightarrow P(\vec{z},V)&=\exp\left(-V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)
 \end{align*}
-where $M=QAQ^T$, $\vec{\sigma}_1=QA^T\vec{1}$, and $\vec{\sigma}_2=Q\vec{\beta}$.
+where $P=-QAQ^T$, $\vec{\sigma}_1=QA^T\vec{1}$, and $\vec{\sigma}_2=Q\vec{\beta}$.
 
 
 \begin{fact}
 \begin{align*}
-\int\exp\left(-\frac{1}{2}\vec{z}^TM\vec{z}+\vec{B}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{\det M}}\exp\left(-\frac{1}{2}\vec{B}^TM^{-1}\vec{B}\right)
-\\\Rightarrow \int\exp\left(-\vec{z}^TM\vec{z}+\vec{B}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{2^{N-1}\det M}}\exp\left(-\frac{1}{4}\vec{B}^TM^{-1}\vec{B}\right)
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det M}}\exp\left(-\frac{1}{4}\vec{B}^TM^{-1}\vec{B}\right)
+\int\exp\left(-\frac{1}{2}\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{\det P}}\exp\left(-\frac{1}{2}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+\\\Rightarrow \int\exp\left(-\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{2^{N-1}\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
 \end{align*}
 \end{fact}
 
 \begin{align*}
-\z&=\int_{-\infty}^\infty\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TM\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+(V-1)\vec{\beta}^T\vec{1}\right)d^NzdV
-\\&=\int_{-\infty}^\infty \exp((V-1)\vec{\beta}^T\vec{1})\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TM\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}\right)d^NzdV
-\\&=\sqrt{\pi^{N-1}}\int_{-\infty}^\infty\exp((V-1)\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}\det{M}}}\right)\exp\left(-\frac{1}{4}\vec{\sigma}_1^TM^{-1}\vec{\sigma}_1\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det M}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TM^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\exp((V-1)\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}}}\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det M}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TM^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\Pi_a\lambda_a}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TM^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV 
-\\&\text{ where $\lambda_a$ are the eigenvalues of $M$}
-\\ \Rightarrow -\log(\z)&=\text{constants}+\frac{1}{2}\sum_a\log(\lambda_a)+\frac{1}{4}\vec{\sigma}_1^TM^{-1}\vec{\sigma_1}-\log(f(M))
+\z&=\int_{-\infty}^\infty\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)d^NzdV
+\\&=\int_{-\infty}^\infty \exp(V\vec{\beta}^T\vec{1})\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}\right)d^NzdV
+\\&=\sqrt{\pi^{N-1}}\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}\det{P}}}\right)\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det PP}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}}}\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\Pi_a\lambda_a}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV 
+\\&\text{ where $\lambda_a$ are the eigenvalues of $P$}
+\\ \Rightarrow -\log(\z)&=\text{constants}+\frac{1}{2}\sum_a\log(\lambda_a)+\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma_1}-\log(f(P))
 \end{align*}
 
-where $f(M)=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV $.
+where $f(P)=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV $.
 
 \begin{align*}
-\Rightarrow\frac{\partial -\log(\z)}{\partial M_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}M^{-1}_{ki}M^{-1}_{jl}\sigma_{1l}-\frac{\partial \log f}{\partial M_{ij}}
-\\\Rightarrow\frac{\partial -\log(\z)}{\partial M_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}M^{-1}{ki}M^{-1}_{jl}\sigma_{1l}-\frac{1}{f}\frac{\partial f}{\partial M_{ij}}
-\end{align*}
-
-\begin{align*}
-\frac{\partial f}{\partial M_{ij}}&=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)\left(-\frac{1}{4V}\sum_{kl}\sigma_{2k}M^{-1}_{ki}M^{-1}_{jl}\sigma_{2l}\right)dV
-\\&=\left(-\frac{1}{4}\sum_{kl}\sigma_{2k}M^{-1}_{ki}M^{-1}_{jl}\sigma_{2l}\right)\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV
+\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{1l}-\frac{\partial \log f}{\partial P_{ij}}
+\\\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}-\frac{1}{f}\frac{\partial f}{\partial P_{ij}}
 \end{align*}
 
 \begin{align*}
-\Rightarrow \langle z_iz_j\rangle &=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}M^{-1}{ki}M^{-1}_{jl}\sigma_{1l}+\left(\frac{1}{4}\sum_{kl}\sigma_{2k}M^{-1}_{ki}M^{-1}_{jl}\sigma_{2l}\right)\frac{\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV}{\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left((V-1)\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TM^{-1}\vec{\sigma}_2\right)dV}
+\frac{\partial f}{\partial P_{ij}}&=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)\left(-\frac{1}{4V}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)dV
+\\&=\left(-\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+\end{align*}
+
+\begin{align*}
+\Rightarrow \langle z_iz_j\rangle &=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}+\left(\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\frac{\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}{\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}
 \end{align*}
 
 \nocite{*}

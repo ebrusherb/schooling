@@ -47,15 +47,15 @@
 Birds in flocks, like animals in many types of social groups, can use their peers to learn about the environment and update their opinions about where to move in that environment.  Previous work on starlings has measured the number of other birds an individuals pays attention to and shown that this number of ``neighbors" leads to a social network that is conducive to the whole flock reaching consensus.  It is unclear, however, why an individual would change its behavior, i.e. the number of neighbors it learns from, to achieve this outcome.  Individual birds should optimize how well they learn about the environment and should minimize the cognitive and time costs of learning.  I find the circumstances in which this individual level optimization can produce the observed group level optimization.
 
 \section{Learning dynamics}
-In this model, an individual's opinion changes with a probability that depends on its social interactions and the strength of the environmental stimulus. Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{q}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
+In this model, an individual's opinion changes with a probability that depends on its social interactions and the strength of the environmental stimulus. Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{v}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
 \begin{equation*}
-\frac{d\vec{q}}{dt}=M\vec{q}+\vec{\beta}^T(\vec{1}-\vec{q}).
+\frac{d\vec{v}}{dt}=M\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v}).
 \end{equation*}
-We simplify this by writing $\frac{d\vec{q}}{dt}=A\vec{q}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal.
+We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal.
 
 These stochastic dynamics will lead to an equilibrium probability distribution over sets of opinions that agrees with the Boltzmann equilibrium distribution for a system with energy or Hamiltonian given by 
 \begin{equation*}
-E(\vec{q})=-\vec{q}^TA\vec{q}+\vec{\beta}^T(\vec{1}-\vec{q})
+E(\vec{v})=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
 \end{equation*}  
 
 \section{Individual-level measures of performance}
@@ -83,10 +83,95 @@ To understand what strategies we might expect to find, we are interested in iden
 
 \section{Appendix}
 \subsection{Equivalence of dynamics and Hamiltonian }
+\begin{claim}
+If $H(\vec{v})=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}$ and $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}$ then $\nabla H\cdot \frac{d\vec{v}}{dt}\leq 0$.
+\end{claim}
+\begin{pf}
+\begin{align*}
+H(\vec{v})&=-\sum_{ij}A_{ij}v_iv_j-\sum_i\beta_iv_i
+\\\Rightarrow\frac{\partial H}{\partial v_i}&=-\sum_{j\neq i}A_{ij}v_j-\sum_{j\neq i}A_{ji}v_j-2A_{ii}v_i-\beta_i
+\\&=-\sum_j(A_{ij}+A^T_{ij})v_j-\beta_i
+\\ \Rightarrow \nabla H&=-(A+A^T)\vec{v}-\vec{\beta}
+\\ \Rightarrow \nabla H\cdot \frac{d\vec{v}}{dt}&=-\vec{v}^T(A+A^T)A\vec{v}-\vec{v}^T(A+A^T)\vec{\beta}-\vec{\beta}^TA\vec{v}-\vec{\beta}^T\vec{\beta}
+\\&=-\vec{v}^TA^2\vec{v}-\vec{v}^TA^TA\vec{v}-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}-\vec{\beta}^T\vec{\beta}
+\end{align*}
+If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA$ is positive semi-definite.  (Consider that $\vec{v}^TA^TA\vec{v}=(A\vec{v})^T(A\vec{v})$ so that $\vec{v}A^TA\vec{v}=0$ if $A\vec{v}=0$ and $\vec{v}^TA^TA\vec{v}<0$ otherwise.) Therefore, $-\vec{v}^TA^2\vec{v}\leq 0$ and $-\vec{v}^TA^TA\vec{v}\leq 0$. At equilibrium, $\vec{v}$ will be ``close" to $\vec{\beta}$ so that $$-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}\sim-\vec{\beta}^TA\vec{\beta}$$
+\end{pf}
 
 \subsection{Numerically evaluating dynamics }
+\begin{claim}
+Let $\Phi(t)$ be the fundamental matrix solution to the homogeneous differential equations $\frac{d\vec{x}}{dt}=A\vec{x}$ so that $\Phi(t)=V\Lambda(t)$ where the columns of $V$ are the eigenvectors of $A$ and $$\Lambda(t)=\text{diag}(e^{\lambda_1 t},\dots,e^{\lambda_n t})$$ where $\{\lambda_i\}$ are the eigenvalues of $A$.  (Note that if $\lambda_i=0$ then $e^{\lambda _i t}=1$ for all $t$.) Let $V^\dagger$ be the pseudoinverse of $V$.  Let $\vec{c}=V^\dagger\vec{X_0}$.  Let $$G(t)=\text{diag}(1/\lambda_1(1-e^{-\lambda_1t}),\dots,1/\lambda_n(1-e^{-\lambda_nt}))V^\dagger\vec{\beta}.$$
+(If $\lambda_i=0$ then the corresponding entry of the first part of $G(t)$ will be given by $t$ rather than the form above.)  THEN if we let $x(t)=\Phi(t)G(t)+\Phi(t)\vec{c}$, $X(t)$ solves the inhomogeneous equations $\frac{dx}{dt}=A\vec{x}+\vec{\beta}$ with initial conditions $x(0)=\vec{X_0}$.
+\end{claim}
+
+\begin{pf}
+It is clear that
+\begin{align*}
+\frac{d\Phi\vec{c}}{dt}&=A\Phi(t)\vec{c} \text{ and } \Phi(0)\vec{c}=\vec{X_0}.
+\end{align*}
+Now, 
+\begin{align*}
+\Phi(t)G(t)&=V
+\left(\begin{array}{ccccc}
+e^{\lambda_1 t}  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots & e^{\lambda_nt}
+ \end{array}\right)
+ \left(\begin{array}{ccccc}
+\frac{1}{\lambda_1}(1-e^{\lambda_1 t})  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &\frac{1}{\lambda_n} (1-e^{\lambda_nt})
+ \end{array}\right)
+ V^\dagger\vec{\beta}
+ \\&=V
+ \left(\begin{array}{ccccc}
+\frac{1}{\lambda_1}(e^{\lambda_1 t}-1)  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &\frac{1}{\lambda_n} (e^{\lambda_nt}-1)
+ \end{array}\right)
+ V^\dagger\vec{\beta}
+ \\ \Rightarrow \frac{d\Phi(t)G(t)}{dt}&=V
+ \left(\begin{array}{ccccc}
+e^{\lambda_1 t}  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &e^{\lambda_nt}
+ \end{array}\right)
+ \\&=V
+ \left(\begin{array}{ccccc}
+e^{\lambda_1 t}  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &e^{\lambda_nt}
+ \end{array}\right)
+ V^\dagger\vec{\beta} -VV^\dagger\vec{\beta}+\vec{\beta}
+ \\&=V
+ \left(\begin{array}{ccccc}
+e^{\lambda_1 t}-1  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &e^{\lambda_nt}-1
+ \end{array}\right)
+ V^\dagger\vec{\beta} +\vec{\beta}
+  \\&=V
+ \left(\begin{array}{ccccc}
+\lambda_1e^{\lambda_1t}\cdot \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &\lambda_ne^{\lambda_nt}\cdot\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
+ \end{array}\right)
+ V^\dagger\vec{\beta} +\vec{\beta}
+  \\&=AV\Lambda(t)
+ \left(\begin{array}{ccccc}
+ \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
+\\ \vdots & \ddots &\vdots
+\\ 0 & \dots &\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
+ \end{array}\right)
+ V^\dagger\vec{\beta} +\vec{\beta}
+ \\&=AV\Lambda(t)G(t)+\vec{\beta}
+ \\&=A\Phi(t)G(t)+\vec{\beta}
+\end{align*}
+Therefore $\frac{dx}{dt}=A\Phi(t)G(t)+A\Phi(t)\vec{c}+\vec{\beta}=Ax(t)+\vec{\beta}$ and since $G(0)=\vec{0}$, $x(0)=\vec{X_0}$.
+\end{pf}
 
 \subsection{Calculating correlations }
+The following is derived from the work in \cite{Bialek:2013fk}.
 \begin{align*}
 H(\vec{v})&=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
 %\\&=\vec{v}A\vec{v}-\vec{\beta}^T\vec{v}+\vec{\beta}^T\vec{1}
@@ -101,7 +186,7 @@ Define $Q\in M_{N-1,N}$ that rotates an $N$-vector away from the consensus vecto
 \begin{align*}
 H(\vec{z},V)&=-V^2\vec{z}^TQAQ^T\vec{z}+(-V^2\vec{1}^TAQ^T-V\vec{\beta}^TQ^T)\vec{z}-V\vec{\beta}^T\vec{1}
 \\&=V^2\vec{z}^TP\vec{z}+(-V^2\vec{\sigma}_1^T-V\vec{\sigma}_2^T)\vec{z}-V\vec{\beta}^T\vec{1}
-\\ \Rightarrow P(\vec{z},V)&=\exp\left(-V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)
+\\ \Rightarrow P(\vec{z},V)&=\frac{1}{\z}\exp\left(-V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)
 \end{align*}
 where $P=-QAQ^T$, $\vec{\sigma}_1=QA^T\vec{1}$, and $\vec{\sigma}_2=Q\vec{\beta}$.
 

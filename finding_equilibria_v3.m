@@ -15,10 +15,10 @@ nummoves=1000;
 N=20;
 b=1;
 
-Tvals=[.01];
+Tvals=[1];
 NT=length(Tvals);
 % radvals=[.1 .5 1];
-radvals=.1;
+radvals=.25;
 Nr=length(radvals);
 
 ESSseaten=cell(NT,Nr);

@@ -1,11 +1,11 @@
-function [meanscore scorevar probeaten probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
+function [meanH2, meancorrlength, probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 % strategy=randi([1 N/2-1],1,N)*2;
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
 scores=zeros(N,numsigs_tot);
 H2norms=zeros(1,numsigs_tot);
-susceptvals=zeros(1,numsigs_tot);
+corrlengths=zeros(1,numsigs_tot);
 
 for i=1:nummoves
     positions=unifrnd(0,1,N,2);
@@ -26,24 +26,25 @@ for i=1:nummoves
         allreceivers=d(receiver,:)<=radius;
         beta(allreceivers)=b;
         v=real(expected_spin(M,T,beta));
-        
-        if sum(abs(v)>1000)>=1
-            j=j;
-        elseif sum(isnan(v))>=1
-            j=j;
-        else  
-            scores(:,(i-1)*numsigs_permove+j)=v;
-%             [h,s]=networkprops(M,'uniform',beta);
-%             H2norms((i-1)*numsigs_permove+j)=h;
-%             susceptvals((i-1)*numsigs_permove+j)=s;
+       
+        scores(:,(i-1)*numsigs_permove+j)=v;
+        h=H2norm(M,'additive');
+        if real(h)<10000 && imag(h)<1
+            H2norms((i-1)*numsigs_permove+j)=h;
+            [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
+            corrlengths((i-1)*numsigs_permove+j)=l;
             j=j+1;
         end
     end
 end
-weird=max(abs(scores),[],1)>1000;
-scores(:,weird)=[];
-meanscore=mean(scores,2);
-scorevar=var(scores,[],2);
+
+meanH2=mean(H2norms);
+meancorrlength=mean(corrlengths);
+
+% weird=max(abs(scores),[],1)>1000;
+% scores(:,weird)=[];
+% meanscore=mean(scores,2);
+% scorevar=var(scores,[],2);
 
 [minvals,~]=min(scores);
 minmat=repmat(minvals,N,1);
@@ -68,13 +69,4 @@ for i=1:size(scores,2)
     maxscorer(rows(cols==i),i)=1/numsigs_tot;
 end
 probgettoeat=sum(maxscorer,2);
-
-% meanH2=mean(H2norms);
-% meansuscept=mean(susceptvals);
-% subplot(3,1,1)
-% plot(strategy,(meanscore)','o')
-% subplot(3,1,2)
-% plot(strategy,scorevar','o')
-% subplot(3,1,3)
-% plot(H2norms)
 end

@@ -1,12 +1,14 @@
 function h = H2norm(M,scaled)
-L=lap(M);
-s=size(L);
+% L=lap(M);
+L=-M;
+s=size(M);
 n=s(1);
 if nargin==1
     scaled='additive';
 end
 if strcmp(scaled,'additive')==1
-noise=diag(sum(transpose(M)));
+% noise=diag(sum(transpose(M)));
+noise=diag(sum(~((M==-1)+(M==0)),2)); %find number of neighbors for each node 
 else
 noise=eye(n);
 end

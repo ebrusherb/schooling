@@ -1,4 +1,5 @@
 function [meanscore scorevar]=payoffs(strategy,numsigs_permove,nummoves,radius,b)
+strategy=randi([1 N/2-1],1,N)*2;
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
@@ -38,7 +39,7 @@ scores(:,weird)=[];
 meanscore=mean(scores,2);
 scorevar=var(scores,[],2);
 subplot(2,1,1)
-plot((meanscore))
+plot(strategy,(meanscore)','o')
 subplot(2,1,2)
-plot(scorevar)
+plot(strategy,scorevar','o')
 end

@@ -1,25 +1,31 @@
-function times = expected_spin(M,T,beta)
+function q = expected_spin(M,T,beta)
+%solves the differential equation dq/dt=M*q+beta*(1-q)  -->
+%dq/dt=A*q+beta where A=M-diag(beta)
+
 % N=length(strategy);
 % M=makenet_normed(strategy);
-
+A=M-diag(beta);
 N=size(M,1);
 
 if nargin==2
     beta=1*ones(N,1);
 end
 
-[vecs,vals]=eig(M);
+[vecs,vals]=eig(A);
 V=vecs;
 vals=diag(vals);
 nonzero=abs(vals)>0.00001;
 nonzerovals=vals(nonzero);
 
+%if there is a zero eigenvalue set the eigenvector to all ones
 %if there are two eigenvectors for eigenvalue 0 I specify what they should
 %be here
 indices=1:N;
 where=indices(~nonzero);
 vhat=1/sqrt(N)*ones(N,1);
-V(:,where(1))=ones(N,1);
+if sum(~nonzero)==1
+    V(:,where(1))=ones(N,1);
+end
 if sum(~nonzero)>1
     L=sum(~nonzero);
     for i=1:(L-1)
@@ -30,8 +36,11 @@ end
 
 % mu=pinv(V)*beta;s
 
-c=zeros(N,1);
-c(where(1))=1;
+% c=zeros(N,1);
+% c(where(1))=1;
+
+initialconditions=.5*ones(N,1);
+c=pinv(V)*initialconditions;
 
 l=exp(nonzerovals*T);
 Lhom=zeros(1,N);
@@ -59,8 +68,8 @@ instantaneous=Uinhom*beta+Uhom*c;
 % U=V*L/V;
 % integrated=U*beta;
 
-% times=[instantaneous,integrated];
+% q=[instantaneous,integrated];
 
-times=instantaneous;
+q=instantaneous;
 end
 

@@ -1,0 +1,225 @@
+\documentclass{article}
+%\documentclass[aps, twocolumn, tightenlines,amscd,amsmath,amssymb,verbatim]{revtex4}
+\usepackage{latexsym}
+\usepackage{amssymb,amsmath}
+\usepackage{custom2}
+\usepackage{graphicx} % for figures
+\usepackage{epstopdf} % so can use EPS or PDF figures
+%\usepackage{subfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{amssymb,amsfonts}
+\usepackage[all,arc]{xy}
+\usepackage{enumerate}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage[pdftex]{hyperref}
+\usepackage{lscape}
+\captionsetup{justification=RaggedRight, singlelinecheck=false}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\argmax}{\text{argmax}}
+\newcommand{\Tr}{\text{Tr}}
+%\newtheorem{claim}{Claim}
+
+\addtolength{\evensidemargin}{-.5in}
+\addtolength{\oddsidemargin}{-.5in}
+\addtolength{\textwidth}{1.4in}
+\addtolength{\textheight}{1.4in}
+\addtolength{\topmargin}{-.5in}
+
+\pagestyle{empty}
+
+\begin{document}
+
+
+\begin{center}
+{\bf \LARGE{Information Gathering Strategies}}
+\vspace{10pt}
+\\ Eleanor Brush
+\\ March 18, 2013
+\end{center}
+
+\tableofcontents
+
+\section{Introduction}
+There are (at least) two reasons animals might update their opinions according to the opinions of the other animals around them.  They might want to be able to learn whatever information the other animals have learned about the environment or it might be advantageous for the animals to come to consensus, for example about where to go.
+
+Previous work on how many neighbors birds have:
+\begin{itemize} 
+\item anisotropy in bird flocks suggest they pay attention to seven of their nearest neighbors \cite{Ballerini:2007uq}
+\item statistical mechanical analysis of bird flocks suggest they pay attention to eleven of their nearest neighbors \cite{Bialek:2012fk}
+\item if  birds pay attention to seven of their nearest neighbors they construct an interaction network that optimizes the group's ability to come to a robust consensus decision \cite{Young:2013kx}
+\end{itemize}
+
+One explanation is that the birds benefit if they are in a group that can come to a consensus decision.  Another explanation is that the birds are optimizing some other measure of performance and in so doing construct a network that enables the group's ability to come to consensus.  We are interested in seeing if there are other properties the individual's might be optimizing that leads to robust consensus.
+
+{\bf The Question:} If individual birds are trying to optimize the speed and reliability with which they can learn an external signal that someone else has picked up, and change the number of birds they pay attention to optimize that performance, how does that affect the interaction network they develop?  In particular, does it improve or diminish the group's ability to come to consensus?
+
+
+\section{The Model}
+
+There are $n$ nodes in the system each have an opinion $x_i$ and receive information from their neighbors, which they weigh by factors $w_{ji}$ such that $\sum_jw_{ij}=1$.   A node updates its opinions by averaging the difference between its opinion and its neighbors'.  In continuous time, the dynamics of this learning process are given by
+\begin{equation}
+\frac{d x_i}{dt}(t)=\sum_jw_{ij}(x_j(t)-x_i(t))+\xi_i \label{model}
+\end{equation}
+where $\xi_i$ is random noise.  Let $L$ be the Laplacian of the weighted matrix given by the $w_{ij}$ so that
+\begin{equation}
+L_{ij}=\left\{\begin{array}{cccc}  \label{lap}
+1& , & \text{ if } i=j \\ 
+-w_{ij} & , & \text{ else}
+\end{array}\right. \end{equation}
+Then the vector of opinions ${\bf x}(t)$ is described by 
+\begin{equation}
+\dot{{\bf x}}(t)=-L{\bf x}(t)+\xi \label{vecmodel}
+\end{equation}
+If the graph described by $L$ is connected, then, in the absence of noise, the system will reach a consensus state in which all nodes have the same opinion, ${\bf x}(t)=\alpha{\bf 1}$.  
+
+The learning dynamics change if we introduce a stubborn node $r$ who stops listening to his neighbors, for instance if he learns about something in the environment that is more important than the information coming from his peers.  In this case, $x_r(t)=s$ for some constant $s$ and all the other nodes continue to update using their neighbors' opinions as before, so that $\dot{x_i}(t)$ is as in \ref{model} for $i\neq r$.  In this case, the consensus opinion will be $s$, the external signal.  This is equivalent to defining a new $L^r$ such that $L^r_{ri}=0$ for all $i$.
+%, and we can choose $Q$ to be the $n\times n$ identity matrix with the $i^{th}$ diagonal element corresponding to the stubborn node set to $0$.  Then $\hat{L}$ is equal to $L$ with the $i^{th}$ row and column removed.  The distance from consensus now represents something with more easily justified fitness consequences: how closely a node's opinion matches the opinion of a node with true environmental information.
+The Laplacian $L$ or $L^r$ affects how quickly consensus can reached and how close to the consensus opinion each node can be when there is noise in the system.  
+
+
+%%%%%%%%%%%%%%
+\section{Measures of Performance \label{measures}}
+There are two timescales on which an individual might care about its performance: a transient period during and a steady state period during which noise perturbs the opinions away from the external signal.
+
+
+To measure the distance  from the external signal during a transient period (ignoring noise for the moment), we define, for each node $i$,
+\begin{equation}
+\tau_i^{ext}=\sqrt{\int_0^\infty |x_i(t)-s|^2dt}
+\end{equation}
+Let $\lambda^r$ be second smallest eigenvalue of $L^r$ and $v$ be the associated eigenvector.  Then we can approximate $x_i(t)-s\sim e^{-\lambda^rt}v_i$ and
+\begin{equation}
+\tau_i^{ext}=\sqrt{\int_0^\infty e^{-2\lambda^rt}v_i^2dt}=\frac{|v_i|}{\sqrt{2\lambda^r}}
+\end{equation}
+
+
+To measure perturbations away from the external signal due to noise in the steady state, we define, for each node $i$,
+\begin{equation}
+\sigma_i^{ext}=\sqrt{\lim_{t\to\infty}E[|x_i(t)-s|^2]}
+\end{equation}
+Different nodes in the network might be subject to different sources and magnitudes of noise.  We will always assume that $\E[\xi_i]=0$.  Let $d_i=Var[\xi_i]$ and $D=diag(d_1,\dots,d_n)$.  In particular, we will set $d_i$ equal to the number of neighbors influencing node $i$, so that nodes with more neighbors make noisier estimates.  This can be found from the $H_2$ norm of the matrix $L^r$ (see Appendix and \cite{Young:2010fk} for details).
+
+These metrics, $\tau_i^{ext}$ and $\sigma_i^{ext}$, measure node $i$'s ability to learn the external signal either quickly during the transient period or reliably during the steady state period.  To combine them into one performance metric, we introduce a tradeoff parameter, $\alpha$ and measure performance according to $(1-\alpha)\tau_i^{ext}+\alpha\sigma_i^{ext}$.
+
+We also need to quantify the group's ability to come to consensus, which again can be measured on a short or a long timescale.  Analogously to our metrics of individual performance, we define
+\begin{equation}
+\tau^{con}=\frac{1}{\sqrt{2\lambda}}
+\end{equation}
+where $\lambda$ is the second smallest eigenvalue of $L$.  In this case, there is no predefined consensus opinion so we need to find the distance between the vector of opinions and consensus in a way that doesn't depend on what consensus opinion is reached.  To do this, we define $y(t)$ to be $x(t)-\langle x(t)\rangle$ and 
+\begin{equation}
+\sigma^{con}=\sqrt{\frac{\lim_{t\to\infty}E[||y(t)||^2]}{n}}
+\end{equation}
+We have defined these measures so that $\tau^{con}$ is low when the group converges to consensus quickly and $\sigma^{con}$ is low when the steady state noise around the consensus state is low.  Again the metrics for each timescale can be combined into one metric by introducing a tradeoff parameter $\alpha$ and trying to minimize $(1-\alpha)\tau^{con}+\alpha\sigma^{con}$.
+
+\section{Learning the external signal versus reaching consensus}
+\begin{lemma} \label{myconjecture}
+TO BE PROVED:  Let $L$ be the Laplacian of the weighted matrix and $L^r$ be $L$ with its $r^{th}$ row set equal to $0$.  Let the second smallest eigenvalue of $L$ be $\lambda$ and the smallest eigenvalue of $L^r$ be $\lambda^r$.  Then $1\geq \lambda \geq \lambda^r\geq 0$.  In particular,
+\begin{enumerate}
+\item $\lambda^r=0$ if and only if $w_{ir}=0$ for all $i$ and
+\item if $w_{ir}=1$ for all $i$ then $\lambda^r=1$.
+\end{enumerate}
+\end{lemma}
+
+In particular, this means that $\langle\tau_i^{ext}\rangle_i\geq \tau^{con}$.
+
+\begin{lemma}
+If we define $\delta(t)=x(t)-s\vec{1}$, then $||\delta(t)||^2\geq||y(t)||^2$ for all $t$.
+\end{lemma}
+
+\begin{pf}
+For the following, let $\langle x\rangle =\frac{\sum_ix_i}{n}$.
+\begin{align*}
+y&=x-\langle x\rangle \text{ and } \delta=x-s
+\\ \Rightarrow ||y||^2&=\sum_i(x_i^2-2x_i\langle x\rangle+\langle x\rangle^2) \text{ and } ||\delta||^2=\sum_i(x_i^2-2x_is+s^2)
+\\ \Rightarrow ||y||^2&=\sum_ix_i^2-2n\langle x\rangle^2+n\langle x\rangle^2 \text{ and } ||\delta||^2=\sum_ix_i^2-2ns\langle x\rangle+ns^2
+\\ \Rightarrow ||\delta||^2-||y||^2&=ns^2-2ns\langle x\rangle+n\langle x\rangle^2
+\\ &=n(\langle x\rangle-s)^2
+\\ \Rightarrow ||\delta||^2-||y||^2&\geq 0 \text{ with equality iff } \langle x\rangle=s
+\\ \Rightarrow ||\delta||^2&\geq||y||^2 \text{ with equality iff } \langle x\rangle=s
+%\\ \Rightarrow ||\delta||&\geq ||y|| \text{ with equality iff } \langle x\rangle=s
+\end{align*}
+
+\end{pf}
+
+Therefore, $\lim_{t\to\infty}E[||\delta(t)||^2]\geq\lim_{t\to\infty}E[||y(t)||^2]$.  So that $\sum_{i=1}^n(\sigma_i^{ext})^2\geq n\sigma^{con}$ and finally this means that $\langle\sigma_i^{ext}\rangle_i\geq \sigma^{con}$.   It is therefore not unreasonable to hope that by minimizing $\tau_i^{ext}$ and $\sigma_i^{ext}$ the animals will tend to minimize $\tau^{con}$ and $\sigma^{con}$.
+
+\section{Optimal Strategies}
+If all $n$ nodes have the same number of neighbors, $2k$, then  
+\begin{equation}
+\tau^{con}=\frac{1}{\sqrt{2-\frac{2}{k}\sum_{\ell=1}^k\cos\left(\frac{2\pi \ell}{m}\right)}} 
+\end{equation}
+and 
+\begin{equation}
+\sigma^{con}=\sqrt{\frac{2k\sum_{j=1}^{n-1}\frac{1}{2-\frac{2}{k}\sum_{\ell=1}^k\cos\left(\frac{2\pi j\ell}{m}\right)}}{n}} 
+\end{equation}
+
+For a given tradeoff $\alpha$, we can find the number of neighbors that optimizes the animals' ability to learn the external signal or the group's ability to come to consensus (Figure \ref{opt}).
+Not surprsingingly, as $\alpha$ increases (and long term noise matters more), it becomes better to pay attention to fewer neighbors (but more than $2$).  We find that the  optimal strategy scales sublinearly with network size.  Most importantly, the optimal strategy for gathering an external signal is to pay attention to fewer neighbors than the optimal strategy for reaching consensus.  This means that optimizing the ability to learn the external signal won't work!
+
+\begin{figure}
+\includegraphics[width=.5\textwidth]{../../Desktop/optstrats_alpha25.eps}
+\includegraphics[width=.5\textwidth]{../../Desktop/optstrats_alpha1.eps}
+\caption{Optimal strategies in a uniform network. \label{opt}}
+\end{figure}
+
+\section{Singular Strategies and Evolutionary Dynamics}
+
+
+
+
+\section{Future Work}
+
+\begin{enumerate}
+\item prove Claim \ref{myconjecture} about eigenvalues
+\item Information centrality predicts the accuracy of each individual's opinion and eigenvector centrality predicts the speed of each individual's opinion.  Is there a measure that predicts performance when both speed and accuracy are valued?
+\item prove that spatial periodicity in strategy is optimal for group performance
+\item allow nodes to actively optimize their strategies 
+ \item allow for more variation among strategies across nodes and for more complicated network structures
+  \item multiple signals with different values 
+\item look at real networks
+\end{enumerate}
+
+%\section{Conclusions }
+%
+%\begin{enumerate}
+%\item from the perspective of network design, measure X tells how to optimize individual performance
+%\item optimal topology for the group when we also consider speed to consensus
+%\item group performance does or doesn't or in certain conditions (i.e. size of group, tradeoff between speed and accuracy) emerge out of individual level considerations so group performance does or doesn't or in certain conditions have to be invoked
+%\end{enumerate}
+
+\section*{Appendix}
+\subsection*{H2 Norm } 
+
+\ Let $y$ represent the distance between the vector of opinions and consensus, i.e.
+$y=QxQ^T,$
+where $Q\in\R^{n-1\times n}$ is such that $Q\vec{1}=0$ , $QQ^T=I_{n-1}$, and $Q^TQ=I_n-\frac{1}{n}\vec{1}\times\vec{1}^T$.   
+Then 
+\begin{equation}
+\dot{y}(t)=-\overline{L}y(t)+Q\xi(t) \notag
+\end{equation}
+where $\overline{L}=QLQ^T$.  As shown in \cite{Young:2010fk}, if $\Sigma_y(t)=\E[y(t)y(t)^T]$,  $\Sigma_y$ at equilibrium solves
+\begin{equation} 0=-\overline{L}\Sigma_y-\Sigma_y\overline{L}^T+D. \label{h2norm}
+\end{equation}
+%If we instead consider deviation from the external signal, $\delta_i(t)=x_i(t)-s$,
+%\begin{align*}
+%\dot{\delta_i}(t)&=\dot{x_i}(t)
+%\\&=\sum_jw_{ij}(x_j(t)-x_i(t))+\xi_i(t)
+%\\&=\sum_jw_{ij}(\delta_j(t)-\delta_i(t))+\xi_i(t)
+%\\&=\sum_{j\neq 1}w_{ij}\delta_j(t)-\delta_i(t)\sum_jw_{ij}+\xi_i(t) \text{ since $\delta_1(t)\equiv 0$}
+%\\ \text{ so that }\dot{\delta}(t)&=-L^1\delta(t)+\xi(t)
+%\end{align*}
+%where $L^1$ is $L$ with the first row and column removed and $\delta(t)=(\delta_2(t)\dots\delta_n(t))$.
+%If $\Sigma(t)=\E[\delta(t)\delta(t)^T]$,  $\Sigma$ at equilibrium solves the analogous Lyapunov equation,
+%\begin{equation}
+%0=-L^1\Sigma-\Sigma(L^1)^T+D. \label{h2mod}
+%\end{equation}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{info_evo}
+
+\end{document}
+
+

@@ -1,0 +1,39 @@
+function rates=convergence2(D,strategy)
+s=size(strategy);
+N=s(2);
+M=zeros(N);
+for i=1:N
+    [~, order]=sort(D(i,:),'ascend');
+    neighbors=order(2:strategy(i)+1);
+    M(i,neighbors)=1;
+end
+weighted=M;
+for i=1:N
+    weighted(i,:)=M(i,:)/sum(M(i,:));
+end
+delta=zeros(N);
+for i=1:N
+    [path_dists,~,~]=graphshortestpath(sparse(transpose(M)),i);
+    not_children=
+    outside=(clusters~=clusters(i));
+    delta(outside,i)=1;
+    inside=(clusters==clusters(i));
+    inside(i)=0;
+    range=1:N;
+    inside=range(inside);
+    W=weighted(inside,inside);
+    [v d]=eig(W);
+    [maxValue,index] = max(real(diag(d)));
+    
+    if maxValue==1
+        [vals,order]=sort(diag(d),'descend');
+        [~,k]=min(abs(vals)>.9999);
+        vec=abs(v(:,order(k)));
+        delta(inside(vec>0),i)=vals(k)*vec(vec>0);
+        delta(inside(vec==0),i)=1;
+    else
+        delta(inside,i)=maxValue*abs(v(:,index));
+    end
+end
+rates=mean(delta,2);
+    

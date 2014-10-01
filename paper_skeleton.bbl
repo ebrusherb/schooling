@@ -1,0 +1,58 @@
+\begin{thebibliography}{1}
+
+\bibitem{Ballerini:2007uq}
+M.~Ballerini, N.~Cabibbo, R.~Candelier, A.~Cavagna, E.~Cisbani, I.~Giardina,
+  V.~Lecomte, A.~Orlandi, G.~Parisi, A.~Procaccini, M.~Viale, and
+  V.~Zdravkovic.
+\newblock Interaction ruling animal collective behavior depends on topological
+  rather than metric distance: Evidence from a field study.
+\newblock {\em Proceedings of the National Academy of Science},
+  105(4):1232--1237, January 2008.
+
+\bibitem{Bialek:2013fk}
+William Bialek, Andrea Cavagna, Irene Giardina, Thierry Mora, Oliver Pohl,
+  Edmondo Silvestri, Massimiliano Viale, and Aleksandra Walczak.
+\newblock Social interactions dominate speed control in driving natural flocks
+  toward criticality.
+\newblock {\em arXiv}, 2013.
+
+\bibitem{Bialek:2012fk}
+William Bialek, Andrea Cavagna, Irene Giardina, Thierry Mora, Edmondo
+  Silvestri, Massimiliano Viale, and Aleksandra~M. Walczak.
+\newblock Statistical mechanics for natural flocks of birds.
+\newblock {\em Proceedings of the National Academy of Science},
+  109(13):4786--4791, March 2012.
+
+\bibitem{Glauber:1963fk}
+Roy~J. Glauber.
+\newblock Time dependent statistics of the ising model.
+\newblock {\em Journal of Mathematical Physics}, 4(2):294--307, 1963.
+
+\bibitem{Holme:2006fk}
+Petter Holme and Gourab Ghoshal.
+\newblock Dynamics of networking agents competing for high centrality and low
+  d.
+\newblock {\em Phys. Rev. Lett.}, 96(4), March 2006.
+
+\bibitem{Meyer:2001fk}
+Carl Meyer.
+\newblock {\em Matrix Analysis and Applied Linear Algebra}.
+\newblock SIAM: Society for Industrial and Applied Mathematics, 2001.
+
+\bibitem{Nowak:2006uq}
+Martin Nowak.
+\newblock {\em Evolutionary Dynamics}.
+\newblock Belknap / Harvard, 2006.
+
+\bibitem{Young:2013kx}
+George~F. Young, Luca Scardovi, Andrea Cavagna, Irene Giardina, and Naomi~E.
+  Leonard.
+\newblock Starling flock networks manage uncertainty in consensus at low cost.
+\newblock {\em PLOS Computational Biology}, 9, 2013.
+
+\bibitem{Young:2010fk}
+George~Forrest Young, Luca Scardovi, and Naomi~Ehrich Leonard.
+\newblock Robustness of noisy consensus dynamics with directed communication.
+\newblock {\em Proceedings of the American Control Conference}, 2010.
+
+\end{thebibliography}

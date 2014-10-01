@@ -1,0 +1,152 @@
+\ProvidesPackage{custom}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+%%\usepackage{beton}
+%%euler does the C used in cauchy sequences
+%\usepackage[mathbf]{euler}
+%\usepackage{euler}
+%\usepackage{pstcol}
+\usepackage{pstricks}
+\usepackage{mathrsfs}%Added by NPML needed for \mathscr
+\def\T{{\mathbb{T}}}
+\def\C{{\mathbb{C}}}
+\def\E{{\mathbb{E}}}
+\def\R{{\mathbb{R}}}
+\def\Q{{\mathbb{Q}}}
+\def\Qp{{\mathbb{Q}_p}}
+\def\Qx{{\mathbb{Q}^\times}}
+\def\Qpx{{\mathbb{Q}^\times_p}}
+\def\Z{{\mathbb{Z}}}
+\def\N{{\mathbb{N}}}
+\def\A{{\mathbb{A}}}
+\def\ip#1#2{\langle{#1},{#2}\rangle}
+\def\mmod#1{\allowbreak\mkern6mu({\rm mod}\,\,{#1})}
+%\renewcommand{\emptyset}{\varnothing}
+\def\pf{\emph{Proof.} }
+\def\proj{\mathrm{proj}}
+\def\det{\mathrm{det}}
+\def\Aut{\mathrm{Aut}}
+\def\Inn{\mathrm{Inn}}
+
+\usepackage{amsmath}
+
+%\AtBeginDocument
+%  {\DeclareFontShape\encodingdefault{ccr}{bx}{n}{<->sub*cmss/sbc/n}{}%
+ %  \DeclareFontShape\encodingdefault{ccr}{bx}{it}{<->sub*cmss/sbc/it}{}%
+ %  \DeclareFontShape\encodingdefault{ccr}{bx}{sl}{<->sub*cmss/sbc/sl}{}%
+  % \DeclareFontShape\encodingdefault{ccr}{bx}{sc}{<->sub*cmss/sbc/sc}{}}
+%\def\GL{{\mathop{\operator@font GL}\nolimits}}
+\def\GL{GL}
+\def\SL{SL}
+%\def\SL{{\mathop{\operator@font SL}\nolimits}}
+\def\U{{\mathop{\operator@font U}\nolimits}}
+\def\SU{{\mathop{\operator@font SU}\nolimits}}
+\def\O{{\mathop{\operator@font O}\nolimits}}
+\def\SO{{\mathop{\operator@font SO}\nolimits}}
+\def\fM{{\mathfrak{M}}}
+\def\sP{{\mathscr{P}}}
+\def\sS{{\mathscr{S}}}
+\def\sd{\mathbin{\triangle}}
+\def\sF{\mathscr{F}}
+\def\Aone{(\textsf{A}1)}
+\def\Atwo{(\textsf{A}2)}
+\def\Athree{(\textsf{A}3)}
+\def\Afour{(\textsf{A}4)}
+\def\Afive{(\textsf{A}5)}
+\def\Mone{(\textsf{M}1)}
+\def\Mtwo{(\textsf{M}2)}
+\def\Mthree{(\textsf{M}3)}
+\def\Mfour{(\textsf{M}4)}
+\def\Mfive{(\textsf{M}5)}
+\def\Done{(\textsf{D})}
+\def\Cone{(\textsf{C})}
+\def\Oone{(\textsf{O}1)}
+\def\Otwo{(\textsf{O}2)}
+\def\Othree{(\textsf{O}3)}
+\def\Ofour{(\textsf{O}4)}
+\def\Pset{\mathcal P}
+\def\im{\mathrm{Im}}
+\def\diam{\mathrm{diam}}
+\def\Sym{\mathrm{Sym}}
+\def\lub{\mathrm{lub}}
+\def\glb{\mathrm{glb}}
+\def\supp{\mathrm{supp}}
+\def\Arg{\mathrm{Arg}}
+%\newtheorem{challenge}{Challenge}[chapter]
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definitions}[theorem]{Definitions}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{exercises}[theorem]{Exercise}
+\newtheorem{claim}[theorem]{Claim}
+%\newtheorem{problem}[challenge]{Problem}
+\newtheorem{challengep}{Challenge Problems}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{moreexamples}[theorem]{More Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{adventure}[theorem]{Adventure}
+%\newtheorem{hidden_project}{\raggedright\bfseries\Large %
+%Project}[chapter]
+%\newtheorem{generic}[theorem]{}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{facts}[theorem]{Facts}
+\renewcommand{\thechallengep}{\Roman{challengep}}
+\newcommand{\notation}{\noindent{\bfseries Notation}}
+
+
+\newenvironment{generic}[1]{\stepcounter{theorem}%
+  {\raggedright{\bfseries #1\ \,\thetheorem\ }}}{}
+\newenvironment{defenm}[0]{\renewcommand{\theenumi}{\alph{enumi}}%
+  \begin{enumerate}}{\end{enumerate}}
+\newenvironment{exerenm}[0]{\renewcommand{\theenumi}{{\itshape\roman{enumi}}}%
+  \begin{enumerate}}{\end{enumerate}}
+\newenvironment{examenm}[0]{\renewcommand{\theenumi}{{\itshape\roman{enumi}}}%
+  \begin{enumerate}}{\end{enumerate}}
+\newenvironment{thmenm}[0]{\renewcommand{\theenumi}{{\itshape\roman{enumi}}}%
+  \begin{enumerate}}{\end{enumerate}}
+%\def\challenge{{\large\noindent \bfseries
+%  Challenge Problems: \Roman{chapter}\\}}
+\def\cl{{\mathop{\operator@font cl}\nolimits}}
+\def\comp#1{^c \! #1}
+\def\card#1{^\# #1}
+\def\ord{{\mathop{\operator@font ord}\nolimits}}
+\def\normal{\vartriangleleft}
+\newcommand{\set}[2]{\ensuremath{\{ #1\ |\ #2 \}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                          {3.25ex \@plus1ex \@minus.2ex}%
+                          {\z@}%
+                          {\normalfont\normalsize\bfseries}}
+\def\@begintheorem#1#2{\trivlist
+  \item[\hskip \labelsep{\bfseries #1\ #2\ }]}
+\def\@opargbegintheorem#1#2#3{\trivlist
+  \item[\hskip \labelsep{\bfseries #1\ #2\ (#3)}]}
+\let\defn=\emph
+\let\epsilon=\varepsilon
+\def\idm{\mathbf{1}}
+\def\Hom{{\mathop{\operator@font Hom}\nolimits}}
+\def\sgn{{\mathop{\operator@font sgn}\nolimits}}
+\let\dd=\partial
+\def\mat#1#2#3#4{\left(\begin{array}{cc} #1 & #2 \\ #3 & #4 \end{array}\right)}
+%\def\endpf{\hfill\includegraphics*{sally.head.ps} \bigskip}
+\def\endpf{\hfill$\blacksquare$}
+%\newcounter{countproj}[chapter]
+\newcommand{\project}[1]{%
+{\begin{hidden_project} \raggedright\bfseries\Large -\  #1 \end{hidden_project}}\bigskip}
+\newcommand{\chquote}[2]{{\vspace{-5mm}\hfill\parbox{8cm}{\small\itshape #1}%
+
+  \hfill\itshape\small -- #2} \\}
+%%some hack fixes to avoid euler
+\def\scr#1{{\mathcal{ #1}}}
+\@addtoreset{theorem}{chapter}
+\renewcommand{\Re}{\ensuremath{\mathrm{Re}}}
+\renewcommand{\Im}{\ensuremath{\mathrm{Im}}}
+
+%\newcommand\project{\@startsection*{subsection}{2}{\z@}%
+%                          {3.25ex \@plus1ex \@minus.2ex}%
+%                          {\z@ \@plus10ex}%
+%                          {\Large\bfseries}}[Project]

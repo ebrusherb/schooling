@@ -22,7 +22,6 @@ if t==1
 else strategy=evolution(:,t-1);
     strategy=reshape(strategy,1,N);
 
-
 M=makenet(strategy);
 
 v1=1./power(speeds(M,'both','max'),1-alpha);

@@ -1,11 +1,8 @@
-function [meanH2, meancorrlength, probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
-% strategy=randi([1 N/2-1],1,N)*2;
+function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
 scores=zeros(N,numsigs_tot);
-H2norms=zeros(1,numsigs_tot);
-corrlengths=zeros(1,numsigs_tot);
 
 for i=1:nummoves
     positions=unifrnd(0,1,N,2);
@@ -28,18 +25,19 @@ for i=1:nummoves
         v=real(expected_spin(M,T,beta));
        
         scores(:,(i-1)*numsigs_permove+j)=v;
-        h=H2norm(M,'additive');
-        if real(h)<10000 && imag(h)<1
-            H2norms((i-1)*numsigs_permove+j)=h;
-            [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
-            corrlengths((i-1)*numsigs_permove+j)=l;
-            j=j+1;
-        end
+%         h=H2norm(M,'additive');
+%         if real(h)<10000 && imag(h)<1
+%             H2norms((i-1)*numsigs_permove+j)=h;
+%             [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
+%             corrlengths((i-1)*numsigs_permove+j)=l;
+%             j=j+1;
+%         end
+        j=j+1;
     end
 end
-
-meanH2=mean(H2norms);
-meancorrlength=mean(corrlengths);
+% 
+% meanH2=mean(H2norms);
+% meancorrlength=mean(corrlengths);
 
 % weird=max(abs(scores),[],1)>1000;
 % scores(:,weird)=[];

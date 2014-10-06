@@ -1,4 +1,4 @@
-function [probeaten, probgettoeat, meanlambda, meanH2, meancorrlength]=signalingevents_wgroupprops(strategy,numsigs_permove,nummoves,radius,b,T)
+function [probeaten, probgettoeat, meanlambda, meanH2, meancorrlength]=signalingevents_wgroupprops_parallel(strategy,numsigs_permove,nummoves,radius,b,T)
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
@@ -7,9 +7,10 @@ lambdavals=zeros(1,nummoves);
 H2norms=zeros(1,nummoves);
 corrlengths=zeros(numsigs_permove,nummoves);
 
+disconnectedcount=0;
 parfor pari=1:nummoves
 % for pari=1:nummoves
-    
+     
     positions=unifrnd(0,1,N,2);
     d=squareform(pdist(positions));
 
@@ -20,15 +21,37 @@ parfor pari=1:nummoves
         M(ind,neighbors)=1/strategy(ind);
     end
     M(1:N+1:end)=-1; %sets diagonal equal to -1
-    
-    L=lap(M);
-    [~,vals]=eig(L);
-    vals=diag(vals);
-    vals=vals(2:length(vals));
-    lambda=min(real(vals));
-    lambdavals(pari)=lambda;
-    h=H2norm(M,'additive');
-    H2norms(pari)=h;   
+        
+    Mbin=M;
+    Mbin(M==-1)=0;
+    Mbin(~~Mbin)=1;
+    g=sparse(Mbin);
+    [~,Ctotal]=graphconncomp(g,'Directed','false');
+%     paths=graphallshortestpaths(g);
+
+%     groups=netgroups(M);
+%     ng=size(groups,1);
+%     groupvec=zeros(N,1);
+%     for i=1:ng
+%         for j=1:length(groups{i})
+%             groupvec(Ctotal==groups{i}(j))=i;
+%         end
+%     end
+
+    if max(Ctotal)==1
+        L=lap(M);
+        [~,vals]=eig(L);
+        vals=diag(vals);
+        vals=vals(2:length(vals));
+        lambda=min(real(vals));
+        lambdavals(pari)=lambda;
+        h=H2norm(M,'additive');
+        H2norms(pari)=h;
+    else 
+        disconnectedcount=disconnectedcount+1;
+        lambdavals(pari)=NaN;
+        H2norms(pari)=NaN;
+    end
     
     receivers=randsample(N,numsigs_permove,'true');
     for j=1:numsigs_permove
@@ -39,15 +62,29 @@ parfor pari=1:nummoves
         v=real(expected_spin(M,T,beta));
 
         scores(:,j,pari)=v;
-
-        [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
-        corrlengths(j,pari)=l;
+        
+%         Mgroup=M(groupvec==groupvec(receiver),groupvec==groupvec(receiver));
+%         bgroup=b;
+%         dgroup=d(groupvec==groupvec(receiver),groupvec==groupvec(receiver));
+%         receivergroup=find(index(groupvec==groupvec(receiver))==receiver);
+%         ingroup=paths(:,receiver)~=Inf;
+%         Mgroup=M(ingroup,ingroup);
+%         bgroup=b;
+%         dgroup=d(ingroup,ingroup);
+%         receivergroup=find(index(ingroup)==receiver);
+%         [~,~,l,~]=correlationlength_mat_single_v3(Mgroup,dgroup,bgroup,radius,receivergroup);
+        if max(Ctotal)==1
+            [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
+            corrlengths(j,pari)=l;
+        else 
+            corrlengths(j,pari)=NaN;
+        end
     end
 end
 
-meanlambda=mean(lambdavals);
-meanH2=mean(H2norms);
-meancorrlength=mean(col(corrlengths));
+meanlambda=mean(lambdavals(~isnan(lambdavals)));
+meanH2=mean(H2norms(~isnan(H2norms)));
+meancorrlength=mean(col(corrlengths(~isnan(corrlengths))));
 
 scores=reshape(scores,N,[]);
 

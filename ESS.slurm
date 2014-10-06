@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=20
 #SBATCH -t 15:00:00
 #SBATCH -J ESSjob
-#SBATCH -o ESSjob.out
+#SBATCH -o ESS.out
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-user=brush@princeton.edu

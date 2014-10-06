@@ -9,7 +9,7 @@ Mbin=M;
 Mbin(M==-1)=0;
 Mbin(~~Mbin)=1;
 g=sparse(Mbin);
-[~,Ctotal]=graphconncomp(g,'Directed','false');
+[~,Ctotal]=graphconncomp(g,'Directed','true');
 nc=max(Ctotal);
 groupreps=zeros(1,nc);
 for i=1:nc

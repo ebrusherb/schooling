@@ -1,5 +1,7 @@
-% dellapool=parpool('local', str2num(getenv('PROCS'))) ;
-% matlabpool open local 2
+numworkers=str2num(getenv('PROCS'));
+dellacluster=parcluster('local');
+dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
+dellapool=parpool(dellacluster, numworkers) ;
 
 numsigs_permove=1;
 nummoves=1000;
@@ -9,7 +11,7 @@ b=1;
 radius=.5;
 T=1;
 
-timesteps=200;
+timesteps=50;
 its=10;
 
 evolution_eaten=zeros(its,N,timesteps);
@@ -17,12 +19,17 @@ groupspeed_eaten=zeros(its,timesteps);
 groupconsensus_eaten=zeros(its,timesteps);
 corrlengths_eaten=zeros(its,timesteps);
 
+evolution_gettoeat=zeros(its,N,timesteps);
+groupspeed_gettoeat=zeros(its,timesteps);
+groupconsensus_gettoeat=zeros(its,timesteps);
+corrlengths_gettoeat=zeros(its,timesteps);
+
 for num=1:its
 
 for t=1:timesteps
-
+    init=randi([1 N-1],1,N);
 if t==1
-    strategy=randi([1 N-1],1,N);
+    strategy=init;
 %     strategy=2*ones(1,N);
 %     strategy(1)=10; 
     [~, ~, meanlambda, meanH2, meancorrlength]=signalingevents_wgroupprops_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
@@ -76,20 +83,8 @@ else
     corrlengths_eaten(num,t)=meancorrlength;
     evolution_eaten(num,:,t)=newstrategy;
 end
-end
-end
-
-evolution_gettoeat=zeros(its,N,timesteps);
-groupspeed_gettoeat=zeros(its,timesteps);
-groupconsensus_gettoeat=zeros(its,timesteps);
-corrlengths_gettoeat=zeros(its,timesteps);
-
-for num=1:its
-
-for t=1:timesteps
-
 if t==1
-    strategy=randi([1 N-1],1,N);
+    strategy=init;
 %     strategy=2*ones(1,N);
 %     strategy(1)=10; 
     [~, ~, meanlambda, meanH2, meancorrlength]=signalingevents_wgroupprops_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
@@ -145,7 +140,8 @@ else
 end
 end
 end
-% matlabpool close
+
+
 save('/home/brush/schooling_consensus/greedyopt.mat','evolution_eaten','groupspeed_eaten','groupconsensus_eaten','corrlengths_eaten','evolution_gettoeat','groupspeed_gettoeat','groupconsensus_gettoeat','corrlengths_gettoeat')
 
 delete(dellapool);

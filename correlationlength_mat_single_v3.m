@@ -18,10 +18,15 @@ corrvec=corrvec(o);
 l=length(distvec);
 
 pos=sum(corrvec>=0);
-if pos<l
-    f=find(corrvec<0,1,'first');
-    corrlength=interp1q(corrvec(f:-1:(f-1))',distvec(f:-1:(f-1))',0); 
-else corrlength=max(distvec);
+mimag=max(abs(imag(corrvec)));
+if mimag~=0
+    corrlength=0;
+else
+    if pos<l
+        f=find(corrvec<0,1,'first');
+        corrlength=interp1q(corrvec(f:-1:(f-1))',distvec(f:-1:(f-1))',0); 
+    else corrlength=max(distvec);
+    end
 end
 
 recrec=sum(sum(corrs(allreceivers,allreceivers)))/2/numreceivers^2;

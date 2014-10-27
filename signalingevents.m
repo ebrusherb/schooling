@@ -2,8 +2,9 @@ function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,numm
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
-scores=zeros(N,numsigs_tot);
+scores=zeros(N,numsigs_permove,nummoves);
 
+% parfor i=1:nummoves
 for i=1:nummoves
     positions=unifrnd(0,1,N,2);
     d=squareform(pdist(positions));
@@ -16,33 +17,18 @@ for i=1:nummoves
     end
     M(1:N+1:end)=-1; %sets diagonal equal to -1
     receivers=randsample(N,numsigs_permove,'true');
-    j=1;
-    while j<=numsigs_permove
+    for j=1:numsigs_permove
         beta=zeros(N,1);
         receiver=receivers(j);
         allreceivers=d(receiver,:)<=radius;
         beta(allreceivers)=b;
         v=real(expected_spin(M,T,beta));
        
-        scores(:,(i-1)*numsigs_permove+j)=v;
-%         h=H2norm(M,'additive');
-%         if real(h)<10000 && imag(h)<1
-%             H2norms((i-1)*numsigs_permove+j)=h;
-%             [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
-%             corrlengths((i-1)*numsigs_permove+j)=l;
-%             j=j+1;
-%         end
-        j=j+1;
+        scores(:,j,i)=v;
     end
 end
-% 
-% meanH2=mean(H2norms);
-% meancorrlength=mean(corrlengths);
 
-% weird=max(abs(scores),[],1)>1000;
-% scores(:,weird)=[];
-% meanscore=mean(scores,2);
-% scorevar=var(scores,[],2);
+scores=reshape(scores,N,[]);
 
 [minvals,~]=min(scores);
 minmat=repmat(minvals,N,1);

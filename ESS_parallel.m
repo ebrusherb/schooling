@@ -3,8 +3,8 @@ dellacluster=parcluster('local');
 dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
 dellapool=parpool(dellacluster, numworkers) ;
 
-numsigs_permove=1;
-nummoves=5000;
+numsigs_permove=100;
+nummoves=10;
 
 N=20;
 b=1;
@@ -12,10 +12,10 @@ b=1;
 strats=1:1:(N-1);
 L=length(strats);
 
-Tvals=1;
+Tvals=[.01 .1 1 10];
 Nt=length(Tvals);
 
-radvals=[0:.25:2];
+radvals=[0:.1:1.4];
 % radvals=.1;
 Nr=length(radvals);
 
@@ -103,7 +103,8 @@ end
 t=toc(t0);
 disp(t);
 
-save('/home/brush/schooling_consensus/ESSoutput.mat','strats','radvals','fitnesseaten','rhoeaten','ESSseaten','fitnessgettoeat','rhogettoeat','ESSsgettoeat');
+filename=strcat('/home/brush/schooling_consensus/ESS','_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
+save(filename,'strats','radvals','Tvals','fitnesseaten','rhoeaten','ESSseaten','fitnessgettoeat','rhogettoeat','ESSsgettoeat');
 
 delete(dellapool);
 

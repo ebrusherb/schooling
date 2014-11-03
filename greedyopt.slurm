@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 20:20:00
+#SBATCH -t 18:00:00
 #SBATCH -J greedyoptjob
 #SBATCH -o greedyopt.out
 #SBATCH --mail-type=begin
@@ -25,6 +25,6 @@ OPTS=' -singleCompThread -nodisplay -nosplash'
 
 export PROCS=${SLURM_CPUS_ON_NODE}
 
-${EXEC}${OPTS} < greedy_opt_v2.m
+${EXEC}${OPTS} < greedyopt_v2.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

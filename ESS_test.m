@@ -1,10 +1,10 @@
-numworkers=str2num(getenv('PROCS'));
-dellacluster=parcluster('local');
-dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
-dellapool=parpool(dellacluster, numworkers) ;
+% numworkers=str2num(getenv('PROCS'));
+% dellacluster=parcluster('local');
+% dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
+% dellapool=parpool(dellacluster, numworkers) ;
 
-numsigs_permove=str2num(getenv('numsigs'));
-nummoves=str2num(getenv('nummoves'));;
+numsigs_permove=100;
+nummoves=10;
 
 N=20;
 b=1;
@@ -12,21 +12,16 @@ b=1;
 strats=1:1:(N-1);
 L=length(strats);
 
-Tvals=[.01 .1 1 10];
+% Tvals=[.01 .1 1 10];
+Tvals=10;
 Nt=length(Tvals);
 
-radvals=[0:.1:1.4];
-% radvals=.1;
+% radvals=[0:.1:1.4];
+radvals=1.4;
 Nr=length(radvals);
 
 ESSseaten=cell(Nt,Nr);
 ESSsgettoeat=cell(Nt,Nr);
-
-storefitnesseaten=cell(Nt,Nr);
-storerhoeaten=cell(Nt,Nr);
-
-storefitnessgettoeat=cell(Nt,Nr);
-storerhogettoeat=cell(Nt,Nr);
 
 t0=tic;
 
@@ -96,13 +91,7 @@ for q=1:Nt
                 tosum(k)=prod(ratio(1:k));
             end
             rhogettoeat(ind)=1/(1+sum(tosum));
-        end  
-        
-        storefitnesseaten{q,p}=fitnesseaten;
-        storerhoeaten{q,p}=rhoeaten;
-        
-        storefitnessgettoeat{q,p}=fitnessgettoeat;
-        storerhogettoeat{q,p}=rhogettoeat;
+        end   
 
         eqstratseaten=eq_strats(N,fitnesseaten,rhoeaten);
         ESSseaten{q,p}=eqstratseaten{2};
@@ -114,10 +103,10 @@ end
 
 t=toc(t0);
 disp(t);
-
-filename=strcat('/home/brush/schooling_consensus/ESS','_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
-save(filename,'strats','radvals','Tvals','storefitnesseaten','storerhoeaten','ESSseaten','storefitnessgettoeat','storerhogettoeat','ESSsgettoeat');
-
-delete(dellapool);
-
-exit ;
+% 
+% filename=strcat('/home/brush/schooling_consensus/ESS','_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
+% save(filename,'strats','radvals','Tvals','fitnesseaten','rhoeaten','ESSseaten','fitnessgettoeat','rhogettoeat','ESSsgettoeat');
+% 
+% delete(dellapool);
+% 
+% exit ;

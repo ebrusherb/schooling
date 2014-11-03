@@ -65,7 +65,7 @@ set(gcf,'Color','w')
 v=get(gcf,'Position');
 ratio=v(4)/v(3);
 w=6.83;
-h=.5*w;
+h=.35*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[.5 1 w h]);
 fontname='TimesNewRoman';
@@ -75,36 +75,43 @@ markersz=3;
 lw=2;
 
 n=size(ESSseaten,2);
-k=1;
-t=3;
 
-ESSseaten=ESSeaten_total{k};
-ESSsgettoeat=ESSgettoeat_total{k};
-
-hold on
-for i=1:n
-    l=size(ESSseaten{t,i},2);
-    p1=plot(radvals(i)*ones(l,1),ESSseaten{t,i},'o','MarkerSize',markersz,'LineWidth',lw,'MarkerFaceColor','blue');
-    l=size(ESSsgettoeat{t,i},2);
-    if l>0
-        p2=plot(radvals(i)*ones(l,1),ESSsgettoeat{t,i},'or','MarkerSize',markersz,'LineWidth',lw,'MarkerFaceColor','red');
+for k=1:1
+    ESSseaten=ESSeaten_total{k};
+    ESSsgettoeat=ESSgettoeat_total{k};
+for t=2:4
+%     subplot(1,3,t-1+(k-1)*4)
+    hold on
+    for i=1:n
+        l=size(ESSseaten{t,i},2);
+        p1=plot(radvals(i)*ones(l,1),ESSseaten{t,i},'o','MarkerSize',markersz,'LineWidth',lw,'MarkerFaceColor','blue');
+        l=size(ESSsgettoeat{t,i},2);
+        if l>0
+            p2=plot(radvals(i)*ones(l,1),ESSsgettoeat{t,i},'or','MarkerSize',markersz,'LineWidth',lw,'MarkerFaceColor','red');
+        end
     end
+    if k==1 && t==2
+            xlabel('Radius of signal','FontName',fontname,'FontSize',textfontsz)
+            ylabel('Number of neighbors','FontName',fontname,'FontSize',textfontsz)
+    end
+    switch k
+        case 1
+            title(strcat('T=',num2str(Tvals(t))),'FontName',fontname,'FontSize',textfontsz)
+    end
+    if k==1 && t==2 
+            leg=legend([p1 p2],{'Predation','Resources'},'FontName',fontname,'FontSize',labfontsz);
+            legend('boxoff')
+            v=get(leg,'Position');
+            set(leg,'Position',[.1 .4 v(3) v(4)])
+    end
+    set(gca,'FontName',fontname,'FontSize',labfontsz)
 end
-xlabel('Radius of signal','FontName',fontname,'FontSize',textfontsz)
-ylabel('Number of neighbors','FontName',fontname,'FontSize',textfontsz)
-
-leg=legend([p1 p2],{'Predation','Resources'},'FontName',fontname,'FontSize',labfontsz);
-legend('boxoff')
-v=get(leg,'Position');
-set(leg,'Position',[.1 .4 v(3) v(4)])
-
-set(gca,'FontName',fontname,'FontSize',labfontsz)
-
+end
 
 set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
-filename=strcat('/Users/eleanorbrush/Desktop/','ESSneighbors','.pdf');
+filename=strcat('/Users/eleanorbrush/Desktop/','ESSneighbors_multT','.pdf');
 print(filename,'-dpdf','-r300');
 %%
 figure

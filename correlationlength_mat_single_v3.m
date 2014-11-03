@@ -19,10 +19,10 @@ l=length(distvec);
 
 pos=sum(corrvec>=0);
 mimag=max(abs(imag(corrvec)));
-if mimag~=0
+if mimag~=0 || sum(isnan(corrvec))>0
     corrlength=0;
 else
-    if pos<l
+    if pos<l && pos>1
         f=find(corrvec<0,1,'first');
         corrlength=interp1q(corrvec(f:-1:(f-1))',distvec(f:-1:(f-1))',0); 
     else corrlength=max(distvec);

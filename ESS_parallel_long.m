@@ -55,7 +55,7 @@ for q=1:Nt
 
             strategy=resident*ones(1,N);
             strategy(1:k)=invader;
-            [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T);
+            [probeaten, probgettoeat]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
 
             perfeaten=1-probeaten;
             featen(ind)=mean(perfeaten(1:k));

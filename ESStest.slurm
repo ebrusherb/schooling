@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 10:00:00
+#SBATCH -t 0:00:10
 #SBATCH -J ESSjob
 #SBATCH -o ESS.out
 #SBATCH --mail-type=begin
@@ -27,6 +27,6 @@ export PROCS=${SLURM_CPUS_ON_NODE}
 export numsigs=1
 export nummoves=1000
 
-${EXEC}${OPTS} < ESS_parallel.m
+${EXEC}${OPTS} < ESS_parallel_test.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

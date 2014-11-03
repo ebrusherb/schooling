@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 10:00:00
+#SBATCH -t 50:00:00
 #SBATCH -J ESSjob
 #SBATCH -o ESS.out
 #SBATCH --mail-type=begin
@@ -24,9 +24,9 @@ EXEC=/usr/licensed/bin/matlab
 OPTS=' -singleCompThread -nodisplay -nosplash'
 
 export PROCS=${SLURM_CPUS_ON_NODE}
-export numsigs=1
+export numsigs=20
 export nummoves=1000
 
-${EXEC}${OPTS} < ESS_parallel.m
+${EXEC}${OPTS} < ESS_parallel_long.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

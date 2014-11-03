@@ -25,6 +25,7 @@ where=indices(~nonzero);
 vhat=1/sqrt(N)*ones(N,1);
 if sum(~nonzero)==1
     V(:,where(1))=ones(N,1);
+%     V(:,where(1))=vhat;
 end
 if sum(~nonzero)>1
     L=sum(~nonzero);

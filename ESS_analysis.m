@@ -2,7 +2,7 @@
 ESSeaten_total=cell(2,1);
 ESSgettoeat_total=cell(2,1);
 
-load /Users/eleanorbrush/Desktop/ESSfull.mat
+load /Users/eleanorbrush/Desktop/ESS_nummoves=1000_numpermove=1_fullstorage.mat
 
 ESSeaten_total{1}=ESSseaten;
 ESSgettoeat_total{1}=ESSsgettoeat;
@@ -22,7 +22,7 @@ k=1;
 ESSseaten=ESSeaten_total{k};
 ESSsgettoeat=ESSgettoeat_total{k};
 t=3;
-radtoplot=[1 3 4:2:10 11];
+radtoplot=[1 2 4:2:10 11];
 figure
 for r=1:length(radtoplot)
     subplot(2,length(radtoplot),r)
@@ -47,6 +47,34 @@ for r=1:length(radtoplot)
     hold on
     plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
 end
+%%
+t=3;
+r=2;
+figure
+set(gcf,'Position',[200 200 1200 700])
+subplot(1,2,1)
+fitnesseaten=storefitnesseaten{t,radtoplot(r)};
+    fitim=imagesc(transpose(fitnesseaten));
+    set(gca,'ydir','normal')
+    colormap(myseqmap)
+    colorbar
+    caxis manual
+    caxis([0 1])
+    hold on
+    plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
+subplot(1,2,2)    
+    rhoeaten=storerhoeaten{t,radtoplot(r)};
+    rhoim=imagesc(transpose(rhoeaten));
+    set(gca,'ydir','normal')
+%     colormap(mydivmap)
+    colorbar
+    caxis manual
+    caxis([0 .1])
+    hold on
+    plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
+
+
+
 %%
 numsigs_permove=1;
 nummoves=1000;
@@ -105,7 +133,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','ESSneighbors','.pdf');
-print(filename,'-dpdf','-r300');
+% print(filename,'-dpdf','-r300');
 %%
 figure
 set(gcf,'Color','w')

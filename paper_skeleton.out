@@ -1,12 +1,12 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [1][-]{section.1}{Abstract}{}
 \BOOKMARK [1][-]{section.2}{Model }{}
-\BOOKMARK [2][-]{subsection.2.1}{Learning dynamics}{section.2}
-\BOOKMARK [2][-]{subsection.2.2}{Individual-level performance }{section.2}
+\BOOKMARK [2][-]{subsection.2.1}{Learning dynamics }{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Individual-level fitness }{section.2}
 \BOOKMARK [2][-]{subsection.2.3}{Group-level performance }{section.2}
 \BOOKMARK [2][-]{subsection.2.4}{Optimization methods }{section.2}
 \BOOKMARK [1][-]{section.3}{Results }{}
-\BOOKMARK [2][-]{subsection.3.1}{ESS }{section.3}
-\BOOKMARK [2][-]{subsection.3.2}{Learned optima }{section.3}
+\BOOKMARK [2][-]{subsection.3.1}{ESS strategies }{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Learned strategies }{section.3}
 \BOOKMARK [2][-]{subsection.3.3}{Relationship between group properties }{section.3}
 \BOOKMARK [1][-]{section.4}{Discussion}{}
 \BOOKMARK [1][-]{section.5}{Figures }{}

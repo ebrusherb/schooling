@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  3 NOV 2014 13:49
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  19 NOV 2014 15:37
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -579,51 +579,51 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 Non-PDF special ignored!
 
-{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-</Users/eleanorbrush/Desktop/ESSneighbors.pdf, id=107, 493.845pt x 246.9225pt>
-File: /Users/eleanorbrush/Desktop/ESSneighbors.pdf Graphic file (type pdf)
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=126, 493.845pt x 246.9225pt>
+File: /Users/eleanorbrush/Desktop/ESSfigure.pdf Graphic file (type pdf)
 
-<use /Users/eleanorbrush/Desktop/ESSneighbors.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 84--86
+<use /Users/eleanorbrush/Desktop/ESSfigure.pdf>
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 96--98
 [][] 
  []
 
 
-</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=108, 493.845pt x 246.92
+</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=127, 493.845pt x 246.92
 25pt>
 File: /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf Graphic file (type pdf
 )
  <use /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 90--92
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 102--104
 [][] 
  []
 
-[2] [3pdfTeX warning (ext4): destination with the same identifier (name{equatio
+[3] [4pdfTeX warning (ext4): destination with the same identifier (name{equatio
 n.6.1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.124 \end{align*}
-                   </Users/eleanorbrush/Desktop/ESSneighbors.pdf>] [4 </Users/e
-leanorbrush/Desktop/greedyoptneighbors.pdf>]
-Overfull \hbox (45.82327pt too wide) in paragraph at lines 151--151
+l.137 \end{align*}
+                   </Users/eleanorbrush/Desktop/ESSfigure.pdf>] [5 </Users/elea
+norbrush/Desktop/greedyoptneighbors.pdf>]
+Overfull \hbox (45.82327pt too wide) in paragraph at lines 164--164
 [] 
  []
 
 
-Overfull \hbox (38.3769pt too wide) in paragraph at lines 168--168
+Overfull \hbox (38.3769pt too wide) in paragraph at lines 181--181
 [] 
  []
 
-[5] [6] (./paper_skeleton.bbl [7]) [8] (./paper_skeleton.aux) ) 
+[6] [7] (./paper_skeleton.bbl [8]) [9] (./paper_skeleton.aux) ) 
 Here is how much of TeX's memory you used:
- 10187 strings out of 493848
- 140593 string characters out of 3149207
- 307441 words of memory out of 3000000
+ 10188 strings out of 493848
+ 140584 string characters out of 3149207
+ 308005 words of memory out of 3000000
  13209 multiletter control sequences out of 15000+200000
  13742 words of font info for 60 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 41i,16n,39p,1175b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,16n,39p,2354b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texl
 ive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texli
 ve/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texliv
@@ -650,9 +650,9 @@ ic/amsfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
 public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
 pe1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/fonts
 /type1/public/rsfs/rsfs10.pfb>
-Output written on paper_skeleton.pdf (8 pages, 333676 bytes).
+Output written on paper_skeleton.pdf (9 pages, 342193 bytes).
 PDF statistics:
- 269 PDF objects out of 1000 (max. 8388607)
- 43 named destinations out of 1000 (max. 500000)
+ 284 PDF objects out of 1000 (max. 8388607)
+ 44 named destinations out of 1000 (max. 500000)
  147 words of extra memory for PDF output out of 10000 (max. 10000000)
 

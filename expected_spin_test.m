@@ -141,6 +141,19 @@ for i = 1:nummoves
     keepvals(:,i)=vals(o);
 end
 scores=reshape(scores,N,[]);
+
+[minvals,~]=min(scores);
+minmat=repmat(minvals,N,1);
+[rows,cols]=find(abs(scores-minmat)<0.00001);
+minscorer=zeros(N,size(scores,2));
+
+for i=1:size(scores,2)
+    look=find(cols==i);
+    minscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
+%     minscorer(rows(cols==i),i)=1/numsigs_tot;
+end
+probeaten=sum(minscorer,2);
+
 stdevscores=std(scores,[],2);
 
 reshaped=reshape(keepvecs,400,1000);
@@ -240,3 +253,13 @@ colorbar
 hold off
 
 q = expected_spin(M,T,beta)
+
+%%
+A=M-diag(beta);
+N=size(M,1);
+
+[vecs,vals]=eig(A);
+V=vecs;
+vals=diag(vals);
+nonzero=abs(vals)>0.00001;
+nonzerovals=vals(nonzero);

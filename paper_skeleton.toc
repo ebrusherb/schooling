@@ -8,10 +8,10 @@
 \contentsline {subsection}{\numberline {3.1}ESS strategies }{2}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Learned strategies }{3}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Relationship between group properties }{3}{subsection.3.3}
-\contentsline {section}{\numberline {4}Discussion}{3}{section.4}
-\contentsline {section}{\numberline {5}Figures }{3}{section.5}
-\contentsline {section}{\numberline {6}Appendix}{4}{section.6}
-\contentsline {subsection}{\numberline {6.1}H2 Norm }{4}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Calculating correlations }{4}{subsection.6.2}
-\contentsline {subsection}{\numberline {6.3}Equivalence of dynamics and Hamiltonian }{6}{theorem.6.2}
+\contentsline {section}{\numberline {4}Discussion}{4}{section.4}
+\contentsline {section}{\numberline {5}Figures }{4}{section.5}
+\contentsline {section}{\numberline {6}Appendix}{5}{section.6}
+\contentsline {subsection}{\numberline {6.1}H2 Norm }{5}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Calculating correlations }{5}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Equivalence of dynamics and Hamiltonian }{7}{theorem.6.2}
 \contentsline {subsection}{\numberline {6.4}Numerically evaluating dynamics }{7}{theorem.6.3}

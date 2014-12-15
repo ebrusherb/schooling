@@ -1,4 +1,4 @@
-function [distbins,avgcorr,corrlength] = correlationlength_mat_single(M,d,b,radius,i)
+function [distbins,avgcorr,corrlength] = correlationlength_mat_single(M,d,b,radius,receiver)
 % if nargin==5 || strcmp(path,'path')
 %     path=1;
 % else path=0;
@@ -9,12 +9,16 @@ N=size(M,2);
 corrvec=[];
 distvec=[];
 
-receiver=i;
 allreceivers=d(receiver,:)<=radius;
 beta=zeros(N,1);
 beta(allreceivers)=1;
 bbeta=b*beta;
-corrs=paircorrelations(M,bbeta);
+% corrs=paircorrelations(M,bbeta);
+im=1;
+while im>0
+    corrs=paircorrelations(M,bbeta);
+    im=max(max(abs(imag(corrs))));
+end
 uppercorr=triu(corrs,1);
 upperdist=triu(d,1);
 corrvectoadd=uppercorr(~~uppercorr);

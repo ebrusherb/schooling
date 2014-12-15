@@ -1,6 +1,6 @@
 close all
 N=20;
-strategy=10*ones(N,1);
+strategy=2*ones(N,1);
 b=1;
 T=1;
 radius=.1;

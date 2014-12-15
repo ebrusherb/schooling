@@ -4,7 +4,7 @@ dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLU
 dellapool=parpool(dellacluster, numworkers) ;
 
 numsigs_permove=str2num(getenv('numsigs'));
-nummoves=str2num(getenv('nummoves'));;
+nummoves=str2num(getenv('nummoves'));
 
 N=20;
 b=1;
@@ -54,16 +54,16 @@ for q=1:Nt
             invader=strats(v);
 
             strategy=resident*ones(1,N);
-            strategy(1:k)=invader;
+            strategy(N+1-(1:k))=invader;
             [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T);
 
             perfeaten=1-probeaten;
-            featen(ind)=mean(perfeaten(1:k));
-            geaten(ind)=mean(perfeaten((k+1):N));
+            featen(ind)=mean(perfeaten(N+1-(1:k)));
+            geaten(ind)=mean(perfeaten(N+1-((k+1):N)));
 
             perfgettoeat=probgettoeat;
-            fgettoeat(ind)=mean(perfgettoeat(1:k));
-            ggettoeat(ind)=mean(perfgettoeat((k+1):N));
+            fgettoeat(ind)=mean(perfgettoeat(N+1-(1:k)));
+            ggettoeat(ind)=mean(perfgettoeat(N+1-((k+1):N)));
 
         end
 

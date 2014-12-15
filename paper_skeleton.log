@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  19 NOV 2014 15:37
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  9 DEC 2014 16:46
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -579,80 +579,81 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 Non-PDF special ignored!
 
-{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=126, 493.845pt x 246.9225pt>
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+
+</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=134, 493.845pt x 246.9225pt>
 File: /Users/eleanorbrush/Desktop/ESSfigure.pdf Graphic file (type pdf)
 
 <use /Users/eleanorbrush/Desktop/ESSfigure.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 96--98
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 93--95
 [][] 
  []
 
 
-</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=127, 493.845pt x 246.92
+</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=135, 493.845pt x 246.92
 25pt>
 File: /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf Graphic file (type pdf
 )
  <use /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 102--104
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 99--101
 [][] 
  []
 
-[3] [4pdfTeX warning (ext4): destination with the same identifier (name{equatio
-n.6.1}) has been already used, duplicate ignored
+[4 </Users/eleanorbrush/Desktop/ESSfigure.pdf>] [5pdfTeX warning (ext4): destin
+ation with the same identifier (name{equation.6.1}) has been already used, dupl
+icate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.137 \end{align*}
-                   </Users/eleanorbrush/Desktop/ESSfigure.pdf>] [5 </Users/elea
-norbrush/Desktop/greedyoptneighbors.pdf>]
-Overfull \hbox (45.82327pt too wide) in paragraph at lines 164--164
+l.134 \end{align*}
+                   </Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>]
+Overfull \hbox (45.82327pt too wide) in paragraph at lines 161--161
 [] 
  []
 
-
-Overfull \hbox (38.3769pt too wide) in paragraph at lines 181--181
+[6]
+Overfull \hbox (38.3769pt too wide) in paragraph at lines 178--178
 [] 
  []
 
-[6] [7] (./paper_skeleton.bbl [8]) [9] (./paper_skeleton.aux) ) 
+[7] (./paper_skeleton.bbl [8]) [9] (./paper_skeleton.aux) ) 
 Here is how much of TeX's memory you used:
  10188 strings out of 493848
  140584 string characters out of 3149207
- 308005 words of memory out of 3000000
+ 306118 words of memory out of 3000000
  13209 multiletter control sequences out of 15000+200000
  13742 words of font info for 60 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 41i,16n,39p,2354b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texl
-ive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texli
-ve/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texliv
-e/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/
-2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2
-009/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/local/texliv
-e/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive
-/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2
-009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/200
-9/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2009/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2009/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmti9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
-ic/amsfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
-public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
-pe1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/fonts
-/type1/public/rsfs/rsfs10.pfb>
-Output written on paper_skeleton.pdf (9 pages, 342193 bytes).
+ 41i,16n,39p,2073b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/
+2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2
+009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/20
+09/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2009
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/
+texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/local/texlive/20
+09/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/200
+9/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2009/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2009/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2009/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2009/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmti9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/a
+msfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
+ic/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
+public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
+e1/public/rsfs/rsfs10.pfb>
+Output written on paper_skeleton.pdf (9 pages, 342743 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
+ 286 PDF objects out of 1000 (max. 8388607)
  44 named destinations out of 1000 (max. 500000)
  147 words of extra memory for PDF output out of 10000 (max. 10000000)
 

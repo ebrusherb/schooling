@@ -13,7 +13,7 @@ ESSeaten_total{2}=ESSseaten;
 ESSgettoeat_total{2}=ESSsgettoeat;
 
 load /Users/eleanorbrush/Desktop/greedyopt_rad=0.1_T=1_nummoves=10_numpermove=100.mat
-%%
+%% lots of fitness and rho heatmaps
 
 myseqmap=cbrewer('seq', 'YlOrRd',9);
 myseqmap=myseqmap(end:-1:1,:);
@@ -22,7 +22,7 @@ k=1;
 ESSseaten=ESSeaten_total{k};
 ESSsgettoeat=ESSgettoeat_total{k};
 t=3;
-radtoplot=[1 2 4:2:10 11];
+radtoplot=[1 2 4:2:10 length(radvals)];
 figure
 for r=1:length(radtoplot)
     subplot(2,length(radtoplot),r)
@@ -32,7 +32,7 @@ for r=1:length(radtoplot)
     colormap(myseqmap)
     colorbar
     caxis manual
-    caxis([0 1])
+    caxis([.8 1])
     title(strcat('Rad=',num2str(radvals(radtoplot(r)))));
     hold on
     plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
@@ -47,9 +47,9 @@ for r=1:length(radtoplot)
     hold on
     plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
 end
-%%
+%% one fitness and rho heatmap
 t=3;
-r=2;
+r=length(radtoplot);
 figure
 set(gcf,'Position',[200 200 1200 700])
 subplot(1,2,1)
@@ -59,7 +59,7 @@ fitnesseaten=storefitnesseaten{t,radtoplot(r)};
     colormap(myseqmap)
     colorbar
     caxis manual
-    caxis([0 1])
+    caxis([.8 1])
     hold on
     plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
 subplot(1,2,2)    
@@ -69,25 +69,12 @@ subplot(1,2,2)
 %     colormap(mydivmap)
     colorbar
     caxis manual
-    caxis([0 .1])
+    caxis([.04 .06])
     hold on
     plot(ESSseaten{t,radtoplot(r)},ESSseaten{t,radtoplot(r)},'or')
 
 
-
-%%
-numsigs_permove=1;
-nummoves=1000;
-
-N=20;
-b=1;
-radius=radvals(end);
-T=Tvals(4);
-
-strategy=[1,16*ones(1,N-1)];
-[probeaten, ~]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T);
-perfeaten=1-probeaten
-%%
+%% ESS as a function of radius of signal
 figure
 set(gcf,'Color','w')
 v=get(gcf,'Position');
@@ -134,7 +121,7 @@ set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','ESSneighbors','.pdf');
 % print(filename,'-dpdf','-r300');
-%%
+%%  ESS as a function of radius for multiple times
 figure
 set(gcf,'Color','w')
 v=get(gcf,'Position');
@@ -189,7 +176,7 @@ set(gcf,'PaperPosition',[0 0 w h]);
 filename=strcat('/Users/eleanorbrush/Desktop/','ESSneighbors_multT','.pdf');
 print(filename,'-dpdf','-r300');
 
-%%
+%% greedyopt figures
 figure
 set(gcf,'Color','w')
 v=get(gcf,'Position');

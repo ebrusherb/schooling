@@ -11,8 +11,8 @@ b=1;
 radius=.1;
 T=1;
 
-timesteps=50;
-its=20;
+timesteps=100;
+its=25;
 
 evolution_eaten=zeros(its,N,timesteps);
 groupspeed_eaten=zeros(its,timesteps);
@@ -28,7 +28,8 @@ disconnected_gettoeat=zeros(its,timesteps);
 
 for num=1:its
 
-for t=1:timesteps
+t=1;    
+while t<=timesteps
     init=randi([1 N-1],1,N);
 if t==1
     strategy=init;
@@ -76,6 +77,7 @@ else
 
     end
     evolution_eaten(num,:,t)=newstrategy;
+    if t>1 && sum(evolution_eaten(num,:,t)==evolution_eaten(
 end
 
 if t==1

@@ -30,7 +30,7 @@ for r=1:length(radtoplot)
     fitim=imagesc(transpose(fitnesseaten));
     set(gca,'ydir','normal')
     colormap(myseqmap)
-    colorbar
+%     colorbar
     caxis manual
     caxis([.8 1])
     title(strcat('Rad=',num2str(radvals(radtoplot(r)))));
@@ -41,7 +41,7 @@ for r=1:length(radtoplot)
     rhoim=imagesc(transpose(rhoeaten));
     set(gca,'ydir','normal')
 %     colormap(mydivmap)
-    colorbar
+%     colorbar
     caxis manual
     caxis([0 .1])
     hold on
@@ -49,7 +49,7 @@ for r=1:length(radtoplot)
 end
 %% one fitness and rho heatmap
 t=3;
-r=length(radtoplot);
+r=2;
 figure
 set(gcf,'Position',[200 200 1200 700])
 subplot(1,2,1)
@@ -225,3 +225,4 @@ set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','greedyoptneighbors','.pdf');
 % print(filename,'-dpdf','-r300');
+

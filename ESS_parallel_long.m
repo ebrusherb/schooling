@@ -4,7 +4,7 @@ dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLU
 dellapool=parpool(dellacluster, numworkers) ;
 
 numsigs_permove=str2num(getenv('numsigs'));
-nummoves=str2num(getenv('nummoves'));;
+nummoves=str2num(getenv('nummoves'));
 
 N=20;
 b=1;

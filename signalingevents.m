@@ -1,11 +1,11 @@
-function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
+% function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 
 scores=zeros(N,numsigs_permove,nummoves);
 
 % parfor i=1:nummoves
-for i=1:nummoves
+for i=1:20000
     positions=unifrnd(0,1,N,2);
     d=squareform(pdist(positions));
 
@@ -53,4 +53,4 @@ for i=1:size(scores,2)
     maxscorer(rows(cols==i),i)=1/numsigs_tot;
 end
 probgettoeat=sum(maxscorer,2);
-end
+% end

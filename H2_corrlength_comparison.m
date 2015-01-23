@@ -1,6 +1,3 @@
-function corrs=paircorrelations(M,beta)
-
-N=size(M,2);
 
 q=zeros(N-1,N);
 q(1,1:2)=[1/sqrt(2) -1/sqrt(2)];
@@ -14,6 +11,17 @@ for j=2:(N-1)
    q(j,:)=v;
 end
 
+noise=eye(N);
+noise=q*noise*transpose(q);
+
+L=-M;
+
+Lbar=q*L*transpose(q);
+
+sigma = lyap(Lbar,-noise);
+
+beta=zeros(N,1);
+
 A=M-diag(beta);
 P=-q*A*transpose(q);
 Pinv=inv(P);
@@ -21,7 +29,6 @@ Pinv=inv(P);
 [vecs,vals]=eig(P);
 vals=diag(vals);
 invvals=1./vals;
-U=vecs*diag(invvals)*transpose(vecs);
 
 sigma1=q*transpose(A)*ones(N,1);
 sigma2=q*beta;
@@ -34,17 +41,8 @@ for i=1:(N-1)
         piece1=U(i,j);
         piece2=sum(sum((sigma1'*Pinv(:,i))*(sigma1'*Pinv(:,j))'))+sum(sum((sigma1'*Pinv(:,j))*(sigma1'*Pinv(:,i))'));
         piece3=sum(sum((sigma2'*Pinv(:,i))*(sigma2'*Pinv(:,j))'))+sum(sum((sigma2'*Pinv(:,j))*(sigma2'*Pinv(:,i))'));
-        zcorrs(i,j)=1/2*piece1+1/4*piece2+1/4*piece3;
-        zcorrs(j,i)=1/2*piece1+1/4*piece2+1/4*piece3;
-%         zcorrs(i,j)=piece1+piece2+piece3;
-%         zcorrs(j,i)=piece1+piece2+piece3;
+        zcorrs(i,j)=piece1+piece2+piece3;
+        zcorrs(j,i)=piece1+piece2+piece3;
     end
 end
 
-% corrs=transpose(q)*zcorrs*q;
-
-cov=transpose(q)*zcorrs*q;
-todivide=repmat(diag(cov),1,N).*repmat(diag(cov)',N,1);
-todivide=power(todivide,.5);
-corrs=cov./todivide;
-end

@@ -1,17 +1,17 @@
 \contentsline {section}{\numberline {1}Abstract}{1}{section.1}
 \contentsline {section}{\numberline {2}Model }{1}{section.2}
 \contentsline {subsection}{\numberline {2.1}Learning dynamics }{1}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Individual-level fitness }{2}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Individual-level fitness }{1}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Group-level performance }{2}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Optimization methods }{2}{subsection.2.4}
 \contentsline {section}{\numberline {3}Results }{2}{section.3}
 \contentsline {subsection}{\numberline {3.1}ESS strategies }{2}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Learned strategies }{3}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Relationship between group properties }{3}{subsection.3.3}
-\contentsline {section}{\numberline {4}Discussion}{4}{section.4}
+\contentsline {section}{\numberline {4}Discussion}{3}{section.4}
 \contentsline {section}{\numberline {5}Figures }{4}{section.5}
 \contentsline {section}{\numberline {6}Appendix}{5}{section.6}
 \contentsline {subsection}{\numberline {6.1}H2 Norm }{5}{subsection.6.1}
 \contentsline {subsection}{\numberline {6.2}Calculating correlations }{5}{subsection.6.2}
 \contentsline {subsection}{\numberline {6.3}Equivalence of dynamics and Hamiltonian }{7}{theorem.6.2}
-\contentsline {subsection}{\numberline {6.4}Numerically evaluating dynamics }{7}{theorem.6.3}
+\contentsline {subsection}{\numberline {6.4}Numerically evaluating dynamics }{8}{theorem.6.3}

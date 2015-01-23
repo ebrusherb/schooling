@@ -13,6 +13,8 @@ ESSeaten_total{2}=ESSseaten;
 ESSgettoeat_total{2}=ESSsgettoeat;
 
 load /Users/eleanorbrush/Desktop/greedyopt_rad=0.1_T=1_nummoves=10_numpermove=100.mat
+
+load /Users/eleanorbrush/Desktop/homogengroupprops.mat
 %% lots of fitness and rho heatmaps
 
 myseqmap=cbrewer('seq', 'YlOrRd',9);
@@ -226,3 +228,52 @@ set(gcf,'PaperPosition',[0 0 w h]);
 filename=strcat('/Users/eleanorbrush/Desktop/','greedyoptneighbors','.pdf');
 % print(filename,'-dpdf','-r300');
 
+
+%%
+figure
+w=6.83;
+h=.25*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[11.5 3 w h]);
+subplot(1,2,1)
+toplot=corrlengths;
+% toplot=corrlengths./repmat([1 radvals(2:end)],Lh,1);
+a=min(min(toplot))-1;
+A=max(max(toplot))-1;
+A=max(abs(a),abs(A))+1;
+mycolors=cbrewer('div','RdBu',20);
+imagesc(radvals,homogenstrats,toplot)
+% caxis manual
+% caxis([-A A])
+% colormap(mycolors)
+colorbar
+title('Correlation Length')
+xlabel('Radius of signal')
+ylabel('Strategy')
+
+subplot(1,2,2)
+hold on
+t=3;
+n=size(ESSseaten,2);
+for i=1:n
+    l=length(ESSseaten{t,i});
+    plot(corrlengths(5,i)*ones(l,1),ESSseaten{t,i},'o')
+end
+xlabel('Correlation length of highly connected group')
+ylabel('ESS strategy')
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+
+filename='/Users/eleanorbrush/Desktop/corrlength_exploration.pdf';
+% print(filename,'-dpdf','-r300')
+
+%%
+seqcols=colormap(jet(Nr));
+figure
+hold on
+
+for i=1:Nr
+    plot(ones(Lh,1)./(groupconsensus(:,i)./col(homogenstrats)),corrlengths(:,i),'-o','Color',seqcols(i,:),'LineWidth',2)
+end
+    

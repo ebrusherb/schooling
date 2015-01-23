@@ -1,0 +1,259 @@
+N = 20;
+radius = .1;
+T = 1;
+nummoves = 1000;
+numsigs_permove = 1;
+b = 1;
+perm = randsample(20,20,'false');
+
+strats = [16 17];
+% invaderstrats = [17 16];
+invaderstrats = fliplr(strats);
+
+maxrec = zeros(1,2);
+invader_counts = zeros(N,N,2);
+invader_minscores = cell(N,N,2);
+resident_counts = zeros(N,N,2);
+resident_minscores = cell(N,N,2);
+
+probeaten = zeros(N,2);
+
+
+for k = 1:2
+    strat = strats(k);
+    invader = 10;
+    invaderstrat = invaderstrats(k);
+    strategy = [strat*ones(1,N)];
+    strategy(invader) = invaderstrat;
+
+    numsigs_tot = numsigs_permove*nummoves;
+
+    scores = zeros(N,numsigs_permove,nummoves);
+    keepM = zeros(N,N,numsigs_permove,nummoves);
+    keepreceivers = zeros(N,numsigs_permove,nummoves);
+
+    % parfor i=1:nummoves
+    for i = 1:nummoves
+        positions = unifrnd(0,1,N,2);
+        d = squareform(pdist(positions));
+
+        M = zeros(N);
+        for ind = 1:N
+            [~, order] = sort(d(ind,:));
+            neighbors = order(2:strategy(ind)+1);
+            M(ind,neighbors) = 1/strategy(ind);
+        end
+        M(1:N+1:end) = -1; %sets diagonal equal to -1
+    %     M = M(perm,perm);
+        receivers = randsample(N,numsigs_permove,'true');
+        for j = 1:numsigs_permove
+            beta = zeros(N,1);
+            receiver = receivers(j);
+            allreceivers = d(receiver,:)<= radius;
+            beta(allreceivers) = b;
+            v = real(expected_spin(M,T,beta));
+
+            scores(:,j,i) = v;
+            keepM(:,:,j,i)= M;
+            keepreceivers(:,j,i) = (allreceivers);
+
+        end
+
+    end
+    
+    keepM=reshape(keepM,20,20,nummoves);
+    keepreceivers = reshape(keepreceivers,[],nummoves);
+    numrec = sum(keepreceivers,1);
+    maxrec(k) = max(numrec);
+    scores = reshape(scores,N,[]);
+    scores = sigfig(scores,4);
+    [c,o] = sort(scores,1);
+
+    % minscorer = o(1,:);
+
+    [minvals,~] = min(scores);
+    minmat = repmat(minvals,N,1);
+    [rows,cols] = find(abs(scores-minmat)<0.00001);
+    minscorer = zeros(N,size(scores,2));
+    
+    for i = 1:size(scores,2)
+        look = find(cols==i);
+        minscorer(rows(look),i) = 1/size(look,1)/numsigs_tot;
+    %     minscorer(rows(cols==i),i) = 1/numsigs_tot;
+    end
+    probeaten(:,k) = sum(minscorer,2);     
+
+    payingattention = keepM;
+    payingattention(keepM == -1) = 1;
+    tosignal = payingattention;
+    tonaive = payingattention;
+    for i = 1:nummoves
+        tosignal(:,:,i) = payingattention(:,:,i).*repmat(col(keepreceivers(:,i))',N,1);
+        tonaive(:,:,i) = payingattention(:,:,i).*repmat(col(~keepreceivers(:,i))',N,1);
+    end
+    sumtosignal = reshape(sum(tosignal,2),N,nummoves);
+    sumtonaive = reshape(sum(tonaive,2),N,nummoves);
+
+    normsumtosignal = sigfig(sumtosignal.*repmat(strategy',1,nummoves));
+    
+    normsumtosignal_res = normsumtosignal([1:(invader-1) (invader+1):end],:);
+    minscorer_res = minscorer([1:(invader-1) (invader+1):end],:);
+    keepreceivers_res = keepreceivers([1:(invader-1) (invader+1):end],:);
+        
+    for i = 1:20
+        for j = 1:N
+        finv = find(numrec==i);
+        finv2 = find(normsumtosignal(invader,:)==j);
+        finv3 = find(keepreceivers(invader,:)==1);
+        finv4 = setdiff(intersect(finv,finv2),finv3);
+        invader_counts(i,j,k) = length(finv4);
+        invader_minscores{i,j,k} = col(minscorer(invader,finv4));
+        
+        fres = find(repmat(numrec,N-1,1)==i);
+        fres2 = find(normsumtosignal_res==j);
+        fres3 = find(keepreceivers_res==1);
+        fres4 = setdiff(intersect(fres,fres2),fres3);
+        resident_counts(i,j,k) = length(fres4);
+        resident_minscores{i,j,k} = col(minscorer_res(fres4));
+        end
+    end 
+
+end
+
+
+totalprob_invader = zeros(N,N,2);
+totalprob_resident = zeros(N,N,2);
+
+for i = 1:N
+    for j = 1:N
+        for k = 1:2
+            if invader_counts(i,j,k)>0
+                totalprob_invader(i,j,k) = sum(invader_minscores{i,j,k})/.001/invader_counts(i,j,k);
+            end
+        end
+    end
+end
+for i = 1:N
+    for j = 1:N
+        for k = 1:2
+            if resident_counts(i,j,k)>0
+                totalprob_resident(i,j,k) = sum(resident_minscores{i,j,k})/.001/resident_counts(i,j,k);
+            end
+        end
+    end
+end
+
+maxrec = max(maxrec);
+
+mycolormap = cbrewer('div','RdYlBu',100);
+subplot(2,2,1)
+imagesc(1:maxrec,1:maxrec,totalprob_resident(1:maxrec,1:maxrec,1))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+colorbar
+subplot(2,2,2)
+imagesc(1:maxrec,1:maxrec,totalprob_invader(1:maxrec,1:maxrec,1))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+colorbar
+subplot(2,2,3)
+imagesc(1:maxrec,1:maxrec,totalprob_resident(1:maxrec,1:maxrec,2))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+colorbar
+subplot(2,2,4)
+imagesc(1:maxrec,1:maxrec,totalprob_invader(1:maxrec,1:maxrec,2))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+colorbar
+%%
+mycolormap = cbrewer('div','RdYlBu',9);
+subplot(2,2,1)
+imagesc(1:maxrec,1:maxrec,resident_counts(1:maxrec,:,1).*totalprob_resident(1:maxrec,:,1)/(N-1))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+% caxis manual
+% caxis([0 250])
+colorbar
+subplot(2,2,2)
+imagesc(1:maxrec,1:maxrec,invader_counts(1:maxrec,:,1).*totalprob_invader(1:maxrec,:,1))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+% caxis manual
+% caxis([0 250])
+colorbar
+subplot(2,2,3)
+imagesc(1:maxrec,1:maxrec,resident_counts(1:maxrec,:,2).*totalprob_resident(1:maxrec,:,2)/(N-1))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+% caxis manual
+% caxis([0 250])
+colorbar
+subplot(2,2,4)
+imagesc(1:maxrec,1:maxrec,invader_counts(1:maxrec,:,2).*totalprob_invader(1:maxrec,:,2))
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+% caxis manual
+% caxis([0 250])
+colorbar
+
+%%
+figure
+set(gcf,'Color','w')
+v=get(gcf,'Position');
+ratio=v(4)/v(3);
+w=6.83;
+h=.5*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[.5 1 w h]);
+
+subplot(1,2,1)
+imagesc(1:maxrec,1:maxrec,totalprob_invader(1:maxrec,1:maxrec,1))
+v=get(gca,'Position')
+set(gca,'Position',[.1 .2 .3 .7])
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+xlabel('Number of informed neighbors')
+ylabel('Number of informed birds in the flock')
+
+subplot(1,2,2)
+imagesc(1:maxrec,1:maxrec,totalprob_invader(1:maxrec,1:maxrec,2));
+v=get(gca,'Position');
+set(gca,'Position',[.5 .2 .3 .7])
+set(gca,'ydir','normal')
+set(gca,'xtick',1:maxrec,'xticklabel',1:maxrec,'ytick',1:maxrec,'yticklabel',1:maxrec)
+colormap(mycolormap)
+caxis manual
+caxis([0 .75])
+c=colorbar;
+v=get(c,'Position')
+set(c,'Position',[.85 v(2:4)])
+yl=get(c,'YLabel');
+set(yl,'String','Probability of being eaten','Rotation',270);
+xlabel('Number of informed neighbors')
+ylabel('Number of informed birds in the flock')
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+
+filename=strcat('/Users/eleanorbrush/Desktop/','mutual_uninvasibility','.pdf');
+print(filename,'-dpdf','-r700');

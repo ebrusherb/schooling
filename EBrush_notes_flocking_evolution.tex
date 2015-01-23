@@ -53,7 +53,12 @@ An individual's opinion changes with a probability that depends on its social in
 \begin{equation*}
 \frac{d\vec{v}}{dt}=M\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v}).
 \end{equation*}
-We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal. In the absence of the environmental signal, there is no trend in the dynamics. In the presence of the environmental signal, however, those individuals who perceive the signal will be more likely to switch to having an opinion of $1$ so their expected value will increase, and consequently so will the values of the those paying attention to the informed individuals. Thus, having a higher expected value can be interpreted as having more information about the information and having a lower expected value can be interpreted as having less information.
+We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal.
+
+These stochastic dynamics will lead to an equilibrium probability distribution over sets of opinions that agrees with the Boltzmann equilibrium distribution for a system with energy or Hamiltonian given by 
+\begin{equation*}
+E(\vec{v})=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
+\end{equation*}  
 
 \subsection{Individual-level fitness }
 To find the optimal strategies from the individuals' perspectives, we need a measure of individual-level fitness, which we define as follows. Each individual has a strategy that determines how many other individuals he pays attention to, $n_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.  We distribute the individuals randomly in space.  Each individual then pays attention to its $n_i$ nearest neighbors.  One individual is chosen to be a receiver; it and all those individuals within a radius $r$ of the receiver perceive an external signal of strength $\beta$.  We find the expected opinion of each individual $q_i$ after a period of time $T$.  We refer to each such set of random positions and receiver as a signaling event. 
@@ -69,15 +74,7 @@ To understand what strategies we might expect to find, we are interested in iden
 \section{Results }
 
 \subsection{ESS strategies }
-Surprisingly, even without imposing costs on paying attention to more neighbors, paying attention to the whole flock is not usually the best strategy. The ESS strategy of the number of neighbors to pay attention strongly depends on which selection pressure is being applied.  If a focal bird pays attention to many others, its opinion will be similar to theirs. This will prevent it from being the most informed and hence the first to locate resources. Thus, the uninvadable strategy is to pay attention to few neighbors when selection is due to knowledge about resources. On the other hand, having many neighbors will prevent the focal bird from being the least informed and thus the most likely to be eaten.  Thus, the uninvadable strategy is to pay attention to many neighbors when selection is due to knowledge about predators. Figure \ref{ESS}a shows the ESS strategy when selection is due to knowledge about resources is always lower than the ESS strategy when selection is due to knowledge about predators (Figure \ref{ESS}a).
-
-The ESS strategies when selection is due to knowledge about predators show two interesting features. First, there are many parameters for which there are multiple ESS strategies. It might seem that if a strategy outperforms all others when it is the resident strategy, it should also outperform other strategies as an invader. However, when there are multiple ESS strategies, if we take any two of those ESS strategies, each is uninvadable by the other. This indicates how important the social environment set by the resident strategy is. The pairwise invisibility plot in Figure \ref{ESS}b shows that low strategies are always costly and that high strategies are only costly when the resident strategy is high. 
-
-If a bird has the environmental signal, it will not be predated, regardless of the number of neighbors it has. The differences in performance only appear when comparing two birds, neither of whom have the signal. To understand the costs of having too few or too many neighbors, we compare the performance of two focal birds, a resident and an invader, neither of whom has the signal.  There are two main cases: there can be a single informed bird or multiple informed birds. We further break down the first case depending on which of these two focal birds pays attention to the informed bird: neither, the resident, the invader, or both. For each of these cases, we find the probability that the invader is predated. An invader with one fewer neighbor than the resident always has probability of being predated greater than chance ($1/N$) because the resident often has an informed neighbor while the invader how no or fewer informed neighbors and thus a less informed opinion (Figure \ref{ESS}c). The total probability of being predated stays more or less constant regardless of the resident strategy, with a slight decrease for high resident strategies (Figure \ref{ESS}b and c). An invader with one more neighbor than the resident is only more likely than chance to be predated when the resident strategy is high enough  (Figure \ref{ESS}d). This invader performs most poorly when both it and the focal resident pay attention to the informed bird(s). In this case, an invader with one more neighbor has more naive neighbors and thus a less informed opinion. This is increasingly problematic as the resident strategy increases and both the focal birds are likely to pay attention to the informed bird(s).
-
-These opposing forces caused by the costs of not paying attention to informed neighbors  and the costs of paying attention to more uninformed neighbors  also explains the second feature of the ESS strategies: they are non-monotonic with respect to the the radius of the signal, i.e. how public the signal is (Figure \ref{ESS}a). Figure \ref{ESS}a shows that there are essentially three categories of radii: When the radius is low, the signal is private, with only a few birds having true information. When the radius is intermediate, the signal is public, with many birds having true information. When the radius is high, the signal is universal, with essentially all birds in the flock having true information. When the signal is private, paying attention to too few birds is costly because with more neighbors it is more likely to have a truly informed neighbor, but paying attention to too many uninformed birds can also be costly. This leads to a high but not maximal ESS strategy. When the signal is public, the costs of paying attention to uninformed birds are reduced and the ESS strategy increases to become as high as possible. When the signal is universal, not paying attention to informed birds does not impose a cost. Additionally, in a group in which the residents pay attention to all of their neighbors, any mutant strategy can get just as much information by paying attention to fewer neighbors so the maximal strategy is no longer an ESS (Figure \ref{ESS}a).
-
-Another way to explain the non-monotonic ESS number of neighbors is to consider the correlation length of a homogeneous flock as a function of the radius of the signal. If a flock is all using the same strategy, its average correlation length depends much more strongly on the radius of the signal than the strategy being used (Figure \ref{corrESS}a). In particular, the correlation length first rises and then falls as the radius is increased. The rise and fall of the correlation length correspond to the rise and fall of the ESS number of neighbors and if the we plot the ESS number of neighbors for various radii of the signal against the average correlation length of a homogeneous flock for that radii, we find a positive relationship (Figure \ref{corrESS}b). This is because when correlations in information die off very quickly (i.e. a low correlation length), having more neighbors is costly because birds even slightly away from the informed birds will have poor information. When there are strong correlations in information across the flock, on the other hand, these costs are reduced because every bird in the flock has on average higher quality information.
+Surprisingly, even without imposing costs on paying attention to more neighbors, having as many neighbors as possible is usually sub-optimal. The ESS strategies for the number of neighbors to pay attention strongly depends on which selection pressure is being applied. The ESS strategy when selection is due to knowledge of a predator is always higher than the ESS strategy when selection is due to knowledge about resources (Figure \ref{ESS}). When selection is due to predation, the ESS strategy is a non-monotonic function of the the radius of the signal, i.e. how public the signal is (Figure \ref{ESS}). This non-monotonic behavior is due to two opposing effects of paying attention to more neighbors. First, having more neighbors increases the probability that one of them will have the signal and thus the probability that the focal bird will have a good source of information. Second, having more neighbors increases the probability that a focal bird will be trying to learn from individuals who do not have true information about the environment. When few individuals have the true signal (i.e. low radius $r$), the second effect outweighs the first and the ESS strategies are to pay attention to fewer birds than are in the whole flock. However, as more individuals have the true signal (i.e. higher radius $r$), the first effect is more important 
 
 \subsection{Learned strategies }
 The equilibrium strategies when the individuals are allowed to learn are similar to the ESS strategies: learned strategies when selection is due to predation are always higher than learned strategies when selection is due to resources (Figure \ref{greedyopt}). Surprisingly, even when the group starts with heterogeneous strategies, they often reach a homogeneous equilibrium. Under selection due to predation, the $\mathscr{H}_2$ robustness and correlation length of the flock tend to decrease, whereas under selection due to resources, $\mathscr{H}_2$ robustness is relatively constant and correlation length tends to increase (Figure \ref{greedyopt}).
@@ -86,11 +83,19 @@ The equilibrium strategies when the individuals are allowed to learn are similar
 Figure \ref{greedyopt} shows that there is a relationship between two group properties: the $\mathscr{H}_2$ norm and the correlation length of the flock.
 
 \section{Discussion}
-explore vs. exploit 
-risk aversion vs. risk tolerance
 
-expect single ESS strategies but social information depends on the social environment set by the resident strategy
-expect ESS strategies to decrease as the signal becomes more public, but we find the opposite
+\section{Figures }
+\begin{figure}[ht]
+\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/ESSneighbors.pdf}
+\caption{\label{ESS} The ESS number of neighbors is always higher if selection is due to predation than due to resources.  The ESS number of neighbors when selection is due to predation is a non-monotonic function of how public the signal is. The x-axis indicates the radius of the signal and the y-axis indicates the ESS number of neighbors. Parameters:  $\beta=1$, $T=1$. 
+}
+\end{figure}
+
+\begin{figure}[ht]
+\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/greedyoptneighbors.pdf}
+\caption{\label{greedyopt} When the birds choose the optimal number of neighbors, given the strategies the rest of the flock are using, they settle on higher strategies when selection is due to predation than when selection is due to resources. Under selection due to predation, the $\mathscr{H}_2$ robustness and correlation length of the flock tend to decrease, whereas under selection due to resources, $\mathscr{H}_2$ robustness is relatively constant and correlation length tends to increase. The upper row shows results from implementing selection based to predation and the lower row shows results from implementing selection based on resources. In each panel, the x-axis represents the number of times the birds are allowed to choose optimal strategies. The first column shows one example of how the birds' strategies change over time. The second column shows, for many initial conditions, how the $\mathscr{H}_2$ robustness changes over time. The third column shows, for many initial conditions, how the correlation length changes over time. Parameters:  $\beta=1$, $r=.1$, $T=1$. 
+}
+\end{figure}
 
 \newpage
 \section{Appendix}
@@ -182,7 +187,7 @@ H(\vec{v})&=-\sum_{ij}A_{ij}v_iv_j-\sum_i\beta_iv_i
 \\ \Rightarrow \nabla H\cdot \frac{d\vec{v}}{dt}&=-\vec{v}^T(A+A^T)A\vec{v}-\vec{v}^T(A+A^T)\vec{\beta}-\vec{\beta}^TA\vec{v}-\vec{\beta}^T\vec{\beta}
 \\&=-\vec{v}^TA^2\vec{v}-\vec{v}^TA^TA\vec{v}-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}-\vec{\beta}^T\vec{\beta}
 \end{align*}
-If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA$ is positive semi-definite.  (Consider that $\vec{v}^TA^TA\vec{v}=(A\vec{v})^T(A\vec{v})$ so that $\vec{v}A^TA\vec{v}=0$ if $A\vec{v}=0$ and $\vec{v}^TA^TA\vec{v}<0$ otherwise.) Therefore, $-\vec{v}^TA^2\vec{v}\leq 0$ and $-\vec{v}^TA^TA\vec{v}\leq 0$. At equilibrium, $\vec{v}$ will be ``close" to $\vec{\beta}$ so that $$-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}\sim-3\vec{\beta}^TA\vec{\beta}$$
+If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA$ is positive semi-definite.  (Consider that $\vec{v}^TA^TA\vec{v}=(A\vec{v})^T(A\vec{v})$ so that $\vec{v}A^TA\vec{v}=0$ if $A\vec{v}=0$ and $\vec{v}^TA^TA\vec{v}<0$ otherwise.) Therefore, $-\vec{v}^TA^2\vec{v}\leq 0$ and $-\vec{v}^TA^TA\vec{v}\leq 0$. At equilibrium, $\vec{v}$ will be ``close" to $\vec{\beta}$ so that $$-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}\sim-\vec{\beta}^TA\vec{\beta}$$
 \end{pf}
 
 \subsection{Numerically evaluating dynamics }
@@ -256,28 +261,6 @@ e^{\lambda_1 t}-1  &\dots &0
 \end{align*}
 Therefore $\frac{dx}{dt}=A\Phi(t)G(t)+A\Phi(t)\vec{c}+\vec{\beta}=Ax(t)+\vec{\beta}$ and since $G(0)=\vec{0}$, $x(0)=\vec{X_0}$.
 \end{pf}
-
-\newpage
-\section{Figures }
-\begin{figure}
-\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/ESSfigure.pdf}
-\caption{\label{ESS} The ESS number of neighbors is always higher if selection is due to predation than due to resources. When selection is due to predation, there can be multiple ESS strategies, which are a non-monotonic function of the radius of the signal. In (a), we show the (possibly multiple) ESS strategies as a function of the radius of the signal. In (b) we show the relative fitness of an invader as a function of the invader and resident strategies when $r=0.1$. The dots show the multiple ESSs. For (c) and (d), we choose a focal resident bird and consider the situation where neither the focal bird nor the invader has the environmental signal.The total of the stacked bars is the total probability that the invader will be predated when neither the focal bird nor the invader have the signal.  We further break down these cases into five cases: there is a single informed bird and neither focal bird, only the focal resident, only the invader, or both pay attention to it or there are multiple informed birds. The horizontal dashed line shows $1/N$, the probability of being predated if the strategies are neutral. In (c), the invader has one fewer neighbor than the resident. In (d), the invader has one more neighbor than the resident. Parameters:  in all panels $N=20$, $\beta=1$, $T=1$, in (b)-(d) $r=0.1$. 
-}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf}
-\caption{\label{corrESS}
-The correlation length of a homogeneous flock depends on both the strategy being used and the radius of the signal, but it depends much more strongly on the radius than the strategy. The ESS number of neighbors is an increasing function of correlation length of a homogeneous group. In (a), we show the average correlation length of a homogeneous flock as a function of the strategy being used and the radius of the signal. In (b), each point corresponds to a value of the radius of signal: the horizontal axis shows the correlation length of a flock paying attention to $N/2$ neighbors for that radius and the vertical axis shows the ESS number of neighbors for that radius. Parameters: $N=20$, $\beta=1$, $T=1$.
-}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/greedyoptneighbors.pdf}
-\caption{\label{greedyopt} When the birds choose the optimal number of neighbors, given the strategies the rest of the flock are using, they settle on higher strategies when selection is due to predation than when selection is due to resources. Under selection due to predation, the $\mathscr{H}_2$ robustness and correlation length of the flock tend to decrease, whereas under selection due to resources, $\mathscr{H}_2$ robustness is relatively constant and correlation length tends to increase. The upper row shows results from implementing selection based to predation and the lower row shows results from implementing selection based on resources. In each panel, the  horizontal axis represents the number of times the birds are allowed to choose optimal strategies. The first column shows one example of how the birds' strategies change over time. The second column shows, for many initial conditions, how the $\mathscr{H}_2$ robustness changes over time. The third column shows, for many initial conditions, how the correlation length changes over time. Parameters:  $N=20$, $\beta=1$, $r=.1$, $T=1$. 
-}
-\end{figure}
-
 
 \nocite{*}
 \bibliographystyle{plain}

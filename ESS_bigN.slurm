@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=50
-#SBATCH -t 144:00:00
-#SBATCH -J greedyoptjob
-#SBATCH -o greedyopt.out
+#SBATCH --cpus-per-task=20
+#SBATCH -t 140:00:00
+#SBATCH -J ESSjob
+#SBATCH -o ESS.%A_%a
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-user=brush@princeton.edu
+#SBATCH --array=1-15
 
 mkdir -p /scratch/network/brush/tmp/$SLURM_JOB_ID
 
@@ -24,7 +25,9 @@ EXEC=/usr/licensed/bin/matlab
 OPTS=' -singleCompThread -nodisplay -nosplash'
 
 export PROCS=${SLURM_CPUS_ON_NODE}
+export numsigs=1
+export nummoves=1000
 
-${EXEC}${OPTS} < greedyopt_v4.m
+${EXEC}${OPTS} < ESS_parallel_bigN_v2.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

@@ -36,9 +36,10 @@ for i=1:l
 end
 i=sum(avgcorr>=0);
 if i<l
+    f=find(avgcorr<0,1,'first');
 %     corrlength=avgcorr(i)/(avgcorr(i)-avgcorr(i+1))*(distbins(i+1)-distbins(i))+distbins(i);
-    corrlength=find(avgcorr<0,1,'first');
-    corrlength=distbins(corrlength);
+    corrlength=interp1q(avgcorr(f:-1:(f-1))',distbins(f:-1:(f-1))',0); 
+%     corrlength=distbins(f);
 else corrlength=max(distvec);
 end
 % end

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=50
-#SBATCH -t 144:00:00
+#SBATCH --cpus-per-task=20
+#SBATCH -t 18:00:00
 #SBATCH -J greedyoptjob
-#SBATCH -o greedyopt.out
+#SBATCH -o greedyopt6.%A
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-user=brush@princeton.edu
@@ -25,6 +25,6 @@ OPTS=' -singleCompThread -nodisplay -nosplash'
 
 export PROCS=${SLURM_CPUS_ON_NODE}
 
-${EXEC}${OPTS} < greedyopt_v4.m
+${EXEC}${OPTS} < greedyopt_v6.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

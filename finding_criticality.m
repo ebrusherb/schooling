@@ -1,4 +1,3 @@
-% [distvec,corrvec,corrlength,crosscorrs] = correlationlength_mat_single_v3(M,d,b,radius,i)
 
 T=1;
 teststrategy=2*randi([1 floor((N-1)/2)],N,1);
@@ -24,7 +23,6 @@ M(1:N+1:end)=-1;
     for j=1:Nb 
         b=bvals(j);
 %             [distvec,corrvec,corrlength]=correlationlength_mat(M,d,b,radius);
-%         [distvec,corrvec,corrlength,~] = correlationlength_mat_single_v3(M,d,b,radius,receiver);
         [distvec,corrvec,corrlength] = correlationlength_mat_single(M,d,b,radius,receiver);
         
         storeddistbins{j}=distvec;

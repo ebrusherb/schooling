@@ -1,4 +1,4 @@
-function [distvec,corrvec,corrlength,crosscorrs] = correlationlength_mat_single_v3(M,d,b,radius,receiver)
+function [distvec,corrvec,corrlength,crosscorrs] = correlationlength_mat_single_fromrec(M,d,b,radius,receiver)
 
 N=size(M,2);
 

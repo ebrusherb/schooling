@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  9 DEC 2014 16:46
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  20 JAN 2015 14:27
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -476,7 +476,7 @@ File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
 (/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
-(./paper_skeleton.aux)
+No file paper_skeleton.aux.
 \openout1 = `paper_skeleton.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
@@ -493,7 +493,6 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 34.
 LaTeX Font Info:    ... okay on input line 34.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 34.
 LaTeX Font Info:    ... okay on input line 34.
-
 (/usr/local/texlive/2009/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count132
@@ -508,33 +507,10 @@ LaTeX Font Info:    ... okay on input line 34.
 \everyMPtoPDFconversion=\toks34
 )
 Package caption Info: Begin \AtBeginDocument code.
- (/usr/local/texlive/2009/texmf-dist/tex/latex/ms/ragged2e.sty
-Package: ragged2e 2009/05/21 v2.1 ragged2e Package (MS)
-
-(/usr/local/texlive/2009/texmf-dist/tex/latex/ms/everysel.sty
-Package: everysel 1999/06/08 v1.03 EverySelectfont Package (MS)
-LaTeX Info: Redefining \selectfont on input line 125.
-)
-\CenteringLeftskip=\skip46
-\RaggedLeftLeftskip=\skip47
-\RaggedRightLeftskip=\skip48
-\CenteringRightskip=\skip49
-\RaggedLeftRightskip=\skip50
-\RaggedRightRightskip=\skip51
-\CenteringParfillskip=\skip52
-\RaggedLeftParfillskip=\skip53
-\RaggedRightParfillskip=\skip54
-\JustifyingParfillskip=\skip55
-\CenteringParindent=\skip56
-\RaggedLeftParindent=\skip57
-\RaggedRightParindent=\skip58
-\JustifyingParindent=\skip59
-)
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 34.
-
-(/usr/local/texlive/2009/texmf-dist/tex/latex/hyperref/nameref.sty
+ (/usr/local/texlive/2009/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/oberdiek/refcount.sty
@@ -544,116 +520,200 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
 LaTeX Info: Redefining \ref on input line 34.
 LaTeX Info: Redefining \pageref on input line 34.
-
-(./paper_skeleton.out) (./paper_skeleton.out)
 \@outlinefile=\write4
 \openout4 = `paper_skeleton.out'.
 
 \AtBeginShipoutBox=\box36
- (./paper_skeleton.toc
-LaTeX Font Info:    Try loading font information for U+lasy on input line 3.
+\tf@toc=\write5
+\openout5 = `paper_skeleton.toc'.
+
+LaTeX Font Info:    Try loading font information for U+lasy on input line 52.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 3.
+LaTeX Font Info:    Try loading font information for U+msa on input line 52.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 3.
+LaTeX Font Info:    Try loading font information for U+msb on input line 52.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 3.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 52.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-))
-\tf@toc=\write5
-\openout5 = `paper_skeleton.toc'.
+)
 
- [1
+LaTeX Warning: Citation `Glauber:1963fk' on page 1 undefined on input line 52.
+
+
+LaTeX Warning: Citation `Glauber:1963fk' on page 1 undefined on input line 52.
+
+[1
 Non-PDF special ignored!
 Non-PDF special ignored!
 Non-PDF special ignored!
 
-{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
-</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=134, 493.845pt x 246.9225pt>
+LaTeX Warning: Citation `Young:2010fk' on page 2 undefined on input line 64.
+
+
+LaTeX Warning: Citation `Young:2013kx' on page 2 undefined on input line 64.
+
+
+LaTeX Warning: Reference `H2' on page 2 undefined on input line 64.
+
+
+LaTeX Warning: Reference `corr' on page 2 undefined on input line 64.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 72.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 72.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 74.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 76.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 76.
+
+
+LaTeX Warning: Reference `ESS' on page 2 undefined on input line 76.
+
+[2]
+
+LaTeX Warning: Reference `ESS' on page 3 undefined on input line 78.
+
+
+LaTeX Warning: Reference `ESS' on page 3 undefined on input line 78.
+
+
+LaTeX Warning: Reference `ESS' on page 3 undefined on input line 78.
+
+
+LaTeX Warning: Reference `corrESS' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Reference `corrESS' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Reference `greedyopt' on page 3 undefined on input line 83.
+
+
+LaTeX Warning: Reference `greedyopt' on page 3 undefined on input line 83.
+
+
+LaTeX Warning: Reference `greedyopt' on page 3 undefined on input line 86.
+
+[3] </Users/eleanorbrush/Desktop/ESSfigure.pdf, id=38, 493.845pt x 246.9225pt>
 File: /Users/eleanorbrush/Desktop/ESSfigure.pdf Graphic file (type pdf)
 
 <use /Users/eleanorbrush/Desktop/ESSfigure.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 93--95
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 97--99
 [][] 
  []
 
 
-</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=135, 493.845pt x 246.92
-25pt>
+Package caption Warning: `ragged2e' support has been changed.
+(caption)                Rerun to get captions right on input line 99.
+See the caption package documentation for explanation.
+
+
+</Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf, id=39, 493.845pt x 164.615p
+t>
+File: /Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf Graphic file (type pdf)
+
+ <use /Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf>
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 103--106
+[][] 
+ []
+
+
+</Users/eleanorbrush/Desktop/greedyoptneighbors.pdf, id=40, 493.845pt x 246.922
+5pt>
 File: /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf Graphic file (type pdf
 )
  <use /Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 99--101
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 110--112
 [][] 
  []
 
-[4 </Users/eleanorbrush/Desktop/ESSfigure.pdf>] [5pdfTeX warning (ext4): destin
-ation with the same identifier (name{equation.6.1}) has been already used, dupl
-icate ignored
+[4 </Users/eleanorbrush/Desktop/ESSfigure.pdf>]
+
+LaTeX Warning: Citation `Young:2010fk' on page 5 undefined on input line 126.
+
+
+LaTeX Warning: Citation `Bialek:2013fk' on page 5 undefined on input line 135.
+
+[5pdfTeX warning (ext4): destination with the same identifier (name{equation.6.
+1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.134 \end{align*}
-                   </Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>]
-Overfull \hbox (45.82327pt too wide) in paragraph at lines 161--161
+l.151 \end{align*}
+                   </Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf>]
+Overfull \hbox (45.82327pt too wide) in paragraph at lines 172--172
 [] 
  []
 
-[6]
-Overfull \hbox (38.3769pt too wide) in paragraph at lines 178--178
+[6 </Users/eleanorbrush/Desktop/greedyoptneighbors.pdf>]
+Overfull \hbox (38.3769pt too wide) in paragraph at lines 189--189
 [] 
  []
 
-[7] (./paper_skeleton.bbl [8]) [9] (./paper_skeleton.aux) ) 
+[7] [8] (./paper_skeleton.bbl [9]) [10] (./paper_skeleton.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 10188 strings out of 493848
- 140584 string characters out of 3149207
- 306118 words of memory out of 3000000
- 13209 multiletter control sequences out of 15000+200000
+ 10097 strings out of 493848
+ 138881 string characters out of 3149207
+ 298459 words of memory out of 3000000
+ 13130 multiletter control sequences out of 15000+200000
  13742 words of font info for 60 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 41i,16n,39p,2073b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/
-2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2
-009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/20
-09/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2009
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/
-texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/local/texlive/20
-09/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/200
-9/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2009/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2009/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2009/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2009/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmti9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/a
-msfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
-ic/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
-public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
-e1/public/rsfs/rsfs10.pfb>
-Output written on paper_skeleton.pdf (9 pages, 342743 bytes).
+ 41i,16n,39p,1743b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
+usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
+sr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb>
+</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></u
+sr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr
+/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/l
+ocal/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/loc
+al/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
+/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/te
+xlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texli
+ve/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/
+2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/200
+9/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2009/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2009/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2009/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2009/texmf-dis
+t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf
+-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/t
+exmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/200
+9/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
+Output written on paper_skeleton.pdf (10 pages, 340700 bytes).
 PDF statistics:
- 286 PDF objects out of 1000 (max. 8388607)
- 44 named destinations out of 1000 (max. 500000)
- 147 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 208 PDF objects out of 1000 (max. 8388607)
+ 46 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

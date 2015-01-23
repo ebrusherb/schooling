@@ -50,7 +50,7 @@ parfor pari=1:nummoves
         receiver=receivers(j);
         
         if max(Ctotal)==1 && length(f)==1
-%             [~,~,l,~]=correlationlength_mat_single_v3(M,d,b,radius,receiver);
+%             [~,~,l,~]=correlationlength_mat_single_fromrec(M,d,b,radius,receiver);
             [~,~,l] = correlationlength_mat_single(M,d,b,radius,receiver);
             corrlengths(j,pari)=l;
         else 

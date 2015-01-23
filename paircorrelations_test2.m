@@ -1,4 +1,4 @@
-function corrs=paircorrelations(M,beta)
+function corrs=paircorrelations_test2(M,beta)
 
 N=size(M,2);
 
@@ -31,13 +31,16 @@ for i=1:(N-1)
     for j=i:(N-1)
 %         piece1=sum(vecs(i,:).*invvals'.*vecs(j,:));
 %         piece1=sum(vecs(i,:).*reshape(invvals,1,[]).*vecs(j,:));
+%         piece2=sum(sum((sigma1'*Pinv(:,i))*(sigma1'*Pinv(:,j))'))+sum(sum((sigma1'*Pinv(:,j))*(sigma1'*Pinv(:,i))'));
+%         piece3=sum(sum((sigma2'*Pinv(:,i))*(sigma2'*Pinv(:,j))'))+sum(sum((sigma2'*Pinv(:,j))*(sigma2'*Pinv(:,i))'));
+        Pinv_deriv=kron(Pinv(:,i),Pinv(j,:));
         piece1=U(i,j);
-        piece2=sum(sum((sigma1'*Pinv(:,i))*(sigma1'*Pinv(:,j))'))+sum(sum((sigma1'*Pinv(:,j))*(sigma1'*Pinv(:,i))'));
-        piece3=sum(sum((sigma2'*Pinv(:,i))*(sigma2'*Pinv(:,j))'))+sum(sum((sigma2'*Pinv(:,j))*(sigma2'*Pinv(:,i))'));
-        zcorrs(i,j)=1/2*piece1+1/4*piece2+1/4*piece3;
-        zcorrs(j,i)=1/2*piece1+1/4*piece2+1/4*piece3;
-%         zcorrs(i,j)=piece1+piece2+piece3;
-%         zcorrs(j,i)=piece1+piece2+piece3;
+        piece2=reshape(sigma1,1,[])*Pinv_deriv*col(sigma1);
+        piece3=reshape(sigma2,1,[])*Pinv_deriv*col(sigma2);
+%         zcorrs(i,j)=1/2*piece1+1/4*piece2+1/4*piece3;
+%         zcorrs(j,i)=1/2*piece1+1/4*piece2+1/4*piece3;
+        zcorrs(i,j)=piece1+piece2+piece3;
+        zcorrs(j,i)=piece1+piece2+piece3;
     end
 end
 

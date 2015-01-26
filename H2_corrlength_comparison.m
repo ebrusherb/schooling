@@ -1,3 +1,17 @@
+strategy=randi(N-1,N,1);
+positions=unifrnd(0,1,N,2);
+d=squareform(pdist(positions));
+
+M=zeros(N);
+for ind=1:N
+    [~, order]=sort(d(ind,:));
+    neighbors=order(2:strategy(ind)+1);
+    M(ind,neighbors)=1/strategy(ind);
+end
+M(1:N+1:end)=-1;
+
+k=0;
+beta=[ones(k,1);zeros(N-k,1)];
 
 q=zeros(N-1,N);
 q(1,1:2)=[1/sqrt(2) -1/sqrt(2)];
@@ -19,8 +33,6 @@ L=-M;
 Lbar=q*L*transpose(q);
 
 sigma = lyap(Lbar,-noise);
-
-beta=zeros(N,1);
 
 A=M-diag(beta);
 P=-q*A*transpose(q);

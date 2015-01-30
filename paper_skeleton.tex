@@ -111,6 +111,48 @@ where $\overline{L}=QLQ^T$.  As shown in \cite{Young:2010fk}, if $\Sigma_y(t)=\E
 \\\mathscr{H}_2 \text{ robustness} &=\frac{1}{\mathscr{H}_2}
 \end{align*}
 
+\begin{claim}
+Given any $Q>0$ there exists a unique $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Z$ if and only if the system $\dot{x}=Ax$ is  global asymptotically stable.
+\end{claim}
+
+\begin{claim}
+Consider the dynamical system,
+\begin{equation}
+\dot{y}=Ay+B+C\xi  \label{tofindsigma}
+\end{equation}
+with $E[\xi(t)]=0$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[y(0)\xi^T(t)]=0$. If all eigenvalues of $A$ are negative and if $\Sigma(t)=E[y(t)y(t)^T]$ and $\Sigma_{ss}=\lim_{t\to\infty}\Sigma(t)$, then $\Sigma_{ss}$ satisfies the Lyapunov equation
+\begin{equation*}
+A\Sigma_{ss}+\Sigma_{ss}A^T=A^{-1}BB^T+BB^T(A^{-1})^T-CC^T
+\end{equation*}
+\end{claim}
+
+\begin{pf}
+\begin{align*}
+\Sigma(t)&=E[y(t)y(t)^T]
+\\ \Rightarrow \dot{\Sigma}&=E[\dot{y}(t)y(t)^T+y(t)\dot{y}(t)^T]
+\\&=E[(Ay+B+C\xi)y^T+y(y^TA^T+B^T+\xi^TC^T)]
+\\&=AE[yy^T]+E[yy^T]A^T+BE[y^T]+E[y]B^T+CE[\xi y^T]+E[y\xi^T]C^T
+\end{align*}
+Note that we can write a solution to (\ref{tofindsigma}) as 
+\begin{equation*}
+y(t)=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds+\int_0^t\exp(A(t-s))C\xi(s)ds.
+\end{equation*}
+This allows us to write $E[y]=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds$ and 
+\begin{align*}
+E[y \xi^T]&=\exp(At)E[y(0)\xi(t)^T]+\int_0^t\exp(A(t-s))BE[\xi(t)^T]ds+\int_0^t\exp(A(t-s))CE[\xi(s)\xi(t)]ds
+\\&=0+0+\frac{1}{2}C
+\\ \Rightarrow \dot{\Sigma}&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+\\&+B\int_0^tB^T\exp(A(t-s))^Tds+\int_0^T\exp(A(t-s))BdsB^T+\frac{1}{2}CC^T+\frac{1}{2}CC^T
+\\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+\\&-BB^T(A^{-1})^T\exp(A(t-s))|_{s=0}^{s=t}-A^{-1}\exp(A(t-s))|_{s=0}^tBB^T+CC^T
+\\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+\\&-BB^T(A^{-1})^T(I-\exp(At))-A^{-1}(I-\exp(At))BB^T+CC^T
+\\ \lim_{t\to\infty}\dot{\Sigma}&=A\Sigma_{ss}+\Sigma_{ss}A^T-BB^T(A^{-1})^T-A^{-1}BB^T+CC^T \text{ since all eigenvalues of $A$ are negative}
+\\\Rightarrow A\Sigma_{ss}+\Sigma_{ss}A^T&=BB^T(A^{-1})^T+A^{-1}BB^T-CC^T \text{ since $\dot{\Sigma}=0$ at equilibrium}
+\end{align*}
+\end{pf}
+
+
 \subsection{Calculating correlations \label{corr}}
 The following is derived from the work in \cite{Bialek:2013fk}.
 \begin{align*}
@@ -186,9 +228,11 @@ If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA
 \end{pf}
 
 \subsection{Numerically evaluating dynamics }
-\begin{claim}
+%\begin{claim}
 Let $\Phi(t)$ be the fundamental matrix solution to the homogeneous differential equations $\frac{d\vec{x}}{dt}=A\vec{x}$ so that $\Phi(t)=V\Lambda(t)$ where the columns of $V$ are the eigenvectors of $A$ and $$\Lambda(t)=\text{diag}(e^{\lambda_1 t},\dots,e^{\lambda_n t})$$ where $\{\lambda_i\}$ are the eigenvalues of $A$.  (Note that if $\lambda_i=0$ then $e^{\lambda _i t}=1$ for all $t$.) Let $V^\dagger$ be the pseudoinverse of $V$.  Let $\vec{c}=V^\dagger\vec{X_0}$.  Let $$G(t)=\text{diag}(1/\lambda_1(1-e^{-\lambda_1t}),\dots,1/\lambda_n(1-e^{-\lambda_nt}))V^\dagger\vec{\beta}.$$
-(If $\lambda_i=0$ then the corresponding entry of the first part of $G(t)$ will be given by $t$ rather than the form above.)  THEN if we let $x(t)=\Phi(t)G(t)+\Phi(t)\vec{c}$, $X(t)$ solves the inhomogeneous equations $\frac{dx}{dt}=A\vec{x}+\vec{\beta}$ with initial conditions $x(0)=\vec{X_0}$.
+(If $\lambda_i=0$ then the corresponding entry of the first part of $G(t)$ will be given by $t$ rather than the form above.)  
+\begin{claim}
+If we let $x(t)=\Phi(t)G(t)+\Phi(t)\vec{c}$, $x(t)$ solves the inhomogeneous equations $\frac{dx}{dt}=A\vec{x}+\vec{\beta}$ with initial conditions $x(0)=\vec{X_0}$.
 \end{claim}
 
 \begin{pf}
@@ -222,7 +266,7 @@ e^{\lambda_1 t}  &\dots &0
 e^{\lambda_1 t}  &\dots &0
 \\ \vdots & \ddots &\vdots
 \\ 0 & \dots &e^{\lambda_nt}
- \end{array}\right)
+ \end{array}\right)V^\dagger\vec{\beta}
  \\&=V
  \left(\begin{array}{ccccc}
 e^{\lambda_1 t}  &\dots &0

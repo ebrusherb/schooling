@@ -1,6 +1,6 @@
 function h = H2norm(M,scaled)
 % L=lap(M);
-L=-M;
+L=M;
 s=size(M);
 n=s(1);
 if nargin==1
@@ -25,5 +25,7 @@ for j=2:(n-1)
 end
 Lbar=q*L*transpose(q);
 noise=q*noise*transpose(q);
-sigma = lyap(Lbar,-noise);
+% X=lyap(A,Q) solves AX+XA^T+Q=0 and I want to solve
+% Lbar*Sigma+Sigma*Lbar^T=I
+sigma = lyap(Lbar,noise);
 h = sqrt(trace(sigma));

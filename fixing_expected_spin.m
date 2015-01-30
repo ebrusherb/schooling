@@ -1,5 +1,5 @@
-strategy=randi(19,20,1);
-% strategy=[19,2*ones(1,19)];
+% strategy=randi(19,20,1);
+strategy=[19,5*ones(1,19)];
 positions=unifrnd(0,1,N,2);
 d=squareform(pdist(positions));
 k=3;

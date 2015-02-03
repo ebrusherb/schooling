@@ -1,4 +1,4 @@
-function [meanlambda, meanH2, meancorrlength, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T)
+function [meanH2, meanH2_forced, corrlength, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T)
 
 N=max(size(strategy));
 

@@ -155,10 +155,11 @@ strategy=[15,15*ones(1,N-1)];
 positions=unifrnd(0,1,N,2);
 d=squareform(pdist(positions));
 
-k=0;
+k=5;
 b=0.1;
 beta=b*[ones(k,1);zeros(N-k,1)];
 
+adj=zeros(N);
 L=zeros(N);
 M=zeros(N);
 for ind=1:N
@@ -166,19 +167,22 @@ for ind=1:N
     neighbors=order(2:strategy(ind)+1);
     M(ind,neighbors)=1/strategy(ind);
     L(ind,neighbors)=1/strategy(ind);
+    adj(ind,neighbors)=1;
 end
+L=L+transpose(L);
+Lsums=sum(L,2);
+L(1:N+1:end)=-Lsums;
 M(1:N+1:end)=-1;
 
-Nmat=.5*(L+transpose(L));
-Nbar=Nmat-diag(Nmat*ones(N,1));
+Nmat=L;
 B=diag(beta);
-P=Nbar-B;
+P=Nmat-B;
 A=M-B;
-% 
-% sigma=lyap(A,eye(N));
-% 
-% D=lyap(P,eye(N));
-% 
+
+sigma_forced=lyap(A,eye(N));
+
+D=lyap(P,eye(N));
+
 % figure
 % subplot(1,4,1)
 % imagesc(A)
@@ -187,25 +191,26 @@ A=M-B;
 % imagesc(D)
 % colorbar
 % subplot(1,4,3)
-% imagesc(sigma)
+% imagesc(sigma_forced)
 % colorbar
 % subplot(1,4,4)
 % imagesc(-inv(P))
 % colorbar
-% 
-% Q=A*inv(P)+inv(P)*transpose(A);
-% 
-% todivide=repmat(diag(-inv(P)),1,N).*repmat(reshape(diag(-inv(P)),1,[]),N,1);
-% todivide=power(todivide,.5);
-% corrs=-inv(P)./todivide;
-% 
-% figure
-% plot(d,corrs,'ok')
-% set(gca,'ylim',[0 1])
-% 
-% [vecs,vals]=eig(P);
+figure;plot(mean(d(1:5,:),1),-diag(inv(P)),'o')
 
-[W,Lambda]=eig(Nbar);
+Q=A*inv(P)+inv(P)*transpose(A);
+
+todivide=repmat(diag(-inv(P)),1,N).*repmat(reshape(diag(-inv(P)),1,[]),N,1);
+todivide=power(todivide,.5);
+corrs_forced=-inv(P)./todivide;
+
+% figure
+% plot(d,corrs_forced,'ok')
+% set(gca,'ylim',[0 1])
+
+[vecs,vals]=eig(P);
+
+[W,Lambda]=eig(Nmat);
 w=find(sigfig(diag(Lambda),10)==0);
 Wtilde=W(:,[(1:w-1) (w+1):N]);
 Lambdatilde=Lambda([(1:w-1) (w+1):N],[(1:w-1) (w+1):N]);
@@ -216,14 +221,15 @@ todivide=repmat(diag(-Ntildeinv),1,N).*repmat(reshape(diag(-Ntildeinv),1,[]),N,1
 todivide=power(todivide,.5);
 corrs=-Ntildeinv./todivide;
 
-dcol=col(d);
-corrscol=col(corrs);
-[~,o]=sort(dcol);
-plot(dcol(o),corrscol(o),'ok')
-hold on
-plot(get(gca,'xlim'),zeros(2,1),'r')
-% hold off
-set(gca,'ylim',[-1 1])
+% figure
+% dcol=col(d);
+% corrscol=col(corrs);
+% [~,o]=sort(dcol);
+% plot(dcol(o),corrscol(o),'ok')
+% hold on
+% plot(get(gca,'xlim'),zeros(2,1),'r')
+% % hold off
+% set(gca,'ylim',[-1 1])
 
 %%
 Ntest=[-1 1;1 -1];

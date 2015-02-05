@@ -33,13 +33,13 @@
 
 \begin{document}
 
-
-\begin{center}
-{\bf \LARGE{Evolution of Information Gathering Strategies}}
-\vspace{10pt}
-\\ Eleanor Brush
-\\ October 31, 2014
-\end{center}
+%
+%\begin{center}
+%{\bf \LARGE{Evolution of Information Gathering Strategies}}
+%\vspace{10pt}
+%\\ Eleanor Brush
+%\\ October 31, 2014
+%\end{center}
 
 \tableofcontents
 
@@ -49,11 +49,35 @@ Birds in flocks, like animals in many types of social groups, can use their peer
 
 \section{Model }
 \subsection{Learning dynamics }
-An individual's opinion changes with a probability that depends on its social interactions and the strength of the environmental stimulus. Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{v}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
-\begin{equation*}
-\frac{d\vec{v}}{dt}=M\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v}).
-\end{equation*}
-We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal. In the absence of the environmental signal, there is no trend in the dynamics. In the presence of the environmental signal, however, those individuals who perceive the signal will be more likely to switch to having an opinion of $1$ so their expected value will increase, and consequently so will the values of the those paying attention to the informed individuals. Thus, having a higher expected value can be interpreted as having more information about the information and having a lower expected value can be interpreted as having less information.
+An individual's opinion changes with a probability that depends on its social interactions and the strength of the environmental stimulus. Let $A$ be the adjacency matrix such that 
+
+\begin{equation}
+A_{ij}=\left\{\begin{array}{l l l}
+1 & \text{ if $i$ pays attention to $j$ }
+\\0 & \text{ otherwise }
+\end{array}\right.
+\end{equation}
+
+We assume that having more neighbors means paying less attention to each so we normalize $A$ to find $\bar{A}$:
+\begin{equation}
+\bar{A}_{ij}=\frac{A_{ij}}{\sum_kA_{ik}}.
+\end{equation}
+
+If each bird averages the differences between its opinion and each of its neighbors' to update its opinion, the opinion dynamics will be described by 
+\begin{equation}
+\dot{x}=Lx
+\end{equation}
+where $L=\bar{A}-I$. In the absence of the environmental signal, there is no trend in the dynamics. We introduce an environmental signal by changing the dynamics such that informed birds change their opinions to be closer to $1$. Having an opinion closer to $1$ can be interpreted as having more information about the environment and having a lower expected value can be interpreted as having less information. Specifically, we incorporate this environmental forcing with a diagonal matrix $B$ where $B_{ii}=b$ if $i$ perceives the environmental signal and $B_{ii}=0$ otherwise. The dynamics then become
+\begin{equation}
+\dot{x}=Lx+B(\vec{1}-x).
+\end{equation}
+If we let $L_\text{f}=L-B$, then we can simplify this by writing
+\begin{equation}
+\dot{x}=L_\text{f}x+\vec{B}
+\end{equation}
+where $\vec{B}=B\vec{1}$ indicates which birds perceive the environmental signal.
+
+
 
 \subsection{Individual-level fitness }
 To find the optimal strategies from the individuals' perspectives, we need a measure of individual-level fitness, which we define as follows. Each individual has a strategy that determines how many other individuals he pays attention to, $n_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.  We distribute the individuals randomly in space.  Each individual then pays attention to its $n_i$ nearest neighbors.  One individual is chosen to be a receiver; it and all those individuals within a radius $r$ of the receiver perceive an external signal of strength $\beta$.  We find the expected opinion of each individual $q_i$ after a period of time $T$.  We refer to each such set of random positions and receiver as a signaling event. 
@@ -61,7 +85,8 @@ To find the optimal strategies from the individuals' perspectives, we need a mea
 We consider two types of signals: predators and food.  If the signal is information that a predator is present, we assume that whichever individual is least aware of the signal will be predated, i.e. the individual $i$ such that $q_i$ is lowest.  We therefore find, over many signaling events, the probability that an individual will be eaten and an individual's fitness is given by the probability of surviving, i.e. $1$ minus the probability of being predated.  If the signal is information that resources are available, we assume that whichever individual is most aware of the signal will get access to the resource, i.e. the individual $i$ such that $q_i$ is highest. In this case, fitness is proportional to the probability of being the first to reach the resources. 
 
 \subsection{Group-level performance }
-We consider two group-level properties that indicate how cohesive the group is.  The first property is $\mathscr{H}_2$ robustness, as used in \cite{Young:2010fk,Young:2013kx}. This is a measure of the robustness of the consensus state in which all birds have the same opinion to noise at equilibrium, as used in (see Appendix Sec. \ref{H2}). The second property is the correlation length of the flock. This is the distance at which the average correlations between birds changes from positive to negative, i.e. the distance over which birds' opinions tend to be positively correlated with each other (see Appendix Sec \ref{corr}).
+%%There are two ways to describe equilibrium properties
+We consider two group-level properties that indicate how cohesive the group is.  The first property is $\mathscr{H}_2$ robustness, as used in \cite{Young:2010fk,Young:2013kx}. This is a measure of the robustness of the consensus state in which all birds have the same opinion to noise at equilibrium, as used in (see Appendix Section XXX). The second property is the correlation length of the flock. This is the distance at which the average correlations between birds changes from positive to negative, i.e. the distance over which birds' opinions tend to be positively correlated with each other (see Appendix Section XXX).
 
 \subsection{Optimization methods }
 To understand what strategies we might expect to find, we are interested in identifying the optimal strategies.  We does this in two ways.  First, using the framework of adaptive dynamics in finite populations, we identify the evolutionarily stable strategy.  This framework assumes that there is a homogeneous population into which a mutant individual tries to invade.  If strategies change on a learning rather than an evolutionary timescale, or if there is just a lot of variation in the population, we might expect individuals to try to optimize their strategies in the context of a heterogeneous population.  This is our second method of optimization. Given a random set of initial strategies over the group, we allow each bird to choose the strategy that would be best given the rest of the strategies being used and repeat this process until the birds reach an equilibrium set of strategies. We repeat this over many initial sets of strategies to find average properties of this optimization process.
@@ -94,35 +119,25 @@ expect ESS strategies to decrease as the signal becomes more public, but we find
 
 \newpage
 \section{Appendix}
-\subsection{H2 Norm \label{H2}} 
+%%% APPENDIX NOW DISCUSSES H2 WITHOUT FORCING (AS IN GEORGE'S PAPER), H2 WITH FORCING, WHICH GIVES CORRELATIONS BUT NOT FLUCTUATIONS AROUND AVERAGE OPINION, STAT MECH CORRELATIONS WITHOUT FORCING AND STAT MECH CORRELATION WITH FORCING, BOTH OF WHICH GIVE FLUCTUATIONS AROUND AVERAGE OPINION. SO H2 WITH FORCING IS STILL INCOMPARABLE TO ANYTHING ELSE SINCE ITS CORRELATIONS NOT FLUCTUATIONS AROUND AVERAGE OPINIONS. IT'S OKAY FOR NOW.
+\subsection{Linear algebra background }
 
-\ Let $y$ represent the distance between the vector of opinions and consensus, i.e.
-$y=QxQ^T,$
-where $Q\in\R^{n-1\times n}$ is such that $Q\vec{1}=0$ , $QQ^T=I_{n-1}$, and $Q^TQ=I_n-\frac{1}{n}\vec{1}\times\vec{1}^T$.   
-Then 
-\begin{equation}
-\dot{y}(t)=-\overline{L}y(t)+Q\xi(t) \notag
-\end{equation}
-where $\overline{L}=QLQ^T$.  As shown in \cite{Young:2010fk}, if $\Sigma_y(t)=\E[y(t)y(t)^T]$,  $\Sigma_y$ at equilibrium solves
-\begin{equation} 0=-\overline{L}\Sigma_y-\Sigma_y\overline{L}^T+D. \label{h2norm}
-\end{equation}
-\begin{align*}
-\mathscr{H}_2&=\sqrt{\Tr(\Sigma_y)}
-\\\mathscr{H}_2 \text{ robustness} &=\frac{1}{\mathscr{H}_2}
-\end{align*}
+\begin{theorem} \label{lyapeq_theorem}
+Given any positive symmetric matrix $Q>0$ there exists a unique positive symmetric matrix $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Q$ if and only if the system $\dot{x}=Ax$ is globally asymptotically stable.
+\end{theorem}
 
-\begin{claim}
-Given any $Q>0$ there exists a unique $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Z$ if and only if the system $\dot{x}=Ax$ is  global asymptotically stable.
-\end{claim}
-
-\begin{claim}
+\begin{claim} \label{lyapeq_derivation}
 Consider the dynamical system,
 \begin{equation}
-\dot{y}=Ay+B+C\xi  \label{tofindsigma}
+\dot{y}=Ay+B+Q\xi  \label{tofindsigma}
 \end{equation}
 with $E[\xi(t)]=0$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[y(0)\xi^T(t)]=0$. If all eigenvalues of $A$ are negative and if $\Sigma(t)=E[y(t)y(t)^T]$ and $\Sigma_{ss}=\lim_{t\to\infty}\Sigma(t)$, then $\Sigma_{ss}$ satisfies the Lyapunov equation
 \begin{equation*}
-A\Sigma_{ss}+\Sigma_{ss}A^T=A^{-1}BB^T+BB^T(A^{-1})^T-CC^T
+A\Sigma_{ss}+\Sigma_{ss}A^T=A^{-1}BB^T+BB^T(A^{-1})^T-QQ^T.
+\end{equation*}
+Further, if $C_{ij}=E[(y_i-E(y_i))(y_j-E(y_j))]$ and $C_{ss}=\lim_{t\to\infty}C$ then 
+\begin{equation*}
+AC_{ss}+C_{ss}A^T=-QQ^T
 \end{equation*}
 \end{claim}
 
@@ -130,176 +145,412 @@ A\Sigma_{ss}+\Sigma_{ss}A^T=A^{-1}BB^T+BB^T(A^{-1})^T-CC^T
 \begin{align*}
 \Sigma(t)&=E[y(t)y(t)^T]
 \\ \Rightarrow \dot{\Sigma}&=E[\dot{y}(t)y(t)^T+y(t)\dot{y}(t)^T]
-\\&=E[(Ay+B+C\xi)y^T+y(y^TA^T+B^T+\xi^TC^T)]
-\\&=AE[yy^T]+E[yy^T]A^T+BE[y^T]+E[y]B^T+CE[\xi y^T]+E[y\xi^T]C^T
+\\&=E[(Ay+B+Q\xi)y^T+y(y^TA^T+B^T+\xi^TQ^T)]
+\\&=AE[yy^T]+E[yy^T]A^T+BE[y^T]+E[y]B^T+QE[\xi y^T]+E[y\xi^T]Q^T
 \end{align*}
 Note that we can write a solution to (\ref{tofindsigma}) as 
 \begin{equation*}
-y(t)=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds+\int_0^t\exp(A(t-s))C\xi(s)ds.
+y(t)=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds+\int_0^t\exp(A(t-s))Q\xi(s)ds.
 \end{equation*}
 This allows us to write $E[y]=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds$ and 
 \begin{align*}
-E[y \xi^T]&=\exp(At)E[y(0)\xi(t)^T]+\int_0^t\exp(A(t-s))BE[\xi(t)^T]ds+\int_0^t\exp(A(t-s))CE[\xi(s)\xi(t)]ds
-\\&=0+0+\frac{1}{2}C
+E[y \xi^T]&=\exp(At)E[y(0)\xi(t)^T]+\int_0^t\exp(A(t-s))BE[\xi(t)^T]ds+\int_0^t\exp(A(t-s))QE[\xi(s)\xi(t)]ds
+\\&=0+0+\frac{1}{2}Q
 \\ \Rightarrow \dot{\Sigma}&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
-\\&+B\int_0^tB^T\exp(A(t-s))^Tds+\int_0^T\exp(A(t-s))BdsB^T+\frac{1}{2}CC^T+\frac{1}{2}CC^T
+\\&+B\int_0^tB^T\exp(A(t-s))^Tds+\int_0^T\exp(A(t-s))BdsB^T+\frac{1}{2}CC^T+\frac{1}{2}QQ^T
 \\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
-\\&-BB^T(A^{-1})^T\exp(A(t-s))|_{s=0}^{s=t}-A^{-1}\exp(A(t-s))|_{s=0}^tBB^T+CC^T
+\\&-BB^T(A^{-1})^T\exp(A(t-s))|_{s=0}^{s=t}-A^{-1}\exp(A(t-s))|_{s=0}^tBB^T+QQ^T
 \\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
-\\&-BB^T(A^{-1})^T(I-\exp(At))-A^{-1}(I-\exp(At))BB^T+CC^T
-\\ \lim_{t\to\infty}\dot{\Sigma}&=A\Sigma_{ss}+\Sigma_{ss}A^T-BB^T(A^{-1})^T-A^{-1}BB^T+CC^T \text{ since all eigenvalues of $A$ are negative}
-\\\Rightarrow A\Sigma_{ss}+\Sigma_{ss}A^T&=BB^T(A^{-1})^T+A^{-1}BB^T-CC^T \text{ since $\dot{\Sigma}=0$ at equilibrium}
+\\&-BB^T(A^{-1})^T(I-\exp(At))-A^{-1}(I-\exp(At))BB^T+QQ^T
+\\ \lim_{t\to\infty}\dot{\Sigma}&=A\Sigma_{ss}+\Sigma_{ss}A^T-BB^T(A^{-1})^T-A^{-1}BB^T+QQ^T \text{ since all eigenvalues of $A$ are negative}
+\\\Rightarrow A\Sigma_{ss}+\Sigma_{ss}A^T&=BB^T(A^{-1})^T+A^{-1}BB^T-QQ^T \text{ since $\dot{\Sigma}=0$ at equilibrium}.
+\end{align*}
+If we take the limit as $t$ goes to infinity, we find that 
+$$\lim_{t\to\infty}E[(y(t))]=\lim_{t\to\infty}(-A^{-1}(\exp(A(t-s))B|_{s=0}^{s=t}))=\lim_{t\to\infty}-A^{-1}(I-\exp(At))B=-A^{-1}B.$$
+Therefore, 
+\begin{align*}
+C&=\Sigma-(-A^{-1}B)(-A^{-1}B)^T
+\\&=\Sigma-A^{-1}BB^T(A^{-1})^T
+\\\Rightarrow AC+CA^T&=A\Sigma+\Sigma A^T-AA^{-1}BB^T(A^{-1})^T
+-A^{-1}BB^T(A^{-1})^TA^T
+\\&=A\Sigma+\Sigma A^T-BB^T(A^{-1})^T-A^{-1}BB^T
+\\&=-QQ^T.
 \end{align*}
 \end{pf}
 
 
-\subsection{Calculating correlations \label{corr}}
-The following is derived from the work in \cite{Bialek:2013fk}.
+\subsection{Opinion dynamics with noise }
+Young et al. \cite{Young:2010fk} model opinion dynamics by assuming that each bird averages the differences between its opinion and each of the opinions of its neighbors and changes its opinion to minimize this difference and that each bird's opinion is subject to independent noise of unit intensity. The equations describing these dynamics can be written as 
+\begin{equation}
+\dot{x_i}=\frac{\sum_{\text{neighbors $j$ of $i$ } }(x_j-x_i)}{K_i} +\xi_i=\sum_j\bar{A}_{ij}x_j-x_i+\xi_i=\sum_jL_{ij}x_j+\xi_i.
+\end{equation}
+In vector notation this becomes
+\begin{equation}
+\dot{x}=Lx+\xi.
+\end{equation}
+The equilibrium of these dynamics is a consensus state in which all birds have the some opinion, $x=\alpha\vec{1}$ for some $\alpha\in\R$. In the absence of any environmental signal, the consensus opinion can be any value $\alpha$. This means there is no single globally asymptotically stable equilibrium, so the variance of the opinions at steady state becomes difficult to analyze. However, we can rotate the opinion vector away from the consensus vector $\vec{1}$ to study deviations away from consensus. 
+
+To rotate into the space orthogonal to the consensus vector, we can define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk} show that this equivalent to finding $Q$ such that $Q\vec{1}=\vec{0}$, $QQ^T=I_{N-1}$, and $Q^TQ+I_N-\frac{1}{N}\vec{1}_N\vec{1}_N^T$. If we then define $y=Qx$, $y$ is the component of $x$ orthogonal to the consensus vector. It follows that the dynamics of $y$ follow
 \begin{align*}
-H(\vec{v})&=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
-%\\&=\vec{v}A\vec{v}-\vec{\beta}^T\vec{v}+\vec{\beta}^T\vec{1}
+\dot{y}&=Q\dot{x}+Q\xi
+\\&=QLx+Q\xi
+\\&=QL\big(x-\frac{1}{N}\sum_kx_k\vec{1}\big)+Q\xi \text{ since } L\vec{1}=0
+\\&=QLQ^TQx+Q\xi
+\\&=QLQ^Ty+Q\xi
+\\&=\tilde{L}y+Q\xi.
 \end{align*}
-Define $V=\sum_kv_k/N$ and $\vec{y}=(\vec{v}-V\vec{1})/V$.  Then $\vec{v}=V(\vec{1}+\vec{y})$.  
+Now, $y=\vec{0}$ \emph{is} globally asymptotically stable, so analyzing its variance at steady state is a well-defined problem. Young et al. show in \cite{Young:2010fk} and we show below in Claim \ref{lyapeq_derivation} that if $\Sigma=\lim_{t\to\infty}E[y(t)y^T(t)]$, then $\Sigma$ satisfies $\tilde{L}\Sigma+\Sigma \tilde{L}^T=-I$. If we find such a $\Sigma$, then $\Tr(\Sigma)=\lim_{t\to\infty}\sum_iE[y_i(t)^2]\lim_{t\to\infty}=E[|y(t)|^2].$ If we define $\mathscr{H}=\Tr(\Sigma)$, then $H$ shows the expected distance between the opinion vector and the consensus vector at steady state. $\mathscr{H}$ is therefore a measure of the robustness of the consensus state to noise.
+
+In this paper, we consider the possibility of an environmental signal that drives the opinions to be equal to $1$. With this modification, the dynamics can be written
+\begin{equation}
+\dot{x}=Lx+B(\vec{1}-x)+\xi=L_\text{f}x+B\vec{1}+\xi
+\end{equation}
+In this case, $\vec{1}$ becomes a globally asymptotically stable equilibrium and we can find the steady state variance around this equilibrium without rotating into the subspace orthogonal to consensus. In particular, if $C_{ij}=\lim_{t\to\infty}E[(y_i(t)-\langle y_i(t)\rangle)(y_j(t)-\langle y_j(t)\rangle)]$, then the symmetric matrix $C$ satisfies $L_\text{f}C+CL_\text{f}^T=-I$ (Claim \ref{lyapeq_derivation}).
+
+\subsection{Probability distribution at equilibrium }
+A quite different way of modeling social interactions is to assume the opinions come to equilibrium and write down an expression for the probability of finding the opinion vector in every state, the method used by Bialek et al. in \cite{Bialek:2012fk}. In statistical physics, a Hamiltonian describes the energy of a given state, $H(v)$, and the Boltzmann distribution describes a probability distribution in which the most energetic states are least likely. Analogously, we can write a function $H(v)$ that gives a high energy when the opinions are not in consensus and a low energy when the opinions are in consensus and a probability distribution of opinion vectors that favors less energetic states. In order to do this, we must use a symmetric interaction matrix, rather than the possibly asymmetric $\bar{A}$ we used above. Bialek et al. study a model in which opinions are a three-dimensional velocity vector and the birds can weight the opinions of their nearest neighbors with any value $J$. In order to simplify this model and make it directly comparable to the opinion dynamics model we described above, we only consider a scalar-valued opinion $x_i$ and we impose the condition that the weights given to the neighbors' opinions are inversely proportional to the numb of neighbors. In particular, we define $S=\frac{1}{2}(A+A^T)$ and $P$ such that $P_{ij}=S_{ij}$ for $j\neq i$ and $P_{ii}=-\sum_kS_{ik}$. This allows us to write down a Hamiltonian
+\begin{equation}
+H(v)=-v^TPv
+\end{equation}
+where the negative sign makes opinions far from consensus give high energies and conversely. The probability distribution over opinion vectors $v$ then becomes $P(v)=1/Z\exp(-\frac{1}{2}H(v))$, where $Z=\int_\R^N\exp(-\frac{1}{2}H(v))dv$. We would like to use this probability distribution to find the covariance and correlation between the birds' opinion. 
+
+As in the opinion dynamics framework, this requires some care when there is no environmental signal. If we write $P$ fully as 
+\begin{equation}
+P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}v^T(-P)v\right),
+\end{equation}
+we see that it is in the form of a multivariate Gaussian distribution. If $P$ is invertible, the covariance matrix would be given by $-P^{-1}$. However, since $P\vec{1}=\vec{0}$, one of the eigenvalues of $P$ is $0$ and it is therefore invertible. If we let $V=\sum_iv_i/N$ and $z=v-V\vec{1}$ so that $v=z+V\vec{1}$, then 
 \begin{align*}
-H(\vec{y},V)&=-V^2(\vec{1}^T+\vec{y}^T)A(\vec{1}+\vec{y})-\vec{\beta}^TV(\vec{1}+\vec{y})
-\\&=-V^2(\vec{1}^T+\vec{y}^T)A\vec{y}-V\vec{\beta}^T\vec{y}-V\vec{\beta}^T\vec{1} \text{ since $A\vec{1}=\vec{0}$}
-\\&=-V^2\vec{y}^TA\vec{y}+(-V^2\vec{1}^TA-V\vec{\beta}^T)\vec{y}-V\vec{\beta}^T\vec{1}
+P(z,V)&=\frac{1}{Z}\exp\left(-\frac{1}{2}(z+V\vec{1})^T(-P)(z+V\vec{1})\right)
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}z^T(-P)z\right) \text{ since }P\vec{1}=P^T\vec{1}=\vec{0}.
 \end{align*}
-Define $Q\in M_{N-1,N}$ that rotates an $N$-vector away from the consensus vector and define $\vec{z}=Q\vec{y}$ so that $\vec{y}=Q^T\vec{z}$ since $\sum_ky_k=0$.
+To unpack this equation, we will write $z$ as a linear combination of eigenvectors of $P$. Since $P$ is symmetric and negative, there is an orthonormal set of eigenvectors $\{w_k\}$ such that $Pw_k=\lambda_kw_k$ with $w_1=\vec{1}$ and $\lambda_1=0$. If we let $W$ be a matrix whose columns are given by $\{w_k\}$ and $\Lambda$ be the diagonal matrix with $\{\lambda_k\}$ along the diagonal, then $W^T=W^{-1}$ and $P=W\Lambda W^T$ since $P$ is symmetric. If we write $z=\sum_kc_kw_k=W\vec{c}$, then $c_k=0$ since $\sum_iz_i=0$ implies that $z\cdot \vec{1}=0$. If we then write $\tilde{W}$ as the $N$ by $N-1$ matrix whose columns are given by $w_2,...w_N$,  $\tilde{\Lambda}$ be the diagonal matrix with $\lambda_2,\dots,\lambda_N$ along the diagonal, and $\tilde{P}=\tilde{W}\tilde{\Lambda}\tilde{W}^T$, then 
 \begin{align*}
-H(\vec{z},V)&=-V^2\vec{z}^TQAQ^T\vec{z}+(-V^2\vec{1}^TAQ^T-V\vec{\beta}^TQ^T)\vec{z}-V\vec{\beta}^T\vec{1}
-\\&=V^2\vec{z}^TP\vec{z}+(-V^2\vec{\sigma}_1^T-V\vec{\sigma}_2^T)\vec{z}-V\vec{\beta}^T\vec{1}
-\\ \Rightarrow P(\vec{z},V)&=\frac{1}{\z}\exp\left(-V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)
+P(z)&=\frac{1}{Z}\exp\left(-\frac{1}{2}z^T(-\tilde{P})z\right).
 \end{align*}
-where $P=-QAQ^T$, $\vec{\sigma}_1=QA^T\vec{1}$, and $\vec{\sigma}_2=Q\vec{\beta}$.
+Note that $\tilde{W}^T(-\tilde{\Lambda}^{-1})\tilde{W}\tilde{P}=I$ so if we denote $\tilde{W}^T(-\tilde{\Lambda}^{-1})\tilde{W}$ as $\tilde{P}^{-1}$ then the covariance matrix of $z$ is given by $\tilde{P}^{-1}$. By dividing each entry $C_{ij}$ of the covariance matrix by $C_{ii}C_{jj}$, the covariance matrix can be used to find the correlation matrix.
 
+The Hamiltonian framework, like the opinion dynamics framework, becomes easier to analyze if there is an environmental signal. In this case, the appropriate Hamiltonian is 
+\begin{equation}
+\begin{array}{lll}
+H(v)&=-(v-\vec{1})^TP_\text{f}(v-\vec{1})
+%\\&=-v^TP_\text{f}v+2v^TP_\text{f}\vec{1}-\vec{1}^TB\vec{1}
+%\\&=-v^TP_\text{f}v+2v^TB\vec{1}-\vec{1}^TB\vec{1}
+\end{array}
+\end{equation}
+since $P_\text{f}$ is symmetric and $P\vec{1}=\vec{0}$. It is clear that $H$ is minimized when $v=\vec{1}$.  In this case, $P_\text{f}$ is invertible and $P_\text{f}^{-1}$ gives the covariance matrix of the opinions $v$, i.e. if $C=P_\text{f}^{-1}$, $C_{ij}=E[(v_i-\langle v_i\rangle)(v_j-\langle v_j\rangle)]$.
 
-\begin{fact}
+We would like to compare the fluctuations around the average (consensus) opinion with and without the environmental signal, i.e. $E[(v_i-\frac{\sum_kv_k}{N})(v_j-\frac{\sum_kv_k}{N})]$. As above, let $V=\sum_iv_i/N$ and $z=v-V\vec{1}$ so that $v=z+V\vec{1}$. 
 \begin{align*}
-\int\exp\left(-\frac{1}{2}\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{\det P}}\exp\left(-\frac{1}{2}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
-\\\Rightarrow \int\exp\left(-\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{2^{N-1}\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+P(z,V)&=\frac{1}{Z}\exp\left(-\frac{1}{2}(v-\vec{1})^T(-P_\text{f})(v-\vec{1}\right)
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}(z-(1-V)\vec{1})^T(-P_\text{f})(z-(1-V)\vec{1}\right)
 \end{align*}
-\end{fact}
-
+Since the subspace of $z\in\R^N$ such that $\sum_iz_i=0$ is $N-1$ dimensional, it will be easier to rotate $z$ into $\R^{N-1}$ and integrate over all of $\R^{N-1}$. Above, we found a $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ was orthogonal to $\vec{1}$. Let $Q'\in\R^N\times\R^N$ be the matrix with $\frac{1}{\sqrt{N}}\vec{1}^T$ as its first row and the subsequent rows identical to the rows of $Q$. Let $\{q_1,\dots,q_N\}$ be the rows of $Q'$, so that $q_1=\vec{1}$. Since $Q'$ is orthonormal, it is invertible and we can write $y=(Q'^{-1})^Tz$. Then $Q'^Ty=z$ and $$0=\vec{1}^Tz=\vec{1}^TQ'^Ty=\sum_{k=1}^N\vec{1}^Tq_ky_k=y_1.$$ 
+Therefore, 
+$$\Omega=\{z\in\R^N:\sum_iz_i=0\}=\{z\in\R^N:z\cdot\vec{1}=0\}=\{z\in\R^N:\exists \ y\in\R^N \text{ such that } z=Q^Ty \text{ and } y_1=0\}.$$
+Further, if $e_1=(1,0,\dots,0)^T$, $Q'^Te_1=q_1=\frac{1}{\sqrt{N}}\vec{1}$ so that $\vec{1}=\sqrt{N}Q'^Te_1$.
+Now, this allows us to rewrite
 \begin{align*}
-\z&=\int_{-\infty}^\infty\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)d^NzdV
-\\&=\int_{-\infty}^\infty \exp(V\vec{\beta}^T\vec{1})\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}\right)d^NzdV
-\\&=\sqrt{\pi^{N-1}}\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}\det{P}}}\right)\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det PP}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}}}\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
-\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\Pi_a\lambda_a}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV 
-\\&\text{ where $\lambda_a$ are the eigenvalues of $P$}
-\\ \Rightarrow -\log(\z)&=\text{constants}+\frac{1}{2}\sum_a\log(\lambda_a)+\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma_1}-\log(f(P))
+P(z,V)&=\frac{1}{Z}\exp\left(-\frac{1}{2}(Q'^Ty-(1-V)\sqrt{N}Q'^Te_1)^T(-P_\text{f})(Q'^Ty-(1-V)\sqrt{N}Q'^Te_1)\right)
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}(y-(1-V)\sqrt{N}e_1)^T(-Q'P_\text{f}Q'^T)(y-(1-V)\sqrt{N}e_1)\right)
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}(y-(1-V)\sqrt{N}e_1)^TR(y-(1-V)\sqrt{N}e_1)\right)
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}(y+(V-1)\sqrt{N}e_1)^TR(y+(V-1)\sqrt{N}e_1)\right)
 \end{align*}
-
-where $f(P)=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV $.
-
+where $R=-Q'P_\text{f}Q'^T$ and $y\in\R^N$ is such that $y_1=0$. To find $P(z)$ we can integrate out $V$:
 \begin{align*}
-\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{1l}-\frac{\partial \log f}{\partial P_{ij}}
-\\\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}-\frac{1}{f}\frac{\partial f}{\partial P_{ij}}
+P(z)&=\int_\R P(z,V)dV
+\\&=\int_\R \frac{1}{Z}\exp\left(-\frac{1}{2}((V-1)\sqrt{N}e_1+y)^TR((V-1)\sqrt{N}e_1+y)\right)dV
+\\&=\frac{1}{Z}\exp(-\frac{1}{2}y^TRy)\int_\R \exp\left(-\frac{1}{2}\left(R_{11}N\left(V-1\right)^2+(V-1)\sqrt{N}\sum_iR_{1i}y_i+(V-1)\sqrt{N}\sum_iy_iR_{i1}\right)\right)dV
+\\&=\frac{1}{Z}\exp(-\frac{1}{2}y^TRy)\int_\R \exp\left(-\frac{1}{2}\left(R_{11}N\left(V-1\right)^2+2(V-1)\sqrt{N}\sum_iR_{1i}y_i\right)\right)dV \text{ since $R$ is symmetric }
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^TRy-\left(\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)\right)\times
+\\&\int_\R \exp\left(-\frac{1}{2}\left(R_{11}N\left(V-1\right)^2+2(V-1)\sqrt{N}\sum_iR_{1i}y_i+\left(\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)\right)dV
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^TRy-\left(\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)\right)\int_\R \exp\left(-\frac{1}{2}\left(\sqrt{R_{11}}\sqrt{N}\left(V-1\right)+\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)dV
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^TRy-\left(\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)\right)\int_\R \exp\left(-\frac{1}{2}R_{11}N\left(\left(V-1\right)+\frac{\sum_iR_{1i}y_i}{R_{11}N}\right)^2\right)dV
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^TRy-\left(\sum_iR_{1i}y_i/\sqrt{R_{11}}\right)^2\right)\right)\times\sqrt{2\pi}\sqrt{R_{11}N}
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^TRy-y^TR_{\cdot 1}R_{1\cdot}y\right)\right)\times\sqrt{2\pi}\sqrt{R_{11}N} \text{ where $R_{1\cdot}$ is the first row of $R$}
+\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T(R-\frac{1}{R_{11}}R_{\cdot 1}R_{1\cdot})y\right)\right)\times\sqrt{2\pi}\sqrt{R_{11}N}
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}\left(y^T(R-\frac{1}{R_{11}}R_{\cdot 1}R_{1\cdot})y\right)\right)
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^TQ'^{-1}(R-\frac{1}{R_{11}}R_{\cdot 1}R_{1\cdot})(Q'^{-1})^Tz\right)
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}}Q'^{-1}R_{\cdot 1}R_{1\cdot}(Q'^{-1})^T)z\right)
+%\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}}Q'^{-1}R_{\cdot 1}R_{1\cdot}(Q'^{-1})^T)z\right)
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}}P_\text{f}Q'^T_{\cdot 1}Q'_{1\cdot}P_\text{f})z\right)
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}}P_\text{f}(Q'_{1\cdot})^TQ'_{1\cdot}P_\text{f})z\right)
+%\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}}P_\text{f}\Pi P_\text{f})z\right) \text{ where $\Pi_{ij}=1/N$ for all $i,j$}
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}N}P_\text{f}\vec{1}\vec{1}^T P_\text{f})z\right) 
+\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{f}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{R_{11}N}B\vec{1}\vec{1}^T B)z\right)  \text{ since $P\vec{1}=\vec{0}$}
 \end{align*}
+By definition of $R$, $R_{11}=\sum_{kl}Q_{1k}P_{\text{f}kl}Q_{1l}$. Let $N_\text{I}$ be the number of birds that can perceive the signal, i.e. $N_\text{I}$ is the number of non-zero elements along the diagonal of $B$. Then, $R_{11}=\frac{b}{N}N_\text{I}$. 
+Finally, we find that 
+\begin{equation}
+P(z)\propto \exp\left(-\frac{1}{2}z^T(-P_\text{f}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB)z\right)
+\end{equation}
+Now, let $P'=P_\text{f}+\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB$. Then $P'\vec{1}=-B\vec{1}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB\vec{1}=-B\vec{1}-\frac{bN_\text{I}}{bN_\text{I}}B\vec{1}=\vec{0}$, so we cannot invert $-P'$ to find the covariance matrix. However, as above, we can discard the $0$ eigenvector since we know that $z\cdot \vec{1}=0$. This gives us $E[(y_i-\frac{\sum_ky_k}{N})(y_j-\frac{\sum_ky_k}{N})]$.
 
+\subsection{Connecting two frameworks }
+To find $\mathscr{H}$, we found the matrix $\Sigma$ such that 
+\begin{equation}
+QLQ^T\Sigma+\Sigma QLQ^T=-I.
+\end{equation}
+If the vector $v$ is described by the dynamics $\dot{v}=Dv$, with $H(v)=-v^TPv$, then
 \begin{align*}
-\frac{\partial f}{\partial P_{ij}}&=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)\left(-\frac{1}{4V}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)dV
-\\&=\left(-\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+\dot{H}&=-\dot{v}^TPv-v^TP\dot{v}
+\\&=-v^TD^TPv-v^TPDv
+\\&=-v^T(D^TP+PD)v.
 \end{align*}
+Therefore, $H(v)$ decreases at all $v$ if and only if $D^TP+PD$ is a positive matrix.
+%MORE?!?
 
-\small{
-\begin{align*}
-\Rightarrow\langle z_iz_j\rangle &=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}+\left(\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\frac{\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}{\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}
-\end{align*}}
-
-
-\subsection{Equivalence of dynamics and Hamiltonian }
-\begin{claim}
-If $H(\vec{v})=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}$ and $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}$ then $\nabla H\cdot \frac{d\vec{v}}{dt}\leq 0$.
-\end{claim}
-\begin{pf}
-\begin{align*}
-H(\vec{v})&=-\sum_{ij}A_{ij}v_iv_j-\sum_i\beta_iv_i
-\\\Rightarrow\frac{\partial H}{\partial v_i}&=-\sum_{j\neq i}A_{ij}v_j-\sum_{j\neq i}A_{ji}v_j-2A_{ii}v_i-\beta_i
-\\&=-\sum_j(A_{ij}+A^T_{ij})v_j-\beta_i
-\\ \Rightarrow \nabla H&=-(A+A^T)\vec{v}-\vec{\beta}
-\\ \Rightarrow \nabla H\cdot \frac{d\vec{v}}{dt}&=-\vec{v}^T(A+A^T)A\vec{v}-\vec{v}^T(A+A^T)\vec{\beta}-\vec{\beta}^TA\vec{v}-\vec{\beta}^T\vec{\beta}
-\\&=-\vec{v}^TA^2\vec{v}-\vec{v}^TA^TA\vec{v}-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}-\vec{\beta}^T\vec{\beta}
-\end{align*}
-If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA$ is positive semi-definite.  (Consider that $\vec{v}^TA^TA\vec{v}=(A\vec{v})^T(A\vec{v})$ so that $\vec{v}A^TA\vec{v}=0$ if $A\vec{v}=0$ and $\vec{v}^TA^TA\vec{v}<0$ otherwise.) Therefore, $-\vec{v}^TA^2\vec{v}\leq 0$ and $-\vec{v}^TA^TA\vec{v}\leq 0$. At equilibrium, $\vec{v}$ will be ``close" to $\vec{\beta}$ so that $$-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}\sim-3\vec{\beta}^TA\vec{\beta}$$
-\end{pf}
-
-\subsection{Numerically evaluating dynamics }
+%Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{v}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
+%\begin{equation*}
+%\frac{d\vec{v}}{dt}=M\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v}).
+%\end{equation*}
+%We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal. 
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%\subsection{H2 Norm \label{H2}} 
+%
+%\ Let $y$ represent the distance between the vector of opinions and consensus, i.e.
+%$y=QxQ^T,$
+%where $Q\in\R^{n-1\times n}$ is such that $Q\vec{1}=0$ , $QQ^T=I_{n-1}$, and $Q^TQ=I_n-\frac{1}{n}\vec{1}\times\vec{1}^T$.   
+%Then 
+%\begin{equation}
+%\dot{y}(t)=-\overline{L}y(t)+Q\xi(t) \notag
+%\end{equation}
+%where $\overline{L}=QLQ^T$.  As shown in \cite{Young:2010fk}, if $\Sigma_y(t)=\E[y(t)y(t)^T]$,  $\Sigma_y$ at equilibrium solves
+%\begin{equation} 0=-\overline{L}\Sigma_y-\Sigma_y\overline{L}^T+D. \label{h2norm}
+%\end{equation}
+%\begin{align*}
+%\mathscr{H}_2&=\sqrt{\Tr(\Sigma_y)}
+%\\\mathscr{H}_2 \text{ robustness} &=\frac{1}{\mathscr{H}_2}
+%\end{align*}
+%
 %\begin{claim}
-Let $\Phi(t)$ be the fundamental matrix solution to the homogeneous differential equations $\frac{d\vec{x}}{dt}=A\vec{x}$ so that $\Phi(t)=V\Lambda(t)$ where the columns of $V$ are the eigenvectors of $A$ and $$\Lambda(t)=\text{diag}(e^{\lambda_1 t},\dots,e^{\lambda_n t})$$ where $\{\lambda_i\}$ are the eigenvalues of $A$.  (Note that if $\lambda_i=0$ then $e^{\lambda _i t}=1$ for all $t$.) Let $V^\dagger$ be the pseudoinverse of $V$.  Let $\vec{c}=V^\dagger\vec{X_0}$.  Let $$G(t)=\text{diag}(1/\lambda_1(1-e^{-\lambda_1t}),\dots,1/\lambda_n(1-e^{-\lambda_nt}))V^\dagger\vec{\beta}.$$
-(If $\lambda_i=0$ then the corresponding entry of the first part of $G(t)$ will be given by $t$ rather than the form above.)  
-\begin{claim}
-If we let $x(t)=\Phi(t)G(t)+\Phi(t)\vec{c}$, $x(t)$ solves the inhomogeneous equations $\frac{dx}{dt}=A\vec{x}+\vec{\beta}$ with initial conditions $x(0)=\vec{X_0}$.
-\end{claim}
-
-\begin{pf}
-It is clear that
-\begin{align*}
-\frac{d\Phi\vec{c}}{dt}&=A\Phi(t)\vec{c} \text{ and } \Phi(0)\vec{c}=\vec{X_0}.
-\end{align*}
-Now, 
-\begin{align*}
-\Phi(t)G(t)&=V
-\left(\begin{array}{ccccc}
-e^{\lambda_1 t}  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots & e^{\lambda_nt}
- \end{array}\right)
- \left(\begin{array}{ccccc}
-\frac{1}{\lambda_1}(1-e^{\lambda_1 t})  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &\frac{1}{\lambda_n} (1-e^{\lambda_nt})
- \end{array}\right)
- V^\dagger\vec{\beta}
- \\&=V
- \left(\begin{array}{ccccc}
-\frac{1}{\lambda_1}(e^{\lambda_1 t}-1)  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &\frac{1}{\lambda_n} (e^{\lambda_nt}-1)
- \end{array}\right)
- V^\dagger\vec{\beta}
- \\ \Rightarrow \frac{d\Phi(t)G(t)}{dt}&=V
- \left(\begin{array}{ccccc}
-e^{\lambda_1 t}  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &e^{\lambda_nt}
- \end{array}\right)V^\dagger\vec{\beta}
- \\&=V
- \left(\begin{array}{ccccc}
-e^{\lambda_1 t}  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &e^{\lambda_nt}
- \end{array}\right)
- V^\dagger\vec{\beta} -VV^\dagger\vec{\beta}+\vec{\beta}
- \\&=V
- \left(\begin{array}{ccccc}
-e^{\lambda_1 t}-1  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &e^{\lambda_nt}-1
- \end{array}\right)
- V^\dagger\vec{\beta} +\vec{\beta}
-  \\&=V
- \left(\begin{array}{ccccc}
-\lambda_1e^{\lambda_1t}\cdot \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &\lambda_ne^{\lambda_nt}\cdot\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
- \end{array}\right)
- V^\dagger\vec{\beta} +\vec{\beta}
-  \\&=AV\Lambda(t)
- \left(\begin{array}{ccccc}
- \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
-\\ \vdots & \ddots &\vdots
-\\ 0 & \dots &\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
- \end{array}\right)
- V^\dagger\vec{\beta} +\vec{\beta}
- \\&=AV\Lambda(t)G(t)+\vec{\beta}
- \\&=A\Phi(t)G(t)+\vec{\beta}
-\end{align*}
-Therefore $\frac{dx}{dt}=A\Phi(t)G(t)+A\Phi(t)\vec{c}+\vec{\beta}=Ax(t)+\vec{\beta}$ and since $G(0)=\vec{0}$, $x(0)=\vec{X_0}$.
-\end{pf}
+%Given any $Q>0$ there exists a unique $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Z$ if and only if the system $\dot{x}=Ax$ is  global asymptotically stable.
+%\end{claim}
+%
+%\begin{claim}
+%Consider the dynamical system,
+%\begin{equation}
+%\dot{y}=Ay+B+C\xi  \label{tofindsigma}
+%\end{equation}
+%with $E[\xi(t)]=0$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[y(0)\xi^T(t)]=0$. If all eigenvalues of $A$ are negative and if $\Sigma(t)=E[y(t)y(t)^T]$ and $\Sigma_{ss}=\lim_{t\to\infty}\Sigma(t)$, then $\Sigma_{ss}$ satisfies the Lyapunov equation
+%\begin{equation*}
+%A\Sigma_{ss}+\Sigma_{ss}A^T=A^{-1}BB^T+BB^T(A^{-1})^T-CC^T
+%\end{equation*}
+%\end{claim}
+%
+%\begin{pf}
+%\begin{align*}
+%\Sigma(t)&=E[y(t)y(t)^T]
+%\\ \Rightarrow \dot{\Sigma}&=E[\dot{y}(t)y(t)^T+y(t)\dot{y}(t)^T]
+%\\&=E[(Ay+B+C\xi)y^T+y(y^TA^T+B^T+\xi^TC^T)]
+%\\&=AE[yy^T]+E[yy^T]A^T+BE[y^T]+E[y]B^T+CE[\xi y^T]+E[y\xi^T]C^T
+%\end{align*}
+%Note that we can write a solution to (\ref{tofindsigma}) as 
+%\begin{equation*}
+%y(t)=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds+\int_0^t\exp(A(t-s))C\xi(s)ds.
+%\end{equation*}
+%This allows us to write $E[y]=\exp(At)y(0)+\int_0^t\exp(A(t-s))Bds$ and 
+%\begin{align*}
+%E[y \xi^T]&=\exp(At)E[y(0)\xi(t)^T]+\int_0^t\exp(A(t-s))BE[\xi(t)^T]ds+\int_0^t\exp(A(t-s))CE[\xi(s)\xi(t)]ds
+%\\&=0+0+\frac{1}{2}C
+%\\ \Rightarrow \dot{\Sigma}&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+%\\&+B\int_0^tB^T\exp(A(t-s))^Tds+\int_0^T\exp(A(t-s))BdsB^T+\frac{1}{2}CC^T+\frac{1}{2}CC^T
+%\\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+%\\&-BB^T(A^{-1})^T\exp(A(t-s))|_{s=0}^{s=t}-A^{-1}\exp(A(t-s))|_{s=0}^tBB^T+CC^T
+%\\&=A\Sigma(t)+\Sigma(t)A^T+By(0)^T\exp(At)^T+\exp(At)y(0)B^T
+%\\&-BB^T(A^{-1})^T(I-\exp(At))-A^{-1}(I-\exp(At))BB^T+CC^T
+%\\ \lim_{t\to\infty}\dot{\Sigma}&=A\Sigma_{ss}+\Sigma_{ss}A^T-BB^T(A^{-1})^T-A^{-1}BB^T+CC^T \text{ since all eigenvalues of $A$ are negative}
+%\\\Rightarrow A\Sigma_{ss}+\Sigma_{ss}A^T&=BB^T(A^{-1})^T+A^{-1}BB^T-CC^T \text{ since $\dot{\Sigma}=0$ at equilibrium}
+%\end{align*}
+%\end{pf}
+%
+%
+%\subsection{Calculating correlations \label{corr}}
+%The following is derived from the work in \cite{Bialek:2013fk}.
+%\begin{align*}
+%H(\vec{v})&=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}
+%%\\&=\vec{v}A\vec{v}-\vec{\beta}^T\vec{v}+\vec{\beta}^T\vec{1}
+%\end{align*}
+%Define $V=\sum_kv_k/N$ and $\vec{y}=(\vec{v}-V\vec{1})/V$.  Then $\vec{v}=V(\vec{1}+\vec{y})$.  
+%\begin{align*}
+%H(\vec{y},V)&=-V^2(\vec{1}^T+\vec{y}^T)A(\vec{1}+\vec{y})-\vec{\beta}^TV(\vec{1}+\vec{y})
+%\\&=-V^2(\vec{1}^T+\vec{y}^T)A\vec{y}-V\vec{\beta}^T\vec{y}-V\vec{\beta}^T\vec{1} \text{ since $A\vec{1}=\vec{0}$}
+%\\&=-V^2\vec{y}^TA\vec{y}+(-V^2\vec{1}^TA-V\vec{\beta}^T)\vec{y}-V\vec{\beta}^T\vec{1}
+%\end{align*}
+%Define $Q\in M_{N-1,N}$ that rotates an $N$-vector away from the consensus vector and define $\vec{z}=Q\vec{y}$ so that $\vec{y}=Q^T\vec{z}$ since $\sum_ky_k=0$.
+%\begin{align*}
+%H(\vec{z},V)&=-V^2\vec{z}^TQAQ^T\vec{z}+(-V^2\vec{1}^TAQ^T-V\vec{\beta}^TQ^T)\vec{z}-V\vec{\beta}^T\vec{1}
+%\\&=V^2\vec{z}^TP\vec{z}+(-V^2\vec{\sigma}_1^T-V\vec{\sigma}_2^T)\vec{z}-V\vec{\beta}^T\vec{1}
+%\\ \Rightarrow P(\vec{z},V)&=\frac{1}{\z}\exp\left(-V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)
+%\end{align*}
+%where $P=-QAQ^T$, $\vec{\sigma}_1=QA^T\vec{1}$, and $\vec{\sigma}_2=Q\vec{\beta}$.
+%
+%
+%\begin{fact}
+%\begin{align*}
+%\int\exp\left(-\frac{1}{2}\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{\det P}}\exp\left(-\frac{1}{2}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+%\\\Rightarrow \int\exp\left(-\vec{z}^TP\vec{z}+\vec{\sigma}^T\vec{z}\right)d^{N-1}z&=\sqrt{\frac{(2\pi)^{N-1}}{2^{N-1}\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+%\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}^TP^{-1}\vec{\sigma}\right)
+%\end{align*}
+%\end{fact}
+%
+%\begin{align*}
+%\z&=\int_{-\infty}^\infty\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}+V\vec{\beta}^T\vec{1}\right)d^NzdV
+%\\&=\int_{-\infty}^\infty \exp(V\vec{\beta}^T\vec{1})\int_{\R^{N-1}}\exp\left(V^2\vec{z}^TP\vec{z}+(V^2\vec{\sigma}_1^T+V\vec{\sigma}_2^T)\vec{z}\right)d^NzdV
+%\\&=\sqrt{\pi^{N-1}}\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}\det{P}}}\right)\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+%\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det PP}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\exp(V\vec{\beta}^T\vec{1})\times\left(\sqrt{\frac{1}{V^{2(N-1)}}}\right)\exp\left(-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+%\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\det P}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+%\\&=\sqrt{\pi^{N-1}}\sqrt{\frac{1}{\Pi_a\lambda_a}}\exp\left(-\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma}_1\right)\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV 
+%\\&\text{ where $\lambda_a$ are the eigenvalues of $P$}
+%\\ \Rightarrow -\log(\z)&=\text{constants}+\frac{1}{2}\sum_a\log(\lambda_a)+\frac{1}{4}\vec{\sigma}_1^TP^{-1}\vec{\sigma_1}-\log(f(P))
+%\end{align*}
+%
+%where $f(P)=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV $.
+%
+%\begin{align*}
+%\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{1l}-\frac{\partial \log f}{\partial P_{ij}}
+%\\\Rightarrow\frac{\partial -\log(\z)}{\partial P_{ij}}&=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}-\frac{1}{f}\frac{\partial f}{\partial P_{ij}}
+%\end{align*}
+%
+%\begin{align*}
+%\frac{\partial f}{\partial P_{ij}}&=\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)\left(-\frac{1}{4V}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)dV
+%\\&=\left(-\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV
+%\end{align*}
+%
+%\small{
+%\begin{align*}
+%\Rightarrow\langle z_iz_j\rangle &=\frac{1}{2}\sum_a\frac{w_iw_j}{\lambda_a}+\frac{1}{4}\sum_{kl}\sigma_{1k}P^{-1}{ki}P^{-1}_{jl}\sigma_{1l}+\left(\frac{1}{4}\sum_{kl}\sigma_{2k}P^{-1}_{ki}P^{-1}_{jl}\sigma_{2l}\right)\frac{\int_{-\infty}^\infty\frac{1}{V^{(N)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}{\int_{-\infty}^\infty\frac{1}{V^{(N-1)}}\exp\left(V\vec{\beta}^T\vec{1}-\frac{1}{4V}\vec{\sigma}_2^TP^{-1}\vec{\sigma}_2\right)dV}
+%\end{align*}}
+%
+%
+%\subsection{Equivalence of dynamics and Hamiltonian }
+%\begin{claim}
+%If $H(\vec{v})=-\vec{v}^TA\vec{v}-\vec{\beta}^T\vec{v}$ and $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}$ then $\nabla H\cdot \frac{d\vec{v}}{dt}\leq 0$.
+%\end{claim}
+%\begin{pf}
+%\begin{align*}
+%H(\vec{v})&=-\sum_{ij}A_{ij}v_iv_j-\sum_i\beta_iv_i
+%\\\Rightarrow\frac{\partial H}{\partial v_i}&=-\sum_{j\neq i}A_{ij}v_j-\sum_{j\neq i}A_{ji}v_j-2A_{ii}v_i-\beta_i
+%\\&=-\sum_j(A_{ij}+A^T_{ij})v_j-\beta_i
+%\\ \Rightarrow \nabla H&=-(A+A^T)\vec{v}-\vec{\beta}
+%\\ \Rightarrow \nabla H\cdot \frac{d\vec{v}}{dt}&=-\vec{v}^T(A+A^T)A\vec{v}-\vec{v}^T(A+A^T)\vec{\beta}-\vec{\beta}^TA\vec{v}-\vec{\beta}^T\vec{\beta}
+%\\&=-\vec{v}^TA^2\vec{v}-\vec{v}^TA^TA\vec{v}-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}-\vec{\beta}^T\vec{\beta}
+%\end{align*}
+%If $A$ is negative semi-definite, then $A^2$ is positive semi-definite and $A^TA$ is positive semi-definite.  (Consider that $\vec{v}^TA^TA\vec{v}=(A\vec{v})^T(A\vec{v})$ so that $\vec{v}A^TA\vec{v}=0$ if $A\vec{v}=0$ and $\vec{v}^TA^TA\vec{v}<0$ otherwise.) Therefore, $-\vec{v}^TA^2\vec{v}\leq 0$ and $-\vec{v}^TA^TA\vec{v}\leq 0$. At equilibrium, $\vec{v}$ will be ``close" to $\vec{\beta}$ so that $$-\vec{v}^TA\vec{\beta}-2\vec{v}^TA^T\vec{\beta}\sim-3\vec{\beta}^TA\vec{\beta}$$
+%\end{pf}
+%
+%\subsection{Numerically evaluating dynamics }
+%%\begin{claim}
+%Let $\Phi(t)$ be the fundamental matrix solution to the homogeneous differential equations $\frac{d\vec{x}}{dt}=A\vec{x}$ so that $\Phi(t)=V\Lambda(t)$ where the columns of $V$ are the eigenvectors of $A$ and $$\Lambda(t)=\text{diag}(e^{\lambda_1 t},\dots,e^{\lambda_n t})$$ where $\{\lambda_i\}$ are the eigenvalues of $A$.  (Note that if $\lambda_i=0$ then $e^{\lambda _i t}=1$ for all $t$.) Let $V^\dagger$ be the pseudoinverse of $V$.  Let $\vec{c}=V^\dagger\vec{X_0}$.  Let $$G(t)=\text{diag}(1/\lambda_1(1-e^{-\lambda_1t}),\dots,1/\lambda_n(1-e^{-\lambda_nt}))V^\dagger\vec{\beta}.$$
+%(If $\lambda_i=0$ then the corresponding entry of the first part of $G(t)$ will be given by $t$ rather than the form above.)  
+%\begin{claim}
+%If we let $x(t)=\Phi(t)G(t)+\Phi(t)\vec{c}$, $x(t)$ solves the inhomogeneous equations $\frac{dx}{dt}=A\vec{x}+\vec{\beta}$ with initial conditions $x(0)=\vec{X_0}$.
+%\end{claim}
+%
+%\begin{pf}
+%It is clear that
+%\begin{align*}
+%\frac{d\Phi\vec{c}}{dt}&=A\Phi(t)\vec{c} \text{ and } \Phi(0)\vec{c}=\vec{X_0}.
+%\end{align*}
+%Now, 
+%\begin{align*}
+%\Phi(t)G(t)&=V
+%\left(\begin{array}{ccccc}
+%e^{\lambda_1 t}  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots & e^{\lambda_nt}
+% \end{array}\right)
+% \left(\begin{array}{ccccc}
+%\frac{1}{\lambda_1}(1-e^{\lambda_1 t})  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &\frac{1}{\lambda_n} (1-e^{\lambda_nt})
+% \end{array}\right)
+% V^\dagger\vec{\beta}
+% \\&=V
+% \left(\begin{array}{ccccc}
+%\frac{1}{\lambda_1}(e^{\lambda_1 t}-1)  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &\frac{1}{\lambda_n} (e^{\lambda_nt}-1)
+% \end{array}\right)
+% V^\dagger\vec{\beta}
+% \\ \Rightarrow \frac{d\Phi(t)G(t)}{dt}&=V
+% \left(\begin{array}{ccccc}
+%e^{\lambda_1 t}  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &e^{\lambda_nt}
+% \end{array}\right)V^\dagger\vec{\beta}
+% \\&=V
+% \left(\begin{array}{ccccc}
+%e^{\lambda_1 t}  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &e^{\lambda_nt}
+% \end{array}\right)
+% V^\dagger\vec{\beta} -VV^\dagger\vec{\beta}+\vec{\beta}
+% \\&=V
+% \left(\begin{array}{ccccc}
+%e^{\lambda_1 t}-1  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &e^{\lambda_nt}-1
+% \end{array}\right)
+% V^\dagger\vec{\beta} +\vec{\beta}
+%  \\&=V
+% \left(\begin{array}{ccccc}
+%\lambda_1e^{\lambda_1t}\cdot \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &\lambda_ne^{\lambda_nt}\cdot\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
+% \end{array}\right)
+% V^\dagger\vec{\beta} +\vec{\beta}
+%  \\&=AV\Lambda(t)
+% \left(\begin{array}{ccccc}
+% \frac{1}{\lambda_1}(1-e^{-\lambda_1 t})  &\dots &0
+%\\ \vdots & \ddots &\vdots
+%\\ 0 & \dots &\frac{1}{\lambda_n}(1-e^{-\lambda_nt})
+% \end{array}\right)
+% V^\dagger\vec{\beta} +\vec{\beta}
+% \\&=AV\Lambda(t)G(t)+\vec{\beta}
+% \\&=A\Phi(t)G(t)+\vec{\beta}
+%\end{align*}
+%Therefore $\frac{dx}{dt}=A\Phi(t)G(t)+A\Phi(t)\vec{c}+\vec{\beta}=Ax(t)+\vec{\beta}$ and since $G(0)=\vec{0}$, $x(0)=\vec{X_0}$.
+%\end{pf}
+\begin{table}
+\caption{ \label{matrices} Table of matrices used in the text.}
+\ra{1.3}
+\begin{tabular}{@{}lllll@{}}
+$A$ & adjacency matrix & $A_{ij}=\left\{\begin{array}{l l l}
+1 & \text{ if $i$ pays attention to $j$ }
+\\0 & \text{ otherwise }
+\end{array}\right.$
+\\$\bar{A}$ & normalized adjacency matrix & $\bar{A}_{ij}=\left\{\begin{array}{l l l }
+\frac{1}{K_i} & \text{ if $i$ pays attention to $j$, where $K_i=$ \# of birds $i$ pays attention to}
+\\ 0 & \text{ otherwise }
+\end{array}\right. $
+\\$B$ & diagonal signal matrix & $B_{ij}=\left\{\begin{array}{l l l}
+b & \text{ if $i=j$ and $i$ perceives the environmental signal }
+\\0 & \text{ otherwise }
+\end{array}\right. $
+\\$L$ & opinion dynamics w/o environmental signal &$L=\bar{A}-I$
+\\$L_f$ & opinion dynamics with environmental signal & $L_\text{f}=L-B$
+\\$\tilde{L}$ & dynamics of deviations from consensus & $\tilde{L}=QLQ^T$
+\\$S$ & symmetrized interaction matrix & $S=\frac{1}{2}(\bar{A}+\bar{A}^T)$
+\\$P$ & energy interactions w/o environmental signal & $P_{ij}=\left\{\begin{array}{lll}
+S_{ij} & \text{ for } j\neq i
+\\-\sum_kS_{ik} & \text{ for } j=i
+\end{array}\right.
+$
+\\$P_\text{f}$ & energy interactions with environmental signal &  $P_\text{f}=P-B$
+\\$Q$ & rotates opinion vector away from consensus & $Q\in \R^{N-1}\times\R^N \text{ such that } Q\vec{1}=\vec{0}, \ QQ^T=I_{N-1}, \text{ and } Q^TQ=I_N-\frac{1}{N}\vec{1}_N\vec{1}_N^T $
+\end{tabular}
+\end{table}
 
 \newpage
 \section{Figures }
@@ -321,6 +572,7 @@ The correlation length of a homogeneous flock depends on both the strategy being
 \caption{\label{greedyopt} When the birds choose the optimal number of neighbors, given the strategies the rest of the flock are using, they settle on higher strategies when selection is due to predation than when selection is due to resources. Under selection due to predation, the $\mathscr{H}_2$ robustness and correlation length of the flock tend to decrease, whereas under selection due to resources, $\mathscr{H}_2$ robustness is relatively constant and correlation length tends to increase. The upper row shows results from implementing selection based to predation and the lower row shows results from implementing selection based on resources. In each panel, the  horizontal axis represents the number of times the birds are allowed to choose optimal strategies. The first column shows one example of how the birds' strategies change over time. The second column shows, for many initial conditions, how the $\mathscr{H}_2$ robustness changes over time. The third column shows, for many initial conditions, how the correlation length changes over time. Parameters:  $N=20$, $\beta=1$, $r=.1$, $T=1$. 
 }
 \end{figure}
+
 
 
 \nocite{*}

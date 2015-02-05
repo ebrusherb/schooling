@@ -19,15 +19,17 @@ timesteps=200;
 its=20;
 
 evolution_eaten=zeros(its,N,timesteps);
-groupspeed_eaten=zeros(its,timesteps);
 groupconsensus_eaten=zeros(its,timesteps);
+groupconsensusforced_eaten=zeros(its,timesteps);
 corrlengths_eaten=zeros(its,timesteps);
+corrlengthsforced_eaten=zeros(its,timesteps);
 disconnected_eaten=zeros(its,timesteps);
 
 evolution_gettoeat=zeros(its,N,timesteps);
-groupspeed_gettoeat=zeros(its,timesteps);
 groupconsensus_gettoeat=zeros(its,timesteps);
+groupconsensusforced_gettoeat=zeros(its,timesteps);
 corrlengths_gettoeat=zeros(its,timesteps);
+corrlengthsforced_gettoeat=zeros(its,timesteps);
 disconnected_gettoeat=zeros(its,timesteps);
 
 maxt_eaten=zeros(its,1);
@@ -172,33 +174,37 @@ save(filename,'evolution_eaten','groupspeed_eaten','groupconsensus_eaten','corrl
 for num=1:its
     for t=1:maxt_eaten(num)
         strategy_eaten=evolution_eaten(num,:,t);
-        [meanlambda, meanH2, meancorrlength, disconnectedcount]=groupprops(strategy_eaten,numsigs_permove,nummoves,radius,b,T);
-        groupspeed_eaten(num,t)=meanlambda;
+        [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy_eaten,numsigs_permove,nummoves,radius,b,T);
         groupconsensus_eaten(num,t)=meanH2;
-        corrlengths_eaten(num,t)=meancorrlength;
+        groupconsensusforced_eaten(num,t)=meanH2_forced;
+        corrlengths_eaten(num,t)=corrlength;
+        corrlengthsforced_eaten(num,t)=corrlength_forced;
         disconnected_eaten(num,t)=disconnectedcount;
     end
-    groupspeed_eaten(num,t:end)=meanlambda;
-    groupconsensus_eaten(num,t:end)=meanH2;
-    corrlengths_eaten(num,t:end)=meancorrlength;
-    disconnected_eaten(num,t:end)=disconnectedcount;
+    groupconsensus_eaten(num,t)=meanH2;
+    groupconsensusforced_eaten(num,t)=meanH2_forced;
+    corrlengths_eaten(num,t)=corrlength;
+    corrlengthsforced_eaten(num,t)=corrlength_forced;
+    disconnected_eaten(num,t)=disconnectedcount;
     for t=1:maxt_gettoeat(num)
         strategy_gettoeat=evolution_gettoeat(num,:,t);
-        [meanlambda, meanH2, meancorrlength, disconnectedcount]=groupprops(strategy_gettoeat,numsigs_permove,nummoves,radius,b,T);
-        groupspeed_gettoeat(num,t)=meanlambda;
+        [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy_gettoeat,numsigs_permove,nummoves,radius,b,T);
         groupconsensus_gettoeat(num,t)=meanH2;
-        corrlengths_gettoeat(num,t)=meancorrlength;
+        groupconsensusforced_gettoeat(num,t)=meanH2_forced;
+        corrlengths_gettoeat(num,t)=corrlength;
+        corrlengthsforced_gettoeat(num,t)=corrlength_forced;
         disconnected_gettoeat(num,t)=disconnectedcount;
     end
-    groupspeed_gettoeat(num,t:end)=meanlambda;
-    groupconsensus_gettoeat(num,t:end)=meanH2;
-    corrlengths_gettoeat(num,t:end)=meancorrlength;
-    disconnected_gettoeat(num,t:end)=disconnectedcount;
+    groupconsensus_gettoeat(num,t)=meanH2;
+    groupconsensusforced_gettoeat(num,t)=meanH2_forced;
+    corrlengths_gettoeat(num,t)=corrlength;
+    corrlengthsforced_gettoeat(num,t)=corrlength_forced;
+    disconnected_gettoeat(num,t)=disconnectedcount;
 end
 % end
 
 filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_rad=',num2str(radius),'_timesteps=',num2str(timesteps),'.mat');
-save(filename,'evolution_eaten','groupspeed_eaten','groupconsensus_eaten','corrlengths_eaten','evolution_gettoeat','groupspeed_gettoeat','groupconsensus_gettoeat','corrlengths_gettoeat','disconnected_eaten','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
+save(filename,'evolution_eaten','groupconsensus_eaten','groupconsensusforced_eaten','corrlengths_eaten','corrlengthsforced_eaten','evolution_gettoeat','groupconsensus_gettoeat','groupconsensusforced_gettoeat','corrlengths_gettoeat','corrlengthsforced_gettoeat','disconnected_eaten','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
 'Greedy opt is done. Group props are too.' %#ok<NOPTS>
 
 delete(dellapool);

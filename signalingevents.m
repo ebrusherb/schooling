@@ -5,7 +5,7 @@ N=max(size(strategy));
 scores=zeros(N,numsigs_permove,nummoves);
 
 % parfor i=1:nummoves
-for i=1:20000
+for i=1:nummoves
     positions=unifrnd(0,1,N,2);
     d=squareform(pdist(positions));
 

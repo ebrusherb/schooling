@@ -16,9 +16,10 @@ Lh=length(homogenstrats);
 radvals=0:.1:1.4;
 Nr=length(radvals);
 
-groupspeed=zeros(Lh,Nr);
 groupconsensus=zeros(Lh,Nr);
+groupconsensus_forced=zeros(Lh,Nr);
 corrlengths=zeros(Lh,Nr);
+corrlengths_forced=zeros(Lh,Nr);
 disconnected=zeros(Lh,Nr);
 
 for i=1:Nr
@@ -26,15 +27,16 @@ for i=1:Nr
     parfor j=1:Lh
         strat=homogenstrats(j);
         strategy=strat*ones(N,1);
-        [meanlambda, meanH2, meancorrlength, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T);
-        groupspeed(j,i)=meanlambda;
+        [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T);
         groupconsensus(j,i)=meanH2;
-        corrlengths(j,i)=meancorrlength;
+        groupconsensus_forced(j,i)=meanH2_forced;
+        corrlengths(j,i)=corrlength;
+        corrlengths_forced(j,i)=corrlength_forced;
         disconnected(j,i)=disconnectedcount;
     end
 end
 
-save('/home/brush/schooling_consensus/homogengroupprops.mat','groupspeed','groupconsensus','corrlengths','disconnected','homogenstrats','Lh','radvals','Nr','N')
+save('/home/brush/schooling_consensus/homogengroupprops.mat','groupconsensus','groupconsensus_forced','corrlengths','corrlengths_forced','disconnected','homogenstrats','Lh','radvals','Nr','N')
 
 delete(dellapool);
 

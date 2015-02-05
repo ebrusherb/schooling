@@ -1,10 +1,10 @@
-numworkers=str2num(getenv('PROCS'));
+numworkers=str2num(getenv('PROCS')); %#ok<ST2NM>
 dellacluster=parcluster('local');
 dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
 dellapool=parpool(dellacluster, numworkers) ;
 
-numsigs_permove=str2num(getenv('numsigs'));
-nummoves=str2num(getenv('nummoves'));
+numsigs_permove=str2num(getenv('numsigs')); %#ok<ST2NM>
+nummoves=str2num(getenv('nummoves'));%#ok<ST2NM>
 
 N=20;
 b=1;
@@ -15,7 +15,7 @@ L=length(strats);
 Tvals=[.01 .1 1 10];
 Nt=length(Tvals);
 
-radvals=[0:.1:1.4];
+radvals=[0:.1:1.4]; %#ok<NBRAK>
 % radvals=.1;
 Nr=length(radvals);
 

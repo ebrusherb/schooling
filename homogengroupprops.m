@@ -1,4 +1,4 @@
-numworkers=str2num(getenv('PROCS'));
+numworkers=str2num(getenv('PROCS')); %#ok<ST2NM>
 dellacluster=parcluster('local');
 dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
 dellapool=parpool(dellacluster, numworkers) ;

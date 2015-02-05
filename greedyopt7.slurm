@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 40:00:00
+#SBATCH -t 50:00:00
 #SBATCH -J greedyoptjob
 #SBATCH -o greedyopt7.%A_%a
 #SBATCH --mail-type=begin

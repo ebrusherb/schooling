@@ -13,12 +13,17 @@ end
 
 initialconditions=.5*ones(N,1);
 
-fun = @(x)expm(-x*A)*beta;
-integrated = integral(fun,0,T,'ArrayValued',true);
+[~,vals]=eig(A);
+w=find(sigfig(diag(vals),13)==0,1);
+if isempty(w)
+    particular=expm(T*A)*inv(A)*(eye(N)-expm(-T*A))*beta; %#ok<*MINV>
+else
+    fun = @(x)expm(-x*A)*beta;
+    integrated = integral(fun,0,T,'ArrayValued',true);
+    particular=expm(T*A)*integrated;
+end
 
 homogeneous=expm(T*A)*initialconditions;
-% particular=expm(T*A)*inv(A)*[eye(N)-expm(-T*A)]*beta;
-particular=expm(T*A)*integrated;
 instantaneous=homogeneous+particular;
 
 q=instantaneous;

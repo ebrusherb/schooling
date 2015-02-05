@@ -1,4 +1,4 @@
-% function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
+function [probeaten, probgettoeat]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T)
 numsigs_tot=numsigs_permove*nummoves;
 N=max(size(strategy));
 

@@ -1,5 +1,8 @@
 % load /Users/eleanorbrush/Desktop/greedyopt_rad=0.1_T=1_nummoves=1000_numpermove=1_timesteps=200.mat
 
+
+%%
+
 % evolution_eaten=zeros(its,N,timesteps)
 its=size(evolution_eaten,1);
 timesteps=size(evolution_eaten,3);

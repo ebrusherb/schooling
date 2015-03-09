@@ -15,6 +15,7 @@ axislw=.5;
 qualcols=cbrewer('qual','Set1',5);
 qualcols=qualcols([1 3 2 4 5],:);
 seqcols = cbrewer('seq','Reds',11);
+seqcols2 = cbrewer('seq','Reds',7);
 
 
 xoffset=.1;
@@ -24,16 +25,22 @@ yoffset=.06;
 
 ESSeaten_total=cell(2,1);
 ESSgettoeat_total=cell(2,1);
+storefitnesseaten_total=cell(2,1);
+storefitnessgettoeat_total=cell(2,1);
 
 load /Users/eleanorbrush/Desktop/ESS_nummoves=1000_numpermove=1_fullstorage.mat
 
 ESSeaten_total{1}=ESSseaten;
 ESSgettoeat_total{1}=ESSsgettoeat;
+storefitnesseaten_total{1}=storefitnesseaten;
+storefitnessgettoeat_total{1}=storefitnessgettoeat;
 
 load /Users/eleanorbrush/Desktop/ESS_nummoves=10_numpermove=100.mat
 
 ESSeaten_total{2}=ESSseaten;
 ESSgettoeat_total{2}=ESSsgettoeat;
+storefitnesseaten_total{2}=storefitnesseaten;
+storefitnessgettoeat_total{2}=storefitnessgettoeat;
 
 load /Users/eleanorbrush/Desktop/greedyopt_rad=0.1_T=1_nummoves=10_numpermove=100.mat
 
@@ -102,21 +109,25 @@ t=3;
 
 ESSseaten=ESSeaten_total{k};
 ESSsgettoeat=ESSgettoeat_total{k};
+storefitnesseaten=storefitnesseaten_total{k};
+storefitnessgettoeat=storefitnessgettoeat_total{k};
 
 subplot(2,2,1)
 hold on
 
 set(gca,'xlim',[-.05 1.45]);
 xlim=get(gca,'xlim');
-xdiv=[.25 1.05];
-plot(xdiv(1)*ones(2,1),ylim,'--k','LineWidth',1)
-plot(xdiv(2)*ones(2,1),ylim,'--k','LineWidth',1)
+% xdiv=[.25 1.05];
+% plot(xdiv(1)*ones(2,1),ylim,'--k','LineWidth',1)
+% plot(xdiv(2)*ones(2,1),ylim,'--k','LineWidth',1)
 % fill([xlim(1) xdiv(1) xdiv(1) xlim(1)],[0 0 N N],qualcols(1,:),'EdgeColor','none')
 % fill([xdiv(1) xdiv(2) xdiv(2) xdiv(1)],[0 0 N N],qualcols(2,:),'EdgeColor','none')
 % fill([xdiv(2) xlim(2) xlim(2) xdiv(2)],[0 0 N N],qualcols(3,:),'EdgeColor','none')
 for i=1:n
     l=size(ESSseaten{t,i},2);
-    p1=plot(radvals(i)*ones(l,1),ESSseaten{t,i},'o','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
+    if l>0
+        p1=plot(radvals(i)*ones(l,1),ESSseaten{t,i},'o','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
+    end
     l=size(ESSsgettoeat{t,i},2);
     if l>0
         p2=plot(radvals(i)*ones(l,1),ESSsgettoeat{t,i},'s','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
@@ -128,6 +139,7 @@ v=get(xlab,'Position');
 set(xlab,'Position',[v(1) -4.5 v(3)]);
 v=get(ylab,'Position');
 set(ylab,'Position',[xlim(1)-.1*diff(xlim) v(2:3)]);
+set(gca,'xlim',[0 1])
 ylim=get(gca,'Ylim');
 plot(xlim(1)*ones(2,1),ylim,'k','LineWidth',axislw);
 plot(xlim,(ylim(1)-.0)*ones(2,1),'k','LineWidth',axislw);
@@ -235,8 +247,10 @@ h=1/3*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[11.5 3 w h]);
 subplot(1,2,1)
-toplot=corrlengths;
+% toplot=corrlengths_forced;
 % toplot=corrlengths./repmat([1 radvals(2:end)],Lh,1);
+toplot=groupconsensus_forced;
+toplot_vec=1./(groupconsensus_forced(1,:)*6);
 
 imagesc(radvals,homogenstrats,toplot)
 caxis manual
@@ -269,9 +283,9 @@ t=3;
 n=size(ESSseaten,2);
 for i=1:n
     l=length(ESSseaten{t,i});
-    plot(corrlengths(5,i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
+    plot(toplot_vec(i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
 end
-xlabel('Correlation length','FontName',fontname,'FontSize',textfontsz)
+xlabel('Robustness','FontName',fontname,'FontSize',textfontsz)
 ylabel('ESS strategy','FontName',fontname,'FontSize',textfontsz)
 
 set(gca,'FontName',fontname,'FontSize',labfontsz)
@@ -290,5 +304,55 @@ set(firstxlab,'Position',[v(1) 21 v(3)])
 set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
-filename='/Users/eleanorbrush/Desktop/corrlength_vs_ESS.pdf';
+filename='/Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf';
+print(filename,'-dpdf','-r300')
+
+%% H2 / correlation length relationship
+figure
+set(gcf,'Color','w')
+w=6.83;
+h=1/3*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[11.5 3 w h]);
+
+hold on
+radvals=0:.1:1.4;
+toplot=1:2:length(0:.1:1);
+
+plot(ones(14,1)./(groupconsensus(:,1).*col(6:19)),corrlengths(:,1),'-o','Color',seqcols2(end,:),'MarkerSize',markersz,'LineWidth',lw)
+
+for i=1:length(toplot)
+    plot(ones(14,1)./(groupconsensus_forced(:,toplot(i)).*col(6:19)),corrlengths_forced(:,toplot(i)),'-o','Color',seqcols2(8-i,:),'MarkerSize',markersz,'LineWidth',lw)
+end
+
+set(gca,'FontName',fontname,'FontSize',labfontsz)
+
+box off
+
+leglabs=cell(length(toplot)+1,1);
+leglabs{1}='No signal';
+for i=1:length(toplot)
+    leglabs{i+1}=num2str(radvals(toplot(i)));
+end
+
+
+[leg,hobj]=legend(leglabs);
+legend('boxoff')
+legpos=get(leg,'position');
+set(leg,'position',[.8 legpos(2:end)],'FontName',fontname,'FontSize',labfontsz)
+
+textobj = findobj(hobj, 'type', 'line');
+for i=[1:2:13]
+    set(textobj(i),'XData',[.2 .4])
+end
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+xlabel('H2 Robustness','FontName',fontname,'FontSize',textfontsz)
+ylabel('Correlation length','FontName',fontname,'FontSize',textfontsz)
+
+axpos=get(gca,'position');
+set(gca,'position',[.08 axpos(2:4)])
+
+filename='/Users/eleanorbrush/Desktop/H2_v_corrlength.pdf';
 print(filename,'-dpdf','-r300')

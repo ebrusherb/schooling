@@ -1,4 +1,4 @@
-function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T)
+function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
 
 N=max(size(strategy));
 
@@ -21,7 +21,7 @@ for j=2:(N-1)
    v=v/norm(v,2);
    Q(j,:)=v;
 end
-Qfull=[1/sqrt(N)*ones(1,N); Q];
+Qfull=[Q; 1/sqrt(N)*ones(1,N)];
 
 
 for i=1:nummoves   
@@ -42,6 +42,9 @@ for i=1:nummoves
     [~,vals]=eig(Ltilde);
     problem=find(sigfig(diag(vals),13)==0,1);
     
+    noise=eye(N);
+%     noise=diag(strategy);
+    
     S=.5*(Abar+transpose(Abar));
     P=S;
     P(1:N+1:end)=-sum(S,2);
@@ -52,12 +55,12 @@ for i=1:nummoves
         disconnectedcount=disconnectedcount+numsigs_permove;
     else
         
-        sigma=lyap(Ltilde,eye(N-1));
-        H=trace(sigma);
+        sigma=lyap(Ltilde,Q*noise*transpose(Q));
+        H=sqrt(trace(sigma));
         H2vec(i)=H;
         
 %         sigma_forced=lyap(Lf,eye(N));
-%         H_forced=trace(sigma_forced);
+%         H_forced=sqrt(trace(sigma_forced));
 %         H2vec_forced(i)=H_forced;
 %         
         Wtilde=W(:,[1:(w-1) (w+1):end]);
@@ -81,28 +84,44 @@ for i=1:nummoves
             B=diag(beta);
             Lf=L-B;
             Pf=P-B; 
+            Lfbar=Qfull*Lf*transpose(Qfull);
+            Bbar=Qfull*B;
             [~,vals]=eig(Lf);
             w=find(sigfig(diag(vals),13)==0,1);
             if ~isempty(w)
                 disconnectedcount=disconnectedcount+1;
                 H2vec_forced(i,j)=H;
                 dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                corrvec_forced=[corrvec_forced; corrvec];%#ok<AGROW>
+                corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
             else
-                sigma_forced=lyap(Lf,eye(N));
-                H_forced=trace(sigma_forced);
-                H2vec_forced(i,j)=H_forced;
+                sigma_forced=lyap(Lf,-inv(Lf)*B*ones(N,1)*ones(1,N)*B-B*ones(N,1)*ones(1,N)*B*transpose(inv(Lf))+noise);
+                sigmaz=Qfull*sigma_forced*transpose(Qfull);
+                sigmay=sigmaz(1:end-1,1:end-1);
+                H_forced=sqrt(trace(sigmay));
+                tocheck=Lfbar*sigmaz+sigmaz*transpose(Lfbar)-inv(Lfbar)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lfbar))+Qfull*transpose(Qfull);
+                m=max(max(abs(tocheck(1:end-1,1:end-1))));
+                if m<1e-12
+                    H2vec_forced(i,j)=H_forced;
 
-                R=-Qfull*Pf*transpose(Qfull);
-                toinvert=-Pf-1/R(1,1)*Pf*1/N*ones(N,N)*Pf;
-                [vecs,vals]=eig(toinvert);
-                w=find(sigfig(diag(vals),13)==0);
-                inverted=vecs(:,[1:(w-1) (w+1):end])*inv(vals([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(vecs(:,[1:(w-1) (w+1):end]));
-                todivide=repmat(diag(inverted),1,N).*repmat(reshape(diag(inverted),1,[]),N,1);
-                todivide=power(todivide,.5);
-                C=inverted./todivide;
-                dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                corrvec_forced=[corrvec_forced; col(C)]; %#ok<AGROW>
+    %                 R=-Qfull*Pf*transpose(Qfull);
+    %                 toinvert=-Pf-1/R(1,1)*Pf*1/N*ones(N,N)*Pf;
+    %                 R11=b/N*sum(allreceivers);
+    %                 toinvert=-Pf-1/R11*Pf*1/N*ones(N,N)*Pf;
+                    toinvert=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;
+                    [vecs,vals]=eig(toinvert);
+                    w=find(sigfig(diag(vals),13)==0);
+                    inverted=vecs(:,[1:(w-1) (w+1):end])*inv(vals([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(vecs(:,[1:(w-1) (w+1):end]));
+                    todivide=repmat(diag(inverted),1,N).*repmat(reshape(diag(inverted),1,[]),N,1);
+                    todivide=power(todivide,.5);
+                    Cforced=inverted./todivide;
+                    dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
+                    corrvec_forced=[corrvec_forced; col(Cforced)]; %#ok<AGROW>
+                else
+                    disconnectedcount=disconnectedcount+1;
+                    H2vec_forced(i,j)=H;
+                    dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
+                    corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
+                end
             end
         end
     end
@@ -111,6 +130,7 @@ end
 meanH2=mean(H2vec(~isnan(H2vec)));
 H2vec_forced=col(H2vec_forced);
 meanH2_forced=mean(H2vec_forced(~isnan(H2vec_forced)));
+% meanH2_forced=meanH2;
 
 deltad=.05;
 dbins=(0:deltad:1.4)+deltad/2;
@@ -146,4 +166,5 @@ else
     corrlength_forced=interp1(avgcorrs_forced([f-1 f]),dbins([f-1 f]),0);
 end
 
+% corrlength_forced=corrlength;
 

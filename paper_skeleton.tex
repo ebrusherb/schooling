@@ -119,7 +119,7 @@ expect ESS strategies to decrease as the signal becomes more public, but we find
 
 \newpage
 \section{Appendix}
-%%% APPENDIX NOW DISCUSSES H2 WITHOUT FORCING (AS IN GEORGE'S PAPER), H2 WITH FORCING, WHICH GIVES CORRELATIONS BUT NOT FLUCTUATIONS AROUND AVERAGE OPINION, STAT MECH CORRELATIONS WITHOUT FORCING AND STAT MECH CORRELATION WITH FORCING, BOTH OF WHICH GIVE FLUCTUATIONS AROUND AVERAGE OPINION. SO H2 WITH FORCING IS STILL INCOMPARABLE TO ANYTHING ELSE SINCE ITS CORRELATIONS NOT FLUCTUATIONS AROUND AVERAGE OPINIONS. IT'S OKAY FOR NOW.
+
 \subsection{Linear algebra background }
 
 \begin{theorem} \label{lyapeq_theorem}
@@ -206,37 +206,38 @@ The equilibrium of these dynamics is a consensus state in which all birds have t
 where $L_\text{s}=L-B$ and $v=B\vec{1}$. If $b=0$, then $L_\text{s}=L$ and $v=\vec{0}$, so the case with the signal reduces to the case without the signal. 
 
 
-If $z=Rx$, then the first $N-1$ coordinates of $z$ are $y=Qx$ and the last is $\sum_ix_i/\sqrt{N}$. The dynamics of $z$ follow
+If $\bar{y}=Rx$, then the first $N-1$ coordinates of $\bar{y}$ are $y=Qx$ and the last is $\sum_ix_i/\sqrt{N}$. The dynamics of $\bar{y}$ follow
 \begin{align*}
-\dot{z}&=R\dot{x}
+\dot{\bar{y}}&=R\dot{x}
 \\&=RL_\text{s}x+Rv+R\xi.
 \end{align*}
 Since the rows of $R$ are orthonormal, $RR^T=I$. Further, since the rows of $R$ are orthonormal, $R$ is invertible, which implies that $R^T=R^{-1}$.  Then we can write
 \begin{align*}
-\dot{z}&=RL_\text{s}R^Tz+Rv+R\xi
-\\&=\tilde{L}_\text{s}z+\tilde{v}+R\xi 
+\dot{\bar{y}}&=RL_\text{s}R^T\bar{y}+Rv+R\xi
+\\&=\tilde{L}_\text{s}\bar{y}+\tilde{v}+R\xi 
 \end{align*}
-where $\tilde{L}_\text{s}=RL_\text{s}R^T$ and $\tilde{v}=Rv=RB\vec{1}$. If $b\neq 0$, $L_\text{s}$ and therefore $\tilde{L}_\text{s}$ have all negative eigenvalues and $z=(0, 0, \dots 0, \sqrt{N})^T$ is a globally asymptotically stable equilibrium. Therefore, by Claim \ref{lyapeq_derivation} and Theorem \ref{lyapeq_theorem}, $\lim_{t\to\infty}E[z(t)z(t)^T]=\Sigma_z$ where $\tilde{L}_\text{s}\Sigma+\Sigma\tilde{L}_\text{s}^T=-RR^T$. We can then find $\Sigma_y=\lim_{t\to\infty}E[y(t)y(t)^T]$
-by removing the last row and column of $\Sigma_z$.
+where $\tilde{L}_\text{s}=RL_\text{s}R^T$ and $\tilde{v}=Rv=RB\vec{1}$. If $b\neq 0$, $L_\text{s}$ and therefore $\tilde{L}_\text{s}$ have all negative eigenvalues and $\bar{y}=(0, 0, \dots 0, \sqrt{N})^T$ is a globally asymptotically stable equilibrium. Therefore, by Claim \ref{lyapeq_derivation} and Theorem \ref{lyapeq_theorem}, $\lim_{t\to\infty}E[\bar{y}(t)\bar{y}(t)^T]=\Sigma_{\bar{y}}$ where $\tilde{L}_\text{s}\Sigma_{\bar{y}}+\Sigma_{\bar{y}}\tilde{L}_\text{s}^T=-RR^T=-I_N$. We can  find $\Sigma_y=\lim_{t\to\infty}E[y(t)y(t)^T]$
+by removing the last row and column of $\Sigma_{\bar{y}}$.
 
-If $b=0$, $L$ has a $0$ eigenvalue corresponding to the eigenvector $\vec{1}$. Therefore, $RLR^T$ also has a $0$ eigenvalue, so we can therefore no longer find the desired $\Sigma_z$.  Since the last row of $R=\frac{1}{\sqrt{N}}\vec{1}$, all entries of the the last column of $LR^T$ are $0$. Therefore, all entries of the last column of $RLR^T$ are $0$. In other words, the dynamics of the first $N-1$ elements of $z$, i.e. $y$, do not depend on the last. This lets us write 
+If $b=0$, $L$ has a $0$ eigenvalue corresponding to the eigenvector $\vec{1}$. Therefore, $RLR^T$ also has a $0$ eigenvalue, so we can therefore no longer find the desired $\Sigma_{\bar{y}}$.  Since the last row of $R=\frac{1}{\sqrt{N}}\vec{1}$, all entries of the the last column of $LR^T$ are $0$. Therefore, all entries of the last column of $RLR^T$ are $0$. In other words, the dynamics of the first $N-1$ elements of $\bar{y}$, i.e. $y$, do not depend on the last. This lets us write 
 \begin{align*}
-\dot{y}&=QLQ^Ty+Q\xi=\tilde{L}+Q\xi
+\dot{y}&=QLQ^Ty+Q\xi=\bar{L}+Q\xi
 \end{align*}
-where $\tilde{L}=QLQ^T$. Another way to see this is to write 
+where $\bar{L}=QLQ^T$. Another way to see this is to write 
 \begin{align*}
  \dot{y}&=Q\dot{x}
  \\ &=QLx+Q\xi
  \\&=QL(x-\langle x\rangle \vec{1})+Q\xi \text{ since $L\vec{1}=\vec{0}$}
  \\&=QLQ^TQx+Q\xi
- \\&=\tilde{L}y+Q\xi.
+ \\&=\bar{L}y+Q\xi.
 \end{align*}
-Again, by Claim \ref{lyapeq_derivation} and Theorem \ref{lyapeq_theorem}, we can now find $\lim_{t\to\infty}E[y(t)y(t)^T]=\Sigma_y$ by finding a solution to $\tilde{L}\Sigma_y+\Sigma_y\tilde{L}=-QQ^T$. 
+Again, by Claim \ref{lyapeq_derivation} and Theorem \ref{lyapeq_theorem}, we can now find $\lim_{t\to\infty}E[y(t)y(t)^T]=\Sigma_y$ by finding a solution to $\bar{L}\Sigma_y+\Sigma_y\bar{L}=-QQ^T=-I_{N-1}$. 
 
-To summarize, in the absence of an environmental signal, $\Sigma_y$ satisfies $\tilde{L}\Sigma_y+\Sigma_y\tilde{L}=-QQ^T$ where $\tilde{L}=QLQ^T$ and the presence of an environmental signal, $\Sigma_y$ can be found in the first $N-1$ rows and columns of $\Sigma_z$ where $\Sigma_z$ satisfies $\tilde{L}_\text{s}\Sigma_z+\Sigma_z\tilde{L}_\text{s}=-RR^T$ where $\tilde{L}_\text{s}=RL_\text{s}R^T$.
+To summarize, in the absence of an environmental signal, $\Sigma_y$ satisfies $\bar{L}\Sigma_y+\Sigma_y\bar{L}^T=-I_{N-1}$ where $\bar{L}=QLQ^T$ and in the presence of an environmental signal, $\Sigma_y$ can be found in the first $N-1$ rows and columns of $\Sigma_{\bar{y}}$ where $\Sigma_{\bar{y}}$ satisfies $\tilde{L}_\text{s}\Sigma_{\bar{y}}+\Sigma_{\bar{y}}\tilde{L}_\text{s}^T=-I_N$ where $\tilde{L}_\text{s}=RL_\text{s}R^T$.
 
 
 \subsection{Probability distribution at equilibrium }
+%Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{v}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
 A quite different way of modeling social interactions the method used by Bialek et al. in \cite{Bialek:2012fk}, which is to assume the opinions come to equilibrium and write down an expression for the probability of finding the opinion vector in every state. In statistical physics, a Hamiltonian describes the energy of a given state, $H(v)$, and the Boltzmann distribution describes a probability distribution in which the most energetic states are least likely. Analogously, we can write a function $H(v)$ that gives a high energy when the opinions are not in consensus and a low energy when the opinions are in consensus and a probability distribution of opinion vectors that favors less energetic states. In order to do this, we must use a symmetric interaction matrix, rather than the possibly asymmetric $\bar{A}$ we used above. Bialek et al. study a model in which opinions are a three-dimensional velocity vector and the birds can weight the opinions of their nearest neighbors with any value $J$. In order to simplify this model and make it directly comparable to the opinion dynamics model we described above, we only consider a scalar-valued opinion $x_i$ and we impose the condition that the weights given to the neighbors' opinions are inversely proportional to the number of neighbors. In particular, we define $S=\frac{1}{2}(A+A^T)$ and $P$ such that $P_{ij}=S_{ij}$ for $j\neq i$ and $P_{ii}=-\sum_kS_{ik}$. This allows us to write down a Hamiltonian
 \begin{equation}
 H(v)=-v^TPv
@@ -259,7 +260,7 @@ P(z)&=\frac{1}{Z}\exp\left(-\frac{1}{2}z^T(-{P})z\right)
 \\&=\frac{1}{Z}\exp\left(-\frac{1}{2}c^T\tilde{W}^T(-\tilde{W}\tilde{\Lambda}\tilde{W}^T)\tilde{W}c\right) 
 \\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\tilde{c}^T(-\tilde{\Lambda})\tilde{c}\right)  
 \end{align*}
-Therefore, $E[\langle c \rangle ]=\vec{0}$ and $E[\tilde{c}\tilde{c}^T]=(-\tilde{\Lambda})^{-1}$. Therefore, $C=E[zz^T]=E[\tilde{W}\tilde{c}\tilde{c}^T\tilde{W}^T]=-\tilde{W}\tilde{\Lambda}\tilde{W}^T$.  By dividing each entry $C_{ij}$ of the covariance matrix by $C_{ii}C_{jj}$, the covariance matrix can be used to find the correlation matrix.
+Therefore, $E[\langle c \rangle ]=\vec{0}$ and $E[\tilde{c}\tilde{c}^T]=(-\tilde{\Lambda})^{-1}$. Therefore, $C_z=E[zz^T]=E[\tilde{W}\tilde{c}\tilde{c}^T\tilde{W}^T]=-\tilde{W}\tilde{\Lambda}^{-1}\tilde{W}^T$.  By dividing each entry $C_{zij}$ of the covariance matrix by $C_{zii}C_{zjj}$, the covariance matrix can be used to find the correlation matrix.
 
 The Hamiltonian framework, like the opinion dynamics framework, can also accommodate an environmental signal. In this case, the appropriate Hamiltonian is 
 \begin{equation}
@@ -289,30 +290,6 @@ y=RQ^TQv=Qv \text{ and } V=\frac{1}{N}\vec{1}^Tv=\frac{1}{\sqrt{N}}R_{N\cdot }v
 \end{align*}
 so that the entire transformation can be represented by $\bar{R}=\left(\begin{array}{cc}Q \\1/\sqrt{N}R_{N\cdot }\end{array}\right)$, so that $\det(\bar{R})=\frac{1}{\sqrt{N}}\det(R)=\frac{1}{\sqrt{N}}$. Therefore, $P(y,V)=\sqrt{N}P(v)$ is the appropriate density function for $y$ and $V$. Finally, note that $Z=\sqrt{(2\pi)^N\det(-P_\text{s}^{-1})}$. This gives
 
-
-%\begin{align*}
-%P(z)&=\int_\R P(z,V)dV
-%\\&=\int_\R \frac{1}{Z}\exp\left(-\frac{1}{2}((V-1)\sqrt{N}e_N+y)^T\Tilde{P}_\text{s}((V-1)\sqrt{N}e_N+y)\right)dV
-%\\&=\frac{1}{Z}\exp(-\frac{1}{2}y^T\Tilde{P}_\text{s}y)\int_\R \exp\left(-\frac{1}{2}\left(\Tilde{P}_{\text{s}NN}N\left(V-1\right)^2+(V-1)\sqrt{N}\sum_{i=1}^{N-1}\Tilde{P}_{\text{s}Ni}y_i+(V-1)\sqrt{N}\sum_{i=1}^{N-1}y_i\Tilde{P}_{\text{s}iN}\right)\right)dV
-%\\&=\frac{1}{Z}\exp(-\frac{1}{2}y^T\Tilde{P}_\text{s}y)\int_\R \exp\left(-\frac{1}{2}\left(\Tilde{P}_{\text{s}NN}N\left(V-1\right)^2+2(V-1)\sqrt{N}\sum_{i=1}^{N-1}\Tilde{P}_{\text{s}Ni}y_i\right)\right)dV \text{ since $\Tilde{P}_\text{s}$ is symmetric }
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T\Tilde{P}_\text{s}y-\left(\sum_{i=1}^{N-1}\Tilde{P}_{\text{s}Ni}y_i/\sqrt{\Tilde{P}_{\text{s}NN}}\right)^2\right)\right)\times
-%\\&\int_\R \exp\left(-\frac{1}{2}\left(\Tilde{P}_{\text{s}NN}N\left(V-1\right)^2+2(V-1)\sqrt{N}\sum_{i=1}^{N-1}\Tilde{P}_{\text{s}Ni}y_i+\left(\sum_{i=1}^{N-1}\Tilde{P}_{\text{s}Ni}y_i/\sqrt{\Tilde{P}_{\text{s}NN}}\right)^2\right)\right)dV 
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T\Tilde{P}_\text{s}y-\left(\sum_i\Tilde{P}_{\text{s}Ni}y_i/\sqrt{\Tilde{P}_{\text{s}NN}}\right)^2\right)\right)\int_\R \exp\left(-\frac{1}{2}\left(\sqrt{\Tilde{P}_{\text{s}NN}}\sqrt{N}\left(V-1\right)+\sum_i\Tilde{P}_{\text{s}Ni}y_i/\sqrt{\Tilde{P}_{\text{s}NN}}\right)^2\right)dV
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T\Tilde{P}_\text{s}y-\left(\sum_i\Tilde{P}_{\text{s}Ni}y_i/\sqrt{\Tilde{P}_{\text{s}NN}}\right)^2\right)\right)\int_\R \exp\left(-\frac{1}{2}\tilde{P}_{\text{s}NN}N\left(V-1+\frac{\sum_i\tilde{P}_{\text{s}Ni}y_i}{\tilde{P}_{\text{s}NN}\sqrt{N}}\right)^2\right)dV
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T\tilde{P}_{\text{s}}y-\left(\sum_i\tilde{P}_{\text{s}Ni}y_i/\sqrt{\tilde{P}_{\text{s}NN}}\right)^2\right)\right)\times\sqrt{\frac{2\pi}{\tilde{P}_{\text{s}NN}N}}
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T\tilde{P}_{\text{s}}y-\frac{1}{\tilde{P}_{\text{s}NN}}y^T\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot}y\right)\right)\times\sqrt{\frac{2\pi}{\tilde{P}_{\text{s}NN}N}} \text{ where $\tilde{P}_{\text{s}N\cdot}$ is the last row of $\tilde{P}_{\text{s}}$}
-%\\&=\frac{1}{Z}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot})y\right)\right)\times\sqrt{\frac{2\pi}{\tilde{P}_{\text{s}NN}N}}
-%\\&=\frac{\sqrt{2\pi}}{\sqrt{(2\pi)^N\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot })y\right)\right)
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^TR^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot})Rz\right)
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}}R^T\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot}R)z\right)
-%%\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{s}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{R_{11}}Q'^{-1}R_{\cdot 1}R_{1\cdot}(Q'^{-1})^T)z\right)
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}}P_\text{s}R^T_{\cdot N}R_{N\cdot}P_\text{s})z\right)
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}}P_\text{s}(R_{N\cdot})^TR_{N\cdot}P_\text{s})z\right)
-%%\\&=\frac{\sqrt{2\pi}\sqrt{R_{11}N}}{(2\pi)^{N/2}\det(-P_\text{s}^{-1})^{1/2}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{R_{11}}P_\text{s}\Pi P_\text{s})z\right) \text{ where $\Pi_{ij}=1/N$ for all $i,j$}
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}N}P_\text{s}\vec{1}\vec{1}^T P_\text{s})z\right) 
-%\\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}N}}\exp\left(-\frac{1}{2}z^T(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}N}B\vec{1}\vec{1}^T B)z\right)  \text{ since $P\vec{1}=\vec{0}$}
-%\end{align*}
-
 \begin{align*}
 P(y,V)&=\sqrt{N}P(v)
 \\&=\frac{\sqrt{N}}{Z}\exp\left(-\frac{1}{2}((V-1)\sqrt{N}e_N+y)^T\Tilde{P}_\text{s}((V-1)\sqrt{N}e_N+y)\right)
@@ -325,27 +302,25 @@ P(y,V)&=\sqrt{N}P(v)
 \\&=\frac{\sqrt{N}}{Z}\exp\left(-\frac{1}{2}\left(y^T\left(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot}\right)y\right)\right)\int_\R \exp\left(-\frac{1}{2}\left(\sqrt{\Tilde{P}_{\text{s}NN}N}\left(V-1\right)+\frac{\tilde{P}_{\text{s}N\cdot}y}{\sqrt{\Tilde{P}_{\text{s}NN}}}\right)^2\right)dV
 \\&=\frac{\sqrt{N}}{Z}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot})y\right)\right)\int_\R \exp\left(-\frac{1}{2}\tilde{P}_{\text{s}NN}N\left(V-1+\frac{\sum_i\tilde{P}_{\text{s}Ni}y_i}{\tilde{P}_{\text{s}NN}\sqrt{N}}\right)^2\right)dV
 \\&=\frac{\sqrt{N}}{Z}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot})y\right)\right)\times\sqrt{\frac{2\pi}{\tilde{P}_{\text{s}NN}N}}
-%\\&=\frac{\sqrt{2\pi}}{\sqrt{(2\pi)^N\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}}}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot })y\right)\right)
 \\&=\frac{1}{\sqrt{(2\pi)^{N-1}\det(-P_\text{s}^{-1})\tilde{P}_{\text{s}NN}}}\exp\left(-\frac{1}{2}\left(y^T(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot })y\right)\right)
 \end{align*}
 
 
-
 Therefore, $E[y_i]=0$ for all $i$ and $E[yy^T]=(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot })^{-1}$. Then, 
 \begin{equation*}
-E[zz^T]=R^T\left(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot }\right)^{-1}R=\left(P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}N}B\vec{1}\vec{1}^TB\right)^{-1}
+E[zz^T]=R^T\left(\tilde{P}_{\text{s}}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot }\right)^{-1}R=\left(-P_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}N}B\vec{1}\vec{1}^TB\right)^{-1}
 \end{equation*}
 Let $N_\text{I}$ be the number of birds that can perceive the signal, i.e. $N_\text{I}$ is the number of non-zero elements along the diagonal of $B$. Then, $\tilde{P}_{\text{s}NN}=\frac{b}{N}N_\text{I}$. 
 Finally, we find that 
 \begin{equation}
-E[zz^T]=\left(P_\text{s}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB\right)^{-1}
+C_z=E[zz^T]=\left(-P_\text{s}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB\right)^{-1}
 \end{equation}
 Now, let $P'=P_\text{s}+\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB$. Then $P'\vec{1}=-B\vec{1}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB\vec{1}=-B\vec{1}-\frac{bN_\text{I}}{bN_\text{I}}B\vec{1}=\vec{0}$, so we cannot invert $-P'$ to find the covariance matrix. However, as above, we can discard the $0$ eigenvector since we know that $z\cdot \vec{1}=0$. This gives us $E[(v_i-\frac{\sum_kv_k}{N})(v_j-\frac{\sum_kv_k}{N})]$.
 
 \subsection{Connecting two frameworks }
-To find $\mathscr{H}$, we found the matrix $\Sigma$ such that 
+To find $\mathscr{H}$, we found the matrix $\Sigma_y$ such that 
 \begin{equation}
-QLQ^T\Sigma+\Sigma QLQ^T=-I.
+QLQ^T\Sigma_y+\Sigma_y QLQ^T=-I.
 \end{equation}
 If the vector $v$ is described by the dynamics $\dot{v}=Dv$, with $H(v)=-v^TPv$, then
 \begin{align*}
@@ -354,25 +329,26 @@ If the vector $v$ is described by the dynamics $\dot{v}=Dv$, with $H(v)=-v^TPv$,
 \\&=-v^T(D^TP+PD)v.
 \end{align*}
 Therefore, $H(v)$ decreases at all $v$ if and only if $D^TP+PD$ is a positive matrix.
-%MORE?!?
 
-%Specifically, an individual's opinion $\sigma_i$ can be either $1$ or $-1$ and $\sigma_i$ switches with probability $w_i(\sigma_i)=\frac{1}{2}(-\sigma_i\sum_jA_{ij}\sigma_j )(1-\beta_i\sigma_i)$ where $A_{ij}$ indicates the strength of the connection from $j$ to $i$ and $\beta_i$ indicates the strength of the environmental stimulus perceived by $i$.  The stochastic dynamics of the opinions can be written down with a master equation \cite{Glauber:1963fk}.  The vector $\vec{v}(t)$ of expected values, $q_i(t)=\langle \sigma_i(t)\rangle$, satisfies the following differential equations: \cite{Glauber:1963fk}
-%\begin{equation*}
-%\frac{d\vec{v}}{dt}=M\vec{v}+\vec{\beta}^T(\vec{1}-\vec{v}).
-%\end{equation*}
-%We simplify this by writing $\frac{d\vec{v}}{dt}=A\vec{v}+\vec{\beta}^T\vec{1}$, where $A=M-B$ and $B$ is a diagonal matrix with the values of $\vec{\beta}$ along the diagonal. 
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
+Table \ref{correspondence} shows how to find the appropriate covariance matrices depending on the framework being used and whether or not a signal is present. If we use $P$ instead of $L$ with the noisy dynamics framework, $C_y=2\Sigma_y$.  %MORE HERE!!!!
+
+ \[
+ \boxed{\bar{y}=Rx$, $y=Qx=\bar{y}_{i=1}^{N-1}$ (or $y=RQ^TQx$), $z=Q^TQx$, $V=\frac{1}{N}\sum_ix_i}
+ \]
+
+\begin{table}
+\caption{\label{correspondence} $P^\dagger$ is the inverse of $P$ with the $0$ eigenvector / value removed. }
+\ra{1.3}
+\begin{tabular}{@{}l|llll@{}}
+& Without signal & With signal 
+\\\hline From noisy dynamics &  $\bar{L}\Sigma_y+\Sigma_y\bar{L}^T=-I_{N-1}$ & $\tilde{L}_\text{s}\Sigma_{\bar{y}}+\Sigma_{\bar{y}}\tilde{L}_\text{s}^T=-I_N$, $\Sigma_y=(\Sigma_{\bar{y}})_{i,j=1}^{N-1}$
+\\\hline From Boltzmann equilibrium & $C_y=QP^{\dagger}Q^T$ & $C_y=(\tilde{P}_\text{s}-\frac{1}{\tilde{P}_{\text{s}NN}}\tilde{P}_{\text{s}\cdot N}\tilde{P}_{\text{s}N\cdot })^\dagger$
+\\ & & or $C_y=Q(-P_\text{s}-\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB)^{\dagger}Q^T$
+\end{tabular}
+\end{table}
+
+
+
 
 \begin{table}
 \caption{ \label{matrices} Table of matrices and variables used in the text.}
@@ -390,9 +366,10 @@ $A$ & adjacency matrix & $A_{ij}=\left\{\begin{array}{l l l}
 b & \text{ if $i=j$ and $i$ perceives the environmental signal }
 \\0 & \text{ otherwise }
 \end{array}\right. $
+\\ $\Lambda$ & diagonal matrix of eigenvalues of $P$
 \\$L$ & opinion dynamics w/o environmental signal &$L=\bar{A}-I$
 \\$L_\text{s}$ & opinion dynamics with environmental signal & $L_\text{s}=L-B$
-\\$\tilde{L}$ & dynamics of deviations from consensus w/o signal & $\tilde{L}=QLQ^T$
+\\$\bar{L}$ & dynamics of deviations from consensus w/o signal & $\bar{L}=QLQ^T$
 \\$\tilde{L}_\text{s}$ & dynamics of deviations from consensus w/ signal & $\tilde{L}=RL_\text{s}R^T$
 \\$S$ & symmetrized interaction matrix & $S=\frac{1}{2}(\bar{A}+\bar{A}^T)$
 \\$P$ & energy interactions w/o environmental signal & $P_{ij}=\left\{\begin{array}{lll}
@@ -401,12 +378,11 @@ S_{ij} & \text{ for } j\neq i
 \end{array}\right.
 $
 \\$P_\text{s}$ & energy interactions with environmental signal &  $P_\text{s}=P-B$
-\\$\tilde{P}$ 
 \\$\tilde{P}_\text{s}$
 \\$Q$ & rotates opinion vector away from consensus & $Q\in \R^{N-1}\times\R^N \text{ such that } Q\vec{1}=\vec{0}, \ QQ^T=I_{N-1}, \text{ and } Q^TQ=I_N-\frac{1}{N}\vec{1}_N\vec{1}_N^T $
 \\$R$ & full rotation matrix whose last row is $\frac{1}{\sqrt{N}}\vec{1}^T$ & $\left(\begin{array}{cc} Q \\ \frac{1}{\sqrt{N}}\vec{1}^T \end{array}\right)$
 \\$r$ & $\mathscr{H}_2$ robustness & $\lim_{t\to\infty}\frac{1}{E[||y||]}$ where $y=Qx$
-\\$W$ & 
+\\$W$ & matrix of eigenvectors of $P$
 \end{tabular}
 \end{table}
 

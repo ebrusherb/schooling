@@ -1,6 +1,6 @@
-% function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
+function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
 
-% N=max(size(strategy));
+N=max(size(strategy));
 
 dvec=[];
 corrvec=[];
@@ -55,24 +55,19 @@ for i=1:nummoves
         disconnectedcount=disconnectedcount+numsigs_permove;
     else
         
-        sigma=lyap(Ltilde,Q*noise*transpose(Q));
-        H=sqrt(trace(sigma));
+        sigmay=lyap(Ltilde,Q*noise*transpose(Q));
+        H=sqrt(trace(sigmay));
         H2vec(i)=H;
-        
-%         sigma_forced=lyap(Lf,eye(N));
-%         H_forced=sqrt(trace(sigma_forced));
-%         H2vec_forced(i)=H_forced;
-%         
+  
         Wtilde=W(:,[1:(w-1) (w+1):end]);
         Lambdatilde=Lambda([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]);
-        Ptildeinv=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
+        Cov=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
         
-        todivide=repmat(diag(-Ptildeinv),1,N).*repmat(reshape(diag(-Ptildeinv),1,[]),N,1);
+        todivide=repmat(diag(-Cov),1,N).*repmat(reshape(diag(-Cov),1,[]),N,1);
         todivide=power(todivide,.5);
-        C=-Ptildeinv./todivide;
+        Corr=-Cov./todivide;
         dvec=[dvec; col(d)]; %#ok<AGROW>
-        corrvec=[corrvec; col(C)]; %#ok<AGROW>
-    
+        corrvec=[corrvec; col(Corr)]; %#ok<AGROW>
     
         receivers=randsample(N,numsigs_permove,'true');
         for j=1:numsigs_permove        
@@ -92,14 +87,14 @@ for i=1:nummoves
                 disconnectedcount=disconnectedcount+1;
                 H2vec_forced(i,j)=H;
                 dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
+                corrvec_forced=[corrvec_forced; col(Corr)];%#ok<AGROW>
             else
-                sigma_forced=lyap(Lf,-inv(Lf)*B*ones(N,1)*ones(1,N)*B-B*ones(N,1)*ones(1,N)*B*transpose(inv(Lf))+noise);
+%                 sigmav_forced=lyap(Lf,-inv(Lf)*B*ones(N,1)*ones(1,N)*B-B*ones(N,1)*ones(1,N)*B*transpose(inv(Lf))+noise);
 %                 sigmaz2=Qfull*sigma_forced*transpose(Qfull);
-                sigmaz=lyap(Lftilde,Qfull*transpose(Qfull));
-                sigmay=sigmaz(1:end-1,1:end-1);
-                H_forced=sqrt(trace(sigmay));
-                tocheck=Lftilde*sigmaz+sigmaz*transpose(Lftilde)-inv(Lftilde)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lftilde))+Qfull*transpose(Qfull);
+                sigmaz_forced=lyap(Lftilde,Qfull*noise*transpose(Qfull));
+                sigmay_forced=sigmaz_forced(1:end-1,1:end-1);
+                H_forced=sqrt(trace(sigmay_forced));
+                tocheck=Lftilde*sigmaz_forced+sigmaz_forced*transpose(Lftilde)-inv(Lftilde)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lftilde))+Qfull*transpose(Qfull);
                 m=max(max(abs(tocheck(1:end-1,1:end-1))));
 %                 if m<1e-12
                     H2vec_forced(i,j)=H_forced;
@@ -109,14 +104,14 @@ for i=1:nummoves
     %                 R11=b/N*sum(allreceivers);
     %                 toinvert=-Pf-1/R11*Pf*1/N*ones(N,N)*Pf;
                     toinvert=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;
-                    [vecs,vals]=eig(toinvert);
-                    w=find(sigfig(diag(vals),13)==0);
-                    inverted=vecs(:,[1:(w-1) (w+1):end])*inv(vals([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(vecs(:,[1:(w-1) (w+1):end]));
-                    todivide=repmat(diag(inverted),1,N).*repmat(reshape(diag(inverted),1,[]),N,1);
+                    [W,Lambda]=eig(toinvert);
+                    w=find(sigfig(diag(Lambda),13)==0);
+                    Cov_forced=W(:,[1:(w-1) (w+1):end])*inv(Lambda([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(W(:,[1:(w-1) (w+1):end]));
+                    todivide=repmat(diag(Cov_forced),1,N).*repmat(reshape(diag(Cov_forced),1,[]),N,1);
                     todivide=power(todivide,.5);
-                    Cforced=inverted./todivide;
+                    Corr_forced=Cov_forced./todivide;
                     dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                    corrvec_forced=[corrvec_forced; col(Cforced)]; %#ok<AGROW>
+                    corrvec_forced=[corrvec_forced; col(Corr_forced)]; %#ok<AGROW>
 %                 else
 %                     disconnectedcount=disconnectedcount+1;
 %                     H2vec_forced(i,j)=H;

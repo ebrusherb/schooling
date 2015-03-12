@@ -1,6 +1,6 @@
-function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
+% function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
 
-N=max(size(strategy));
+% N=max(size(strategy));
 
 dvec=[];
 corrvec=[];
@@ -84,7 +84,7 @@ for i=1:nummoves
             B=diag(beta);
             Lf=L-B;
             Pf=P-B; 
-            Lfbar=Qfull*Lf*transpose(Qfull);
+            Lftilde=Qfull*Lf*transpose(Qfull);
             Bbar=Qfull*B;
             [~,vals]=eig(Lf);
             w=find(sigfig(diag(vals),13)==0,1);
@@ -95,12 +95,13 @@ for i=1:nummoves
                 corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
             else
                 sigma_forced=lyap(Lf,-inv(Lf)*B*ones(N,1)*ones(1,N)*B-B*ones(N,1)*ones(1,N)*B*transpose(inv(Lf))+noise);
-                sigmaz=Qfull*sigma_forced*transpose(Qfull);
+%                 sigmaz2=Qfull*sigma_forced*transpose(Qfull);
+                sigmaz=lyap(Lftilde,Qfull*transpose(Qfull));
                 sigmay=sigmaz(1:end-1,1:end-1);
                 H_forced=sqrt(trace(sigmay));
-                tocheck=Lfbar*sigmaz+sigmaz*transpose(Lfbar)-inv(Lfbar)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lfbar))+Qfull*transpose(Qfull);
+                tocheck=Lftilde*sigmaz+sigmaz*transpose(Lftilde)-inv(Lftilde)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lftilde))+Qfull*transpose(Qfull);
                 m=max(max(abs(tocheck(1:end-1,1:end-1))));
-                if m<1e-12
+%                 if m<1e-12
                     H2vec_forced(i,j)=H_forced;
 
     %                 R=-Qfull*Pf*transpose(Qfull);
@@ -116,12 +117,12 @@ for i=1:nummoves
                     Cforced=inverted./todivide;
                     dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
                     corrvec_forced=[corrvec_forced; col(Cforced)]; %#ok<AGROW>
-                else
-                    disconnectedcount=disconnectedcount+1;
-                    H2vec_forced(i,j)=H;
-                    dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                    corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
-                end
+%                 else
+%                     disconnectedcount=disconnectedcount+1;
+%                     H2vec_forced(i,j)=H;
+%                     dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
+%                     corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
+%                 end
             end
         end
     end

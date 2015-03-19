@@ -48,9 +48,9 @@ maxmat=repmat(maxvals,N,1);
 maxscorer=zeros(N,size(scores,2));
 
 for i=1:size(scores,2)
-%     look=find(cols==i);
-%     maxscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
-    maxscorer(rows(cols==i),i)=1/numsigs_tot;
+    look=find(cols==i);
+    maxscorer(rows(look),i)=1/size(look,1)/numsigs_tot;
+%     maxscorer(rows(cols==i),i)=1/numsigs_tot;
 end
 probgettoeat=sum(maxscorer,2);
 end

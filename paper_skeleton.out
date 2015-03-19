@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Abstract}{}
+\BOOKMARK [1][-]{section.2}{Introduction }{}
+\BOOKMARK [1][-]{section.3}{Model }{}
+\BOOKMARK [2][-]{subsection.3.1}{Modeling interactions and group-level properties }{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Individual-level fitness }{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Optimization methods }{section.3}
+\BOOKMARK [1][-]{section.4}{Results }{}
+\BOOKMARK [2][-]{subsection.4.1}{Robustness and correlation length are positively related. }{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{There are multiple ESS, which depend on the content of the signal. }{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{The predation ESS is to pay attention to more neighbors when the signal is more public.}{section.4}
+\BOOKMARK [2][-]{subsection.4.4}{Learned strategies }{section.4}
+\BOOKMARK [1][-]{section.5}{Discussion}{}
+\BOOKMARK [1][-]{section.6}{Appendix}{}
+\BOOKMARK [2][-]{theorem.6.1}{Linear algebra background }{section.6}
+\BOOKMARK [2][-]{subsection.6.2}{Opinion dynamics with noise }{section.6}
+\BOOKMARK [2][-]{subsection.6.3}{Probability distribution at equilibrium }{section.6}
+\BOOKMARK [2][-]{subsection.6.4}{Connecting two frameworks }{section.6}
+\BOOKMARK [1][-]{section.7}{Figures }{}

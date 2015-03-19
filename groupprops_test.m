@@ -1,6 +1,16 @@
-function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
+numworkers=str2num(getenv('PROCS')); %#ok<ST2NM>
+dellacluster=parcluster('local');
+dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
+dellapool=parpool(dellacluster, numworkers) ;
 
-N=max(size(strategy));
+numsigs_permove=1;
+nummoves=1000;
+
+N=20;
+b=1;
+T=1;
+radius=.7;
+strategy=6*ones(N,1);
 
 dvec=[];
 corrvec=[];
@@ -21,7 +31,7 @@ for j=2:(N-1)
    v=v/norm(v,2);
    Q(j,:)=v;
 end
-Qfull=[Q; 1/sqrt(N)*ones(1,N)];
+Qfull=[1/sqrt(N)*ones(1,N); Q];
 
 
 for i=1:nummoves   
@@ -42,9 +52,6 @@ for i=1:nummoves
     [~,vals]=eig(Ltilde);
     problem=find(sigfig(diag(vals),13)==0,1);
     
-%     noise=eye(N);
-    noise=diag(strategy);
-    
     S=.5*(Abar+transpose(Abar));
     P=S;
     P(1:N+1:end)=-sum(S,2);
@@ -55,19 +62,24 @@ for i=1:nummoves
         disconnectedcount=disconnectedcount+numsigs_permove;
     else
         
-        sigmay=lyap(Ltilde,Q*noise*transpose(Q));
-        H=sqrt(trace(sigmay));
+        sigma=lyap(Ltilde,eye(N-1));
+        H=trace(sigma);
         H2vec(i)=H;
-  
+        
+%         sigma_forced=lyap(Lf,eye(N));
+%         H_forced=trace(sigma_forced);
+%         H2vec_forced(i)=H_forced;
+%         
         Wtilde=W(:,[1:(w-1) (w+1):end]);
         Lambdatilde=Lambda([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]);
-        Cov=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
+        Ptildeinv=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
         
-        todivide=repmat(diag(-Cov),1,N).*repmat(reshape(diag(-Cov),1,[]),N,1);
+        todivide=repmat(diag(-Ptildeinv),1,N).*repmat(reshape(diag(-Ptildeinv),1,[]),N,1);
         todivide=power(todivide,.5);
-        Corr=-Cov./todivide;
+        C=-Ptildeinv./todivide;
         dvec=[dvec; col(d)]; %#ok<AGROW>
-        corrvec=[corrvec; col(Corr)]; %#ok<AGROW>
+        corrvec=[corrvec; col(C)]; %#ok<AGROW>
+    
     
         receivers=randsample(N,numsigs_permove,'true');
         for j=1:numsigs_permove        
@@ -79,54 +91,39 @@ for i=1:nummoves
             B=diag(beta);
             Lf=L-B;
             Pf=P-B; 
-            Lftilde=Qfull*Lf*transpose(Qfull);
-            Bbar=Qfull*B;
             [~,vals]=eig(Lf);
             w=find(sigfig(diag(vals),13)==0,1);
             if ~isempty(w)
                 disconnectedcount=disconnectedcount+1;
                 H2vec_forced(i,j)=H;
                 dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                corrvec_forced=[corrvec_forced; col(Corr)];%#ok<AGROW>
+                corrvec_forced=[corrvec_forced; corrvec];%#ok<AGROW>
             else
-%                 sigmav_forced=lyap(Lf,-inv(Lf)*B*ones(N,1)*ones(1,N)*B-B*ones(N,1)*ones(1,N)*B*transpose(inv(Lf))+noise);
-%                 sigmaz2=Qfull*sigma_forced*transpose(Qfull);
-                sigmaz_forced=lyap(Lftilde,Qfull*noise*transpose(Qfull));
-                sigmay_forced=sigmaz_forced(1:end-1,1:end-1);
-                H_forced=sqrt(trace(sigmay_forced));
-                tocheck=Lftilde*sigmaz_forced+sigmaz_forced*transpose(Lftilde)-inv(Lftilde)*Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)-Bbar*ones(N,1)*ones(1,N)*transpose(Bbar)*transpose(inv(Lftilde))+Qfull*transpose(Qfull);
-                m=max(max(abs(tocheck(1:end-1,1:end-1))));
-%                 if m<1e-12
-                    H2vec_forced(i,j)=H_forced;
+                sigma_forced=lyap(Lf,eye(N));
+                H_forced=trace(sigma_forced);
+                H2vec_forced(i,j)=H_forced;
 
-    %                 R=-Qfull*Pf*transpose(Qfull);
-    %                 toinvert=-Pf-1/R(1,1)*Pf*1/N*ones(N,N)*Pf;
-    %                 R11=b/N*sum(allreceivers);
-    %                 toinvert=-Pf-1/R11*Pf*1/N*ones(N,N)*Pf;
-                    toinvert=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;
-                    [W,Lambda]=eig(toinvert);
-                    w=find(sigfig(diag(Lambda),13)==0);
-                    Cov_forced=W(:,[1:(w-1) (w+1):end])*inv(Lambda([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(W(:,[1:(w-1) (w+1):end]));
-                    todivide=repmat(diag(Cov_forced),1,N).*repmat(reshape(diag(Cov_forced),1,[]),N,1);
-                    todivide=power(todivide,.5);
-                    Corr_forced=Cov_forced./todivide;
-                    dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-                    corrvec_forced=[corrvec_forced; col(Corr_forced)]; %#ok<AGROW>
-%                 else
-%                     disconnectedcount=disconnectedcount+1;
-%                     H2vec_forced(i,j)=H;
-%                     dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
-%                     corrvec_forced=[corrvec_forced; col(C)];%#ok<AGROW>
-%                 end
+                R=-Qfull*Pf*transpose(Qfull);
+                toinvert=-Pf-1/R(1,1)*Pf*1/N*ones(N,N)*Pf;
+                [vecs,vals]=eig(toinvert);
+                w=find(sigfig(diag(vals),13)==0);
+                inverted=vecs(:,[1:(w-1) (w+1):end])*inv(vals([1:(w-1) (w+1):end],[1:(w-1) (w+1):end]))*transpose(vecs(:,[1:(w-1) (w+1):end]));
+                todivide=repmat(diag(inverted),1,N).*repmat(reshape(diag(inverted),1,[]),N,1);
+                todivide=power(todivide,.5);
+                C=inverted./todivide;
+                dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
+                corrvec_forced=[corrvec_forced; col(C)]; %#ok<AGROW>
             end
         end
     end
 end
 
+max(abs(real(corrvec_forced)))
+max(abs(imag(corrvec_forced)))
+
 meanH2=mean(H2vec(~isnan(H2vec)));
 H2vec_forced=col(H2vec_forced);
 meanH2_forced=mean(H2vec_forced(~isnan(H2vec_forced)));
-% meanH2_forced=meanH2;
 
 deltad=.05;
 dbins=(0:deltad:1.4)+deltad/2;
@@ -162,5 +159,16 @@ else
     corrlength_forced=interp1(avgcorrs_forced([f-1 f]),dbins([f-1 f]),0);
 end
 
-% corrlength_forced=corrlength;
+radvals=0:.1:1.4;
+Nr=length(radvals);
+strategy=6*ones(N,1);
+for i=1:Nr
+    radius=radvals(i)
+    [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T);
+end
+
+delete(dellapool);
+
+exit ;
+
 

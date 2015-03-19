@@ -1,17 +1,17 @@
-numworkers=str2num(getenv('PROCS')); %#ok<ST2NM>
-dellacluster=parcluster('local');
-dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
-dellapool=parpool(dellacluster, numworkers) ;
+% numworkers=str2num(getenv('PROCS')); %#ok<ST2NM>
+% dellacluster=parcluster('local');
+% dellacluster.JobStorageLocation=strcat('/scratch/network/brush/tmp/',getenv('SLURM_JOB_ID'));
+% dellapool=parpool(dellacluster, numworkers) ;
 
 numsigs_permove=1;
-nummoves=1000;
+nummoves=100;
 
 N=20;
 b=1;
 T=1;
 
-homogenstrats=6:1:(N-1);
-% homogenstrats=6;
+% homogenstrats=6:1:(N-1);
+homogenstrats=6;
 Lh=length(homogenstrats);
 
 radvals=0:.1:1.4;
@@ -39,9 +39,8 @@ for i=1:Nr
     end
 end
 
-save('/home/brush/schooling_consensus/homogengroupprops.mat','groupconsensus','groupconsensus_forced','corrlengths','corrlengths_forced','disconnected','homogenstrats','Lh','radvals','Nr','N')
-% save('/home/brush/schooling_consensus/homogengroupprops.mat','groupconsensus','corrlengths','disconnected','homogenstrats','Lh','radvals','Nr','N')
-
-delete(dellapool);
-
-exit ;
+% save('/home/brush/schooling_consensus/homogengroupprops.mat','groupconsensus','groupconsensus_forced','corrlengths','corrlengths_forced','disconnected','homogenstrats','Lh','radvals','Nr','N')
+% 
+% delete(dellapool);
+% 
+% exit ;

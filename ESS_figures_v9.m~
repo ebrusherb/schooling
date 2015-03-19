@@ -23,26 +23,9 @@ yoffset=.06;
 
 %% load ESS data
 
-ESSeaten_total=cell(2,1);
-ESSgettoeat_total=cell(2,1);
-storefitnesseaten_total=cell(2,1);
-storefitnessgettoeat_total=cell(2,1);
+load /Users/eleanorbrush/Desktop/ESS_nummoves=1000_numpermove=1.mat
 
-load /Users/eleanorbrush/Desktop/ESS_nummoves=1000_numpermove=1_fullstorage.mat
-
-ESSeaten_total{1}=ESSseaten;
-ESSgettoeat_total{1}=ESSsgettoeat;
-storefitnesseaten_total{1}=storefitnesseaten;
-storefitnessgettoeat_total{1}=storefitnessgettoeat;
-
-load /Users/eleanorbrush/Desktop/ESS_nummoves=10_numpermove=100.mat
-
-ESSeaten_total{2}=ESSseaten;
-ESSgettoeat_total{2}=ESSsgettoeat;
-storefitnesseaten_total{2}=storefitnesseaten;
-storefitnessgettoeat_total{2}=storefitnessgettoeat;
-
-load /Users/eleanorbrush/Desktop/greedyopt_rad=0.1_T=1_nummoves=10_numpermove=100.mat
+load /Users/eleanorbrush/Desktop/greedyopt_simultaneous_T=1_nummoves=1000_numpermove=1_rad=0.2_timesteps=100.mat
 
 load /Users/eleanorbrush/Desktop/homogengroupprops.mat
 %% find number of receivers for different radius
@@ -105,12 +88,7 @@ set(gcf,'Position',[11.5 3 w h]);
 
 n=size(ESSseaten,2);
 k=1;
-t=3;
-
-ESSseaten=ESSeaten_total{k};
-ESSsgettoeat=ESSgettoeat_total{k};
-storefitnesseaten=storefitnesseaten_total{k};
-storefitnessgettoeat=storefitnessgettoeat_total{k};
+t=1;
 
 subplot(2,2,1)
 hold on
@@ -249,11 +227,12 @@ set(gcf,'Position',[11.5 3 w h]);
 subplot(1,2,1)
 % toplot=corrlengths_forced;
 % toplot=corrlengths./repmat([1 radvals(2:end)],Lh,1);
-toplot=groupconsensus_forced;
-toplot_vec=1./(groupconsensus_forced(1,:)*6);
+toplot=ones(14,15)./(groupconsensus_forced.*power(repmat(col(6:19),1,15),1/2));
+toplot_vec=1./(groupconsensus_forced(1,:)*sqrt(6));
 
 imagesc(radvals,homogenstrats,toplot)
 caxis manual
+set(gca,'ydir','normal')
 
 % a=min(min(toplot))-1;
 A=max(max(toplot))-1;
@@ -264,7 +243,7 @@ A=max(max(toplot))-1;
 colormap(seqcols)
 cb=colorbar;
 
-ylab=ylabel(cb,'Correlation Length','FontName',fontname,'FontSize',labfontsz);
+ylab=ylabel(cb,'Normalized robustness','FontName',fontname,'FontSize',labfontsz);
 set(ylab,'Rotation',270);
 v=get(ylab,'Position');
 set(ylab,'Position',[v(1)+.1 v(2) v(3)])
@@ -276,17 +255,23 @@ set(gca,'FontName',fontname,'FontSize',labfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
+v=get(gca,'Position')
+% set(gca,'Position',[.08 .18 .27 .72])
+% v=get(firstxlab,'Position');
+% set(firstxlab,'Position',[v(1) 21 v(3)])
 
 subplot(1,2,2)
 hold on
-t=3;
+t=1;
 n=size(ESSseaten,2);
-for i=1:n
+for i=1:12
     l=length(ESSseaten{t,i});
+
     plot(toplot_vec(i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
 end
-xlabel('Robustness','FontName',fontname,'FontSize',textfontsz)
-ylabel('ESS strategy','FontName',fontname,'FontSize',textfontsz)
+set(gca,'ylim',[13 20])
+xlabel('Normalized robustness','FontName',fontname,'FontSize',textfontsz)
+ylabel('ESS','FontName',fontname,'FontSize',textfontsz)
 
 set(gca,'FontName',fontname,'FontSize',labfontsz)
 
@@ -294,18 +279,11 @@ apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
 
-subplot(1,2,1)
-v=get(gca,'Position');
-set(gca,'Position',[.08 .18 .27 .72])
-v=get(firstxlab,'Position');
-set(firstxlab,'Position',[v(1) 21 v(3)])
-
-
 set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf';
-% print(filename,'-dpdf','-r300')
+print(filename,'-dpdf','-r300')
 
 %% H2 / correlation length relationship
 figure
@@ -323,6 +301,11 @@ caxis manual
 colormap(seqcols)
 cb=colorbar;
 set(cb,'FontName',fontname,'FontSize',labfontsz)
+ylab=ylabel(cb,'Normalized robustness','FontName',fontname,'FontSize',labfontsz);
+set(ylab,'Rotation',270);
+v=get(ylab,'Position');
+set(ylab,'Position',[v(1)+.1 v(2) v(3)])
+
 xlabel('Radius','FontName',fontname,'FontSize',textfontsz)
 ylabel('Strategy','FontName',fontname,'FontSize',textfontsz)
 
@@ -337,11 +320,16 @@ caxis manual
 colormap(seqcols)
 cb=colorbar;
 set(cb,'FontName',fontname,'FontSize',labfontsz)
+ylab=ylabel(cb,'Correlation length','FontName',fontname,'FontSize',labfontsz);
+set(ylab,'Rotation',270);
+v=get(ylab,'Position');
+set(ylab,'Position',[v(1)+.1 v(2) v(3)])
+
 xlabel('Radius','FontName',fontname,'FontSize',textfontsz)
 ylabel('Strategy','FontName',fontname,'FontSize',textfontsz)
 
 apos=get(gca,'Position');
-annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
 
 subplot(2,2,3:4)
@@ -380,7 +368,7 @@ set(gca,'Position',[apos(1) .15 apos(3:4)])
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(c)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-xlabel('H2 robustness','FontName',fontname,'FontSize',textfontsz)
+xlabel('Normalized robustness','FontName',fontname,'FontSize',textfontsz)
 ylabel('Correlation length','FontName',fontname,'FontSize',textfontsz)
 
 axpos=get(gca,'position');
@@ -391,4 +379,4 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/H2_v_corrlength.pdf';
-% print(filename,'-dpdf','-r300')
+print(filename,'-dpdf','-r300')

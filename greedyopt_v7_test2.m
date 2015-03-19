@@ -15,8 +15,8 @@ radvals=[.1 .7];
 Nr=length(radvals);
 T=1;
 
-timesteps=50;
-its=2;
+timesteps=10;
+its=1;
 
 evolution_eaten=zeros(its,N,timesteps);
 groupspeed_eaten=zeros(its,timesteps);
@@ -33,7 +33,7 @@ disconnected_gettoeat=zeros(its,timesteps);
 % for ir=1:Nr
     radius=radvals(aid);
 for num=1:its
-    init=randi([1 N-1],1,N);
+%     init=randi([1 N-1],1,N);
     t=1;
     while t<=timesteps
 
@@ -50,8 +50,10 @@ for num=1:its
         [probeaten, ~]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
         perf=1-probeaten;
         newstrategy=strategy;
-
-        for i=1:N
+        
+        changeorder=randsample(1:N,N,'false');
+%         for i=1:N
+        for i=changeorder
             choosestrat=zeros(1,3);
             choosestrat(2)=perf(i);
 
@@ -76,9 +78,11 @@ for num=1:its
             end 
 
             if choosestrat(1)>choosestrat(2)
+                strategy(i)=strategy(i)-1;
                 newstrategy(i)=strategy(i)-1;
             end
             if choosestrat(3)>choosestrat(2)
+                strategy(i)=strategy(i)-1;
                 newstrategy(i)=strategy(i)+1;
             end
 

@@ -172,14 +172,14 @@ subplot(2,2,2);
 imagesc(Lbar*C_y+C_y*transpose(Lbar));
 colorbar
 subplot(2,2,3);
-% imagesc(sigma_y_forced);
+imagesc(sigma_y_forced);
 % imagesc(Lfbar*sigma_y_forced+sigma_y_forced*transpose(Lfbar));
-imagesc(Lftilde*sigma_ybar+sigma_ybar*transpose(Lftilde));
+% imagesc(Lftilde*sigma_ybar+sigma_ybar*transpose(Lftilde));
 colorbar
 subplot(2,2,4);
-% imagesc(C_y_forced);
+imagesc(C_y_forced);
 % imagesc(Pftilde*C_y_forced+C_y_forced(1:end-1,1:end-1)*transpose(Pfbar));
-imagesc(Lftilde*C_y_forced+C_y_forced*transpose(Lftilde));
+% imagesc(Lftilde*C_y_forced+C_y_forced*transpose(Lftilde));
 colorbar
 
 figure
@@ -187,8 +187,8 @@ subplot(1,2,1)
 plot(sigma_y,C_y,'o')
 hold on;plot(get(gca,'xlim'),2*get(gca,'xlim'))
 subplot(1,2,2)
-% plot(sigma_y_forced,C_y_forced(1:end-1,1:end-1),'o')
-plot(sigma_ybar,C_y_forced,'o')
+plot(sigma_y_forced,C_y_forced(1:end-1,1:end-1),'o')
+% plot(sigma_ybar,C_y_forced,'o')
 hold on;plot(get(gca,'xlim'),2*get(gca,'xlim'))
 
 %%

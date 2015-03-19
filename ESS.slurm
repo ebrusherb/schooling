@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 23:00:00
+#SBATCH -t 1:00:00
 #SBATCH -J ESSjob
 #SBATCH -o ESS.out
 #SBATCH --mail-type=begin

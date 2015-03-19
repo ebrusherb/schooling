@@ -15,7 +15,7 @@ radvals=[.1 .2 .7];
 % Nr=length(radvals);
 T=1;
 
-timesteps=100;
+timesteps=200;
 its=20;
 
 evolution_eaten=zeros(its,N,timesteps);
@@ -24,6 +24,7 @@ groupconsensusforced_eaten=zeros(its,timesteps);
 corrlengths_eaten=zeros(its,timesteps);
 corrlengthsforced_eaten=zeros(its,timesteps);
 disconnected_eaten=zeros(its,timesteps);
+changeorder_eaten=zeros(its,N,timesteps);
 
 evolution_gettoeat=zeros(its,N,timesteps);
 groupconsensus_gettoeat=zeros(its,timesteps);
@@ -31,6 +32,7 @@ groupconsensusforced_gettoeat=zeros(its,timesteps);
 corrlengths_gettoeat=zeros(its,timesteps);
 corrlengthsforced_gettoeat=zeros(its,timesteps);
 disconnected_gettoeat=zeros(its,timesteps);
+changeorder_gettoeat=zeros(its,N,timesteps);
 
 maxt_eaten=zeros(its,1);
 maxt_gettoeat=zeros(its,1);
@@ -50,14 +52,20 @@ for num=1:its
         t=t+1;
     else
         strategy=evolution_eaten(num,:,t-1);
-        strategy=reshape(strategy,1,N);
+        strategy=reshape(strategy,N,1);
 
-        [probeaten, ~]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
-        perf=1-probeaten;
-        newstrategy=strategy;
+%         [probeaten, ~]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+%         perf=1-probeaten;
+%         newstrategy=strategy;
 
-        i=randsample(1:N,1);
+%         i=randsample(1:N,1);
 %         for i=1:N
+        changeorder=randsample(1:N,N,'false');
+        changeorder_eaten(num,:,t)=changeorder;     
+        for i=changeorder
+            [probeaten, ~]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            perf=1-probeaten;
+            
             choosestrat=zeros(1,3);
             choosestrat(2)=perf(i);
 
@@ -70,7 +78,7 @@ for num=1:its
                 [probeaten, ~]=signalingevents_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=1-probeaten(i);
             end
-
+            
             if strategy(i)==1
                 choosestrat(1)=perf(i);
             else
@@ -80,23 +88,25 @@ for num=1:its
                 [probeaten, ~]=signalingevents_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=1-probeaten(i);   
             end 
-
+            
             if choosestrat(1)>choosestrat(2)
-                newstrategy(i)=strategy(i)-1;
+                strategy(i)=strategy(i)-1;
             end
             if choosestrat(3)>choosestrat(2)
-                newstrategy(i)=strategy(i)+1;
+                strategy(i)=strategy(i)+1;
             end
+            
+        end
 
-%         end
-        evolution_eaten(num,:,t)=newstrategy;
+        evolution_eaten(num,:,t)=strategy;
+        
         if sum(evolution_eaten(num,:,t)==evolution_eaten(num,:,t-1))==N
-            evolution_eaten(num,:,(t+1):end)=repmat(col(newstrategy),1,timesteps-t);
+            evolution_eaten(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
             t_eaten=t;
             t=timesteps+1;
         else
             t_eaten=t;
-            t=t+1; 
+            t=t+1;
         end
     end
     end
@@ -113,14 +123,20 @@ for num=1:its
         t=t+1;
     else
         strategy=evolution_gettoeat(num,:,t-1);
-        strategy=reshape(strategy,1,N);
+        strategy=reshape(strategy,N,1);
 
-        [~, probgettoeat]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
-        perf=probgettoeat;
-        newstrategy=strategy;
+%         [~, probgettoeat]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+%         perf=probgettoeat;
+%         newstrategy=strategy;
 
-        i=randsample(1:N,1);
+%         i=randsample(1:N,1);
 %         for i=1:N
+        changeorder=randsample(1:N,N,'false');
+        changeorder_gettoeat(num,:,t)=changeorder;     
+        for i=changeorder
+            [~, probgettoeat]=signalingevents_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            perf=probgettoeat;
+            
             choosestrat=zeros(1,3);
             choosestrat(2)=perf(i);
 
@@ -145,16 +161,16 @@ for num=1:its
             end 
 
             if choosestrat(1)>choosestrat(2)
-                newstrategy(i)=strategy(i)-1;
+                strategy(i)=strategy(i)-1;
             end
             if choosestrat(3)>choosestrat(2)
-                newstrategy(i)=strategy(i)+1;
+                strategy(i)=strategy(i)+1;
             end
 
-%         end
-        evolution_gettoeat(num,:,t)=newstrategy;
+        end
+        evolution_gettoeat(num,:,t)=strategy;
         if sum(evolution_gettoeat(num,:,t)==evolution_gettoeat(num,:,t-1))==N
-            evolution_gettoeat(num,:,(t+1):end)=repmat(col(newstrategy),1,timesteps-t);
+            evolution_gettoeat(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
             t_gettoeat=t;
             t=timesteps+1;
         else 
@@ -169,7 +185,7 @@ end
 % end
 
 filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_timesteps=',num2str(timesteps),'.mat');
-save(filename,'evolution_eaten','evolution_gettoeat','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
+save(filename,'evolution_eaten','evolution_gettoeat','changeorder_eaten','changeorder_gettoeat','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
 'Greedy opt is done. Group props are not.' %#ok<NOPTS>
 
 % for ir=1:Nr
@@ -206,7 +222,7 @@ end
 % end
 
 filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_rad=',num2str(radius),'_timesteps=',num2str(timesteps),'.mat');
-save(filename,'evolution_eaten','groupconsensus_eaten','groupconsensusforced_eaten','corrlengths_eaten','corrlengthsforced_eaten','evolution_gettoeat','groupconsensus_gettoeat','groupconsensusforced_gettoeat','corrlengths_gettoeat','corrlengthsforced_gettoeat','disconnected_eaten','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
+save(filename,'evolution_eaten','groupconsensus_eaten','groupconsensusforced_eaten','corrlengths_eaten','corrlengthsforced_eaten','evolution_gettoeat','groupconsensus_gettoeat','groupconsensusforced_gettoeat','corrlengths_gettoeat','corrlengthsforced_gettoeat','disconnected_eaten','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat','changeorder_eaten','changeorder_gettoeat','radius','b','T','nummoves','numsigs_permove')
 'Greedy opt is done. Group props are too.' %#ok<NOPTS>
 
 delete(dellapool);

@@ -15,8 +15,8 @@ radvals=[.1 .2 .7];
 % Nr=length(radvals);
 T=1;
 
-timesteps=100;
-its=20;
+timesteps=200;
+its=10;
 
 evolution_eaten=zeros(its,N,timesteps);
 groupconsensus_eaten=zeros(its,timesteps);
@@ -24,6 +24,7 @@ groupconsensusforced_eaten=zeros(its,timesteps);
 corrlengths_eaten=zeros(its,timesteps);
 corrlengthsforced_eaten=zeros(its,timesteps);
 disconnected_eaten=zeros(its,timesteps);
+changeorder_eaten=zeros(its,N,timesteps);
 
 evolution_gettoeat=zeros(its,N,timesteps);
 groupconsensus_gettoeat=zeros(its,timesteps);
@@ -38,7 +39,7 @@ maxt_gettoeat=zeros(its,1);
 % for ir=1:Nr
     radius=radvals(aid);
 for num=1:its
-    init=randi([1 N-1],1,N);
+    init=randi([1 N/2-1],1,N);
     t=1;
     while t<=timesteps
 
@@ -56,16 +57,22 @@ for num=1:its
         perf=1-probeaten;
         newstrategy=strategy;
 
-        i=randsample(1:N,1);
+%         i=randsample(1:N,1);
 %         for i=1:N
+        changeorder=randsample(1:N,N,'false');
+        changeorder_eaten(i,:,t)=changeorder;     
+        for i=changeorder
+            [probeaten, ~]=signalingevents_parallel(newstrategy,numsigs_permove,nummoves,radius,b,T);
+            perf=1-probeaten;
+            
             choosestrat=zeros(1,3);
             choosestrat(2)=perf(i);
 
             if strategy(i)==N-1
                 choosestrat(3)=perf(i);
             else 
-                upone=strategy;
-                upone(i)=strategy(i)+1;
+                upone=newstrategy;
+                upone(i)=newstrategy(i)+1;
 
                 [probeaten, ~]=signalingevents_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=1-probeaten(i);
@@ -74,21 +81,22 @@ for num=1:its
             if strategy(i)==1
                 choosestrat(1)=perf(i);
             else
-                downone=strategy;
-                downone(i)=strategy(i)-1;
+                downone=newstrategy;
+                downone(i)=newstrategy(i)-1;
 
                 [probeaten, ~]=signalingevents_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=1-probeaten(i);   
             end 
 
             if choosestrat(1)>choosestrat(2)
-                newstrategy(i)=strategy(i)-1;
+                newstrategy(i)=newstrategy(i)-1;
             end
             if choosestrat(3)>choosestrat(2)
-                newstrategy(i)=strategy(i)+1;
+                newstrategy(i)=newstrategy(i)+1;
             end
 
-%         end
+        end
+
         evolution_eaten(num,:,t)=newstrategy;
         if sum(evolution_eaten(num,:,t)==evolution_eaten(num,:,t-1))==N
             evolution_eaten(num,:,(t+1):end)=repmat(col(newstrategy),1,timesteps-t);
@@ -119,8 +127,11 @@ for num=1:its
         perf=probgettoeat;
         newstrategy=strategy;
 
-        i=randsample(1:N,1);
+%         i=randsample(1:N,1);
 %         for i=1:N
+        changeorder=randsample(1:N,N,'false');
+        changeorder_eaten(i,:,t)=changeorder;     
+        for i=changeorder
             choosestrat=zeros(1,3);
             choosestrat(2)=perf(i);
 
@@ -128,7 +139,7 @@ for num=1:its
                 choosestrat(3)=perf(i);
             else 
                 upone=strategy;
-                upone(i)=strategy(i)+1;
+                upone(i)=newstrategy(i)+1;
 
                 [~, probgettoeat]=signalingevents_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=probgettoeat(i);
@@ -138,20 +149,20 @@ for num=1:its
                 choosestrat(1)=perf(i);
             else
                 downone=strategy;
-                downone(i)=strategy(i)-1;
+                downone(i)=newstrategy(i)-1;
 
                 [~, probgettoeat]=signalingevents_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=1-probgettoeat(i);   
             end 
 
             if choosestrat(1)>choosestrat(2)
-                newstrategy(i)=strategy(i)-1;
+                newstrategy(i)=newstrategy(i)-1;
             end
             if choosestrat(3)>choosestrat(2)
-                newstrategy(i)=strategy(i)+1;
+                newstrategy(i)=newstrategy(i)+1;
             end
 
-%         end
+        end
         evolution_gettoeat(num,:,t)=newstrategy;
         if sum(evolution_gettoeat(num,:,t)==evolution_gettoeat(num,:,t-1))==N
             evolution_gettoeat(num,:,(t+1):end)=repmat(col(newstrategy),1,timesteps-t);
@@ -166,7 +177,7 @@ for num=1:its
     maxt_gettoeat(num)=t_gettoeat;
 end
 
-% end
+end
 
 filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_timesteps=',num2str(timesteps),'.mat');
 save(filename,'evolution_eaten','evolution_gettoeat','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')

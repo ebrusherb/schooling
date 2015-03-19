@@ -29,34 +29,42 @@ textfontsz=12;
 markersz=3;
 lw=2;
 
-nt=size(evolution_eaten,3);
+timesteps=size(evolution_eaten,3);
+M=max([max(maxt_eaten),max(maxt_gettoeat)]);
+M=min(timesteps,M+2);
 
 subplot(2,3,1)
-plot(1:nt,reshape(evolution_eaten(1,:,:),N,[]))
+plot(1:timesteps,reshape(evolution_eaten(1,:,:),N,[]))
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 xlabel('','FontName',fontname,'FontSize',textfontsz)
 ylabel('Number of neighbors','FontName',fontname,'FontSize',textfontsz)
         
 subplot(2,3,2)
-plot(1:nt,1./groupconsensus_eaten)
+plot(1:timesteps,1./groupconsensus_eaten)
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 xlabel('','FontName',fontname,'FontSize',textfontsz)
 ylabel('H2 Robustness','FontName',fontname,'FontSize',textfontsz)
 
 subplot(2,3,3)
-plot(1:nt,corrlengths_eaten)
+plot(1:timesteps,corrlengths_eaten)
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 xlabel('','FontName',fontname,'FontSize',textfontsz)
 ylabel('Correlation length','FontName',fontname,'FontSize',textfontsz)
 
 subplot(2,3,4)
-plot(1:nt,reshape(evolution_gettoeat(1,:,:),N,[]))
+plot(1:timesteps,reshape(evolution_gettoeat(1,:,:),N,[]))
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 subplot(2,3,5)
-plot(1:nt,1./groupconsensus_gettoeat)
+plot(1:timesteps,1./groupconsensus_gettoeat)
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 subplot(2,3,6)
-plot(1:nt,corrlengths_gettoeat)
+plot(1:timesteps,corrlengths_gettoeat)
+set(gca,'xlim',[0 M])
 set(gca,'FontName',fontname,'FontSize',textfontsz)
 
 set(gcf,'PaperSize',[w h]);

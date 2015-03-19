@@ -12,7 +12,7 @@ b=1;
 strats=1:1:(N-1);
 L=length(strats);
 
-Tvals=[.01 .1 1 10];
+Tvals=[1 .01 .1 10];
 Nt=length(Tvals);
 
 radvals=[0:.1:1.4]; %#ok<NBRAK>
@@ -49,7 +49,8 @@ for q=1:Nt
         parfor ind=1:(L*L*(N-1))
 %         parfor ind=1:5
             [u,v,k]=ind2sub([L,L,N-1],ind);
-            
+            % rows are residents, columns are invaders, transpose to plot
+            % normally
             resident=strats(u);
             invader=strats(v);
 

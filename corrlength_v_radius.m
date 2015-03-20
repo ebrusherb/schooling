@@ -1,5 +1,5 @@
 N=20;
-strategy=12*ones(N,1);
+strategy=2*ones(N,1);
 
 deltad=.05;
 
@@ -29,8 +29,16 @@ end
 S=.5*(Abar+transpose(Abar));
 P=S;
 P(1:N+1:end)=-sum(S,2);
-
-
+[W,Lambda]=eig(P);
+w=find(sigfig(diag(Lambda),13)==0);
+if length(w)>1
+    'prob'
+end
+Wtilde=W(:,setdiff(1:N,w));
+Lambdatilde=Lambda(setdiff(1:N,w),setdiff(1:N,w));
+Cov=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
+plot(d,-Cov,'o');set(gca,'ylim',[-.5 5])      
+%%
 %     noise=eye(N);
 noise=diag(strategy);
     

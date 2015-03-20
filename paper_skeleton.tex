@@ -196,8 +196,8 @@ E[y \xi^T]&=\exp(At)y(0)E[\xi(t)^T]+\int_0^t\exp(A(t-s))BE[\xi(t)^T]ds+\int_0^t\
 \\&=0+0+\frac{1}{2}Q
 \\ \Rightarrow \dot{\Sigma} &= A\Sigma_t+\Sigma_tA^T+vE[y(t)^T]+E[y(t)]v^T+\frac{1}{2}QQ^T+\frac{1}{2}QQ^T
 \\ &= A\Sigma_t+\Sigma_tA^T+vE[y(t)^T]+E[y(t)]v^T+QQ^T
-\\ \Rightarrow \lim_{t\to\infty} \dot{\Sigma}&=A\Sigma+\Sigma A-vv^T(A^{-1})^T-A^{-1}vv^T+QQ^T
-\\ \Rightarrow A\Sigma+\Sigma A&=vv^T(A^{-1})^T+A^{-1}vv^T-QQ^T \text{ since $\dot{\Sigma}=0$ at equilibrium}.
+\\ \Rightarrow \lim_{t\to\infty} \dot{\Sigma}&=A\Sigma+\Sigma A^T-vv^T(A^{-1})^T-A^{-1}vv^T+QQ^T
+\\ \Rightarrow A\Sigma+\Sigma A^T&=vv^T(A^{-1})^T+A^{-1}vv^T-QQ^T \text{ since $\dot{\Sigma}=0$ at equilibrium}.
 \end{align*}
 
 Further, by definition of $C$, 

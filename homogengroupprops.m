@@ -10,7 +10,7 @@ N=20;
 b=1;
 T=1;
 
-homogenstrats=6:1:(N-1);
+homogenstrats=1:1:(N-1);
 % homogenstrats=6;
 Lh=length(homogenstrats);
 

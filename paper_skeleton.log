@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  19 MAR 2015 15:37
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  20 MAR 2015 17:39
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -581,22 +581,22 @@ Non-PDF special ignored!
 
 {/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
  [4] [5]
-Overfull \hbox (1.22423pt too wide) in paragraph at lines 200--200
+Overfull \hbox (7.52388pt too wide) in paragraph at lines 201--201
 [] 
  []
 
 [6] [7] [8]
-Overfull \hbox (51.03079pt too wide) in paragraph at lines 338--338
+Overfull \hbox (51.03079pt too wide) in paragraph at lines 339--339
 [] 
  []
 
 [9] [10]
-Overfull \hbox (9.75453pt too wide) in paragraph at lines 390--396
+Overfull \hbox (9.75453pt too wide) in paragraph at lines 391--397
 [][] 
  []
 
 
-Overfull \hbox (174.72876pt too wide) in paragraph at lines 404--436
+Overfull \hbox (174.72876pt too wide) in paragraph at lines 405--437
 [][] 
  []
 
@@ -605,7 +605,7 @@ Overfull \hbox (174.72876pt too wide) in paragraph at lines 404--436
 t>
 File: /Users/eleanorbrush/Desktop/H2_v_corrlength.pdf Graphic file (type pdf)
  <use /Users/eleanorbrush/Desktop/H2_v_corrlength.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 441--442
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 442--443
 [][] 
  []
 
@@ -613,7 +613,7 @@ Overfull \hbox (47.42667pt too wide) in paragraph at lines 441--442
 File: /Users/eleanorbrush/Desktop/ESSfigure.pdf Graphic file (type pdf)
 
 <use /Users/eleanorbrush/Desktop/ESSfigure.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 446--448
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 447--449
 [][] 
  []
 
@@ -623,7 +623,7 @@ pt>
 File: /Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf Graphic file (type pdf)
 
  <use /Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 452--455
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 453--456
 [][] 
  []
 
@@ -655,7 +655,7 @@ public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
 pe1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/font
 s/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/f
 onts/type1/public/rsfs/rsfs10.pfb>
-Output written on paper_skeleton.pdf (15 pages, 282556 bytes).
+Output written on paper_skeleton.pdf (15 pages, 282426 bytes).
 PDF statistics:
  331 PDF objects out of 1000 (max. 8388607)
  76 named destinations out of 1000 (max. 500000)

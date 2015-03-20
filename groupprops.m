@@ -123,44 +123,51 @@ for i=1:nummoves
     end
 end
 
-meanH2=mean(H2vec(~isnan(H2vec)));
-H2vec_forced=col(H2vec_forced);
-meanH2_forced=mean(H2vec_forced(~isnan(H2vec_forced)));
-% meanH2_forced=meanH2;
+if disconnectedcount<nummoves
+    meanH2=mean(H2vec(~isnan(H2vec)));
+    H2vec_forced=col(H2vec_forced);
+    meanH2_forced=mean(H2vec_forced(~isnan(H2vec_forced)));
+    % meanH2_forced=meanH2;
 
-deltad=.05;
-dbins=(0:deltad:1.4)+deltad/2;
-Nbins=length(dbins);
-avgcorrs=zeros(1,Nbins);
-avgcorrs_forced=zeros(1,Nbins);
+    deltad=.05;
+    dbins=(0:deltad:1.4)+deltad/2;
+    Nbins=length(dbins);
+    avgcorrs=zeros(1,Nbins);
+    avgcorrs_forced=zeros(1,Nbins);
 
-for i=1:Nbins
-    w1=find(dvec>=dbins(i)-deltad/2);
-    w2=find(dvec<dbins(i)+deltad/2);
-    w=intersect(w1,w2);
-    avgcorrs(i)=mean(corrvec(w));
-end
+    for i=1:Nbins
+        w1=find(dvec>=dbins(i)-deltad/2);
+        w2=find(dvec<dbins(i)+deltad/2);
+        w=intersect(w1,w2);
+        avgcorrs(i)=mean(corrvec(w));
+    end
 
-for i=1:Nbins
-    w1=find(dvec_forced>=dbins(i)-deltad/2);
-    w2=find(dvec_forced<dbins(i)+deltad/2);
-    w=intersect(w1,w2);
-    avgcorrs_forced(i)=mean(corrvec_forced(w));
-end
+    for i=1:Nbins
+        w1=find(dvec_forced>=dbins(i)-deltad/2);
+        w2=find(dvec_forced<dbins(i)+deltad/2);
+        w=intersect(w1,w2);
+        avgcorrs_forced(i)=mean(corrvec_forced(w));
+    end
 
-f=find(avgcorrs<0,1,'first');
-if isempty(f)
-    corrlength=max(dvec);
+    f=find(avgcorrs<0,1,'first');
+    if isempty(f)
+        corrlength=max(dvec);
+    else
+        corrlength=interp1(avgcorrs([f-1 f]),dbins([f-1 f]),0);
+    end
+
+    f=find(avgcorrs_forced<0,1,'first');
+    if isempty(f)
+        corrlength_forced=max(dvec);
+    else
+        corrlength_forced=interp1(avgcorrs_forced([f-1 f]),dbins([f-1 f]),0);
+    end
+
 else
-    corrlength=interp1(avgcorrs([f-1 f]),dbins([f-1 f]),0);
+    meanH2=N^2;
+    meanH2_forced=N^2;
+    corrlength=1.5;
+    corrlength_forced=1.5;
 end
 
-f=find(avgcorrs_forced<0,1,'first');
-if isempty(f)
-    corrlength_forced=max(dvec);
-else
-    corrlength_forced=interp1(avgcorrs_forced([f-1 f]),dbins([f-1 f]),0);
-end
-
-% corrlength_forced=corrlength;
 

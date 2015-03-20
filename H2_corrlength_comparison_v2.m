@@ -25,6 +25,10 @@ for j=2:(N-1)
 end
 % Qfull=[1/sqrt(N)*ones(1,N); Q];
 
+deltad=.05;
+dbins=(0:deltad:1.4)+deltad/2;
+Nbins=length(dbins);
+
 
 for i=1:nummoves   
     positions=unifrnd(0,1,N,2);

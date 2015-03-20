@@ -16,6 +16,7 @@ qualcols=cbrewer('qual','Set1',5);
 qualcols=qualcols([1 3 2 4 5],:);
 seqcols = cbrewer('seq','Reds',11);
 seqcols2 = cbrewer('seq','Reds',7);
+seqcols3 = cbrewer('seq','Reds',15);
 
 
 xoffset=.1;
@@ -227,8 +228,8 @@ set(gcf,'Position',[11.5 3 w h]);
 subplot(1,2,1)
 % toplot=corrlengths_forced;
 % toplot=corrlengths./repmat([1 radvals(2:end)],Lh,1);
-toplot=ones(14,15)./(groupconsensus_forced.*power(repmat(col(6:19),1,15),1/2));
-toplot_vec=1./(groupconsensus_forced(1,:)*sqrt(6));
+toplot=ones(size(groupconsensus_forced))./groupconsensus_forced;
+toplot_vec=1./groupconsensus_forced;
 
 imagesc(radvals,homogenstrats,toplot)
 caxis manual
@@ -255,10 +256,9 @@ set(gca,'FontName',fontname,'FontSize',labfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-v=get(gca,'Position')
-% set(gca,'Position',[.08 .18 .27 .72])
-% v=get(firstxlab,'Position');
-% set(firstxlab,'Position',[v(1) 21 v(3)])
+v=get(gca,'Position');
+set(gca,'Position',[.08 .18 .27 .72])
+
 
 subplot(1,2,2)
 hold on
@@ -266,7 +266,6 @@ t=1;
 n=size(ESSseaten,2);
 for i=1:12
     l=length(ESSseaten{t,i});
-
     plot(toplot_vec(i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
 end
 set(gca,'ylim',[13 20])
@@ -293,8 +292,10 @@ h=1/2*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[11.5 3 w h]);
 
+stratvals=6:19;
+
 subplot(2,2,1)
-imagesc(radvals,6:19,ones(14,15)./(groupconsensus_forced.*power(repmat(col(6:19),1,15),1/2)))
+imagesc(radvals,stratvals,ones(size(groupconsensus_forced))./groupconsensus_forced)
 set(gca,'ydir','normal')
 set(gca,'FontName',fontname,'FontSize',labfontsz)
 caxis manual
@@ -313,7 +314,7 @@ apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
 subplot(2,2,2)
-imagesc(radvals,6:19,corrlengths_forced)
+imagesc(radvals,stratvals,corrlengths_forced)
 set(gca,'ydir','normal')
 set(gca,'FontName',fontname,'FontSize',labfontsz)
 caxis manual
@@ -337,21 +338,31 @@ hold on
 radvals=0:.1:1.4;
 toplot=1:2:length(0:.1:1);
 
-% plot(ones(14,1)./(groupconsensus(:,1).*col(6:19)),corrlengths(:,1),'-o','Color',seqcols2(end,:),'MarkerSize',markersz,'LineWidth',lw)
-
 for i=1:length(toplot)
-    plot(ones(14,1)./(groupconsensus_forced(:,toplot(i)).*sqrt(col(6:19))),corrlengths_forced(:,toplot(i)),'-o','Color',seqcols2(8-i,:),'MarkerSize',markersz,'LineWidth',lw)
+    plot(ones(14,1)./groupconsensus_forced(:,toplot(i)),corrlengths_forced(:,toplot(i)),'-o','Color',seqcols2(8-i,:),'MarkerSize',markersz,'LineWidth',lw)
 end
-set(gca,'ylim',[0 .5])
-set(gca,'FontName',fontname,'FontSize',labfontsz)
-
-box off
 
 leglabs=cell(length(toplot),1);
-% leglabs{1}='No signal';
 for i=1:length(toplot)
     leglabs{i}=num2str(radvals(toplot(i)));
 end
+% 
+% toplot=1:14;
+% 
+% for i=1:length(toplot)
+%     plot(ones(1,15)./groupconsensus_forced(toplot(i),:),corrlengths_forced(toplot(i),:),'-o','Color',seqcols3(16-i,:),'MarkerSize',markersz,'LineWidth',lw)
+% end
+% 
+% 
+% set(gca,'ylim',[0 .5])
+% set(gca,'FontName',fontname,'FontSize',labfontsz)
+% 
+% box off
+% 
+% leglabs=cell(length(toplot),1);
+% for i=1:length(toplot)
+%     leglabs{i}=num2str(stratvals(toplot(i)));
+% end
 
 [leg,hobj]=legend(leglabs);
 legend('boxoff')
@@ -359,7 +370,7 @@ legpos=get(leg,'position');
 set(leg,'position',[.83 .17 legpos(3:4)],'FontName',fontname,'FontSize',labfontsz)
 
 textobj = findobj(hobj, 'type', 'line');
-for i=[1:2:length(textobj)]
+for i=1:2:length(textobj)
     set(textobj(i),'XData',[.2 .4])
 end
 

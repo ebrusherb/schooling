@@ -100,14 +100,14 @@ for num=1:its
 
         evolution_eaten(num,:,t)=strategy;
         
-        if sum(evolution_eaten(num,:,t)==evolution_eaten(num,:,t-1))==N
-            evolution_eaten(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
-            t_eaten=t;
-            t=timesteps+1;
-        else
+%         if sum(evolution_eaten(num,:,t)==evolution_eaten(num,:,t-1))==N
+%             evolution_eaten(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
+%             t_eaten=t;
+%             t=timesteps+1;
+%         else
             t_eaten=t;
             t=t+1;
-        end
+%         end
     end
     end
     maxt_eaten(num)=t_eaten;
@@ -169,14 +169,14 @@ for num=1:its
 
         end
         evolution_gettoeat(num,:,t)=strategy;
-        if sum(evolution_gettoeat(num,:,t)==evolution_gettoeat(num,:,t-1))==N
-            evolution_gettoeat(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
-            t_gettoeat=t;
-            t=timesteps+1;
-        else 
+%         if sum(evolution_gettoeat(num,:,t)==evolution_gettoeat(num,:,t-1))==N
+%             evolution_gettoeat(num,:,(t+1):end)=repmat(col(strategy),1,timesteps-t);
+%             t_gettoeat=t;
+%             t=timesteps+1;
+%         else 
             t_gettoeat=t;
             t=t+1;
-        end
+%         end
     end
     end
     maxt_gettoeat(num)=t_gettoeat;

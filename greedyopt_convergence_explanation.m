@@ -172,3 +172,9 @@ else
 %     end
 end
 end
+
+%%
+i=1;
+strategy=evolution_eaten(i,:,end);
+strategy=sort(strategy);
+[probeaten,~]=signalingevents(strategy,numsigs_permove,nummoves,radius,b,T);

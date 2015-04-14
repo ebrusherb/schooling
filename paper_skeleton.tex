@@ -47,6 +47,28 @@
 Birds in flocks, like animals in many types of social groups, can use their peers to learn about the environment and update their opinions about where to move in that environment.  Previous work on starlings has measured the number of other birds an individuals pays attention to and shown that this number of ``neighbors" leads to a social network that is conducive to the whole flock reaching consensus.  It is unclear, however, why an individual would change its behavior, i.e. the number of neighbors it learns from, to achieve this outcome.  Individual birds should optimize how well they learn about the environment. There are (at least) two features of the environment that are important to an individual bird's fitness---the location of a predator and the location of resources---and it can try to learn about these from its peers. In this work, we identify the optimal strategies for birds under selection pressure dictated by these types of information and explore the relationship between the robustness measure and the correlation length of the flock, a measure commonly used to describe how close a flock's structure is to criticality.
 
 \section{Introduction }
+%Introduction to schools and flocks
+%
+%Reasons for flocking / paying attention to your peers. Predation \cite{Ballerini:2007uq} Empirical evidence for reduced predator efficiency when the prey are a in a bigger group (captive fish) \cite{Landeau:1986fk}. Foraging (find citations). Foraging (cite bat / information center papers). I have to make some statement to the effect that I assume predator efficiency is constant irrespective of the type of network the flock forms or if it's even connected.  Which is conservative.
+%
+%How to construct a social network: Zone model a la Couzin uses metric interaction rules. Metric zones seem to reproduce flocking dynamics in surf scoters \cite{Lukeman:2010vn}.  Evidence for topological network in starlings \cite{Ballerini:2007uq}, which they suggest must rely on vision \cite{Ballerini:2007uq}, although this can produced by a model in which an interaction range is governed by absolute distance instead of number of neighbors \cite{Bode:2010ys}. Evidence that the ability to see one's neighbors should be included in constructing social networks (golden shiners) \cite{Strandburg-Peshkin:2013fk}
+%
+%evidence for six to seven neighbors from anisotropy of positions of neighbors \cite{Ballerini:2007uq}  Ballerini argues that six / seven represents a cognitive limitation \cite{Ballerini:2007uq}. maximum likelihood interaction range is around ten \cite{Bialek:2012fk}
+%
+%assertion that individuals are trying to maintain a cohesive group "The main goal of the interaction among individuals is to maintain cohesion of the group. This cohesion is a very strong biological requirement, shaped by the evolutionary pressure for survival: Stragglers and small groups are significantly more prone to predation than animals belonging to large and highly cohesive aggregations." \cite{Ballerini:2007uq}, the support for which comes from a paper about teleost fishes. But why should the group maintain cohesion due to a predator response if predation is the thing causing cohesion? There's something circular here. And "An alternative interpretation of the interaction range we find is that the specific value of $n_\text{c}$ may be functional to optimize anti predatory response: If each individual interacts with too few neighbors, information is non noisy, but it is too short-ranged; conversely, if the interaction involves too many neighbors, information is averaged over several ill-informed individuals, and it is too noisy" \cite{Ballerini:2007uq} --- BUT WE FIND THE OPPOSITE. "The interaction mechanism shaped by evolution must keep cohesion in the face of strong perturbations, of which predation is the most relevant. We believe that topological interaction is the only mechanisms granting such robust cohesion and, therefore, higher biological fitness." \cite{Ballerini:2007uq} 
+%
+%Evidence for how collective create interesting structures \cite{Cavagna:2009kx} \cite{Bialek:2013fk} \cite{Young:2013kx}
+%
+%Individual evolution, consequences for group structure\cite{Torney:2015fk}
+%
+%NOTE: A similar model of random flock dynamics is in \cite{Shang:2014uq}. They randomly place nodes in a unit square repeatedly, but they let them keep their opinions across spatial shuffles. They prove that the system exponentially approaches consensus in the absence of noise and show that the system almost always reaches consensus in the presence of noise \cite{Shang:2014uq}. With or without noise, the time to consensus decreases as the number of neighbors increases, but with diminishing returns, as in \cite{Young:2013kx}.
+%
+%Can individual optimization reproduce interesting group structure?
+%
+%CRITICALITY AS AN INFORMATIONAL TRAGEDY OF THE COMMONS.
+%
+%Two points to make about optimization in a group: 1) \cite{Torney:2015fk} found that when one individual changes its strategy it does not change the overall social environment and thus can optimize without regard for the group. However, to find the group-level optimum, one must change the group's strategy and thus the social environment, leading to an group optimum different from the individual's. Same here. 2) The existence of multiple ESS is evidence for how important social environment is because what is an un-invadable strategy when it is at high frequency does poorly when another strategy is at high frequency.
+%
 Questions:
 \begin{enumerate}
 \item How are the two group properties---$\mathscr{H}_2$ robustness and correlation length---related?
@@ -66,14 +88,17 @@ A_{ij}=\left\{\begin{array}{l l l}
 \\0 & \text{ otherwise }
 \end{array}\right.
 \end{equation}
-If $n_i$ is the number of neighbors node $i$ has, then $n_i=\sum_kA_{ik}$. We assume that having more neighbors means paying less attention to each so we normalize $A$ to find $\bar{A}$: $\bar{A}_{ij}=\frac{A_{ij}}{n_i}$.
+If $k_i$ is the number of neighbors node $i$ has, then $k_i=\sum_kA_{ik}$. We assume that having more neighbors means paying less attention to each so we normalize $A$ to find $\bar{A}$: $\bar{A}_{ij}=\frac{A_{ij}}{k_i}$.
 
 
 The Laplacian of this matrix is given by $L=\bar{A}-I$, which is symmetric only if $A$ is.  We can symmetrize the interactions by defining $S=\frac{1}{2}(A+A^T)$ and $P$ such that $P_{ij}=S_{ij}$ for $j\neq i$ and $P_{ii}=-\sum_kS_{ik}$. Then $L$ and $P$ share the properties that $L\vec{1}=P\vec{1}=\vec{0}$ and that each is negative semi-definite, with the difference being that $P$ is necessarily symmetric.  It is more common to use $L$ in a dynamics system approach, so that 
 \begin{equation}
+\dot{v}_i=\frac{1}{k_i}\sum_i\left(v_j-v_i\right)+\sqrt{k_i}\xi_i
+\end{equation}
+\begin{equation}
 \dot{v}=Lv+D\xi \label{opinion_dynamics}
 \end{equation} 
-where $D$ is a diagonal matrix with entires $\{\sqrt{n_i}\}$ and $E[\xi(t)]=\vec{0}$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[v(0)\xi(t)^T]=\vec{0}$. This describes a system in which each bird changes averages the differences between its own opinions and those of its neighbors and changes its opinion to minimize these differences. Our choice of $D$ assumes that birds with more neighbors make noisier estimates of how to change their opinions. 
+where $D$ is a diagonal matrix with entires $\{\sqrt{k_i}\}$ and $E[\xi(t)]=\vec{0}$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[v(0)\xi(t)^T]=\vec{0}$. This describes a system in which each bird changes averages the differences between its own opinions and those of its neighbors and changes its opinion to minimize these differences. Our choice of $D$ assumes that birds with more neighbors make noisier estimates of how to change their opinions. 
 
 The Boltzmann distribution in statistical physics is a standard way in which to write an equilibrium distribution. In physics, those states with the highest energy are least likely. In our system, those sets of opinions that are least in consensus will be less likely. Specifically, we will use the following expression to represent the ``energy'' of an opinion vector
 \begin{equation}
@@ -95,7 +120,7 @@ The second property is the correlation length of the flock. This is the distance
 
 So far, we have considered birds whose opinions only depend on the opinions of the rest of the flock. We can additionally incorporate environmental information by assuming that there is an environmental signal such that more informed birds have opinions closer to $1$. If we let $B$ be a matrix with $B_ii=1$ if $i$ can perceive the signal and $0$ otherwise, then the dynamical system becomes
 \begin{equation}
-\dot{v}=Lv+B(\vec{1}-v)+\xi =L_\text{s}v+B\vec{1}+n_i\xi \label{opinion_dynamics2}
+\dot{v}=Lv+B(\vec{1}-v)+D\xi =L_\text{s}v+B\vec{1}+D\xi \label{opinion_dynamics2}
 \end{equation}
 where $L_\text{s}=L-B$. Similarly, the statistical physics model becomes
 \begin{equation}
@@ -109,9 +134,14 @@ To find the optimal strategies from the individuals' perspectives, we need a mea
 \begin{equation}
 \dot{q}=L_\text{s}q+B\vec{1}. \label{expected_opinion}
 \end{equation}
-To generate a matrix $L$, we distribute the individuals randomly in space (specifically, in a unit square). has a strategy $n_i$ that dictates how many neighbors it has, so that $n_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    Each individual then pays attention to its $n_i$ nearest neighbors.  One individual is chosen to be a receiver; it and all those individuals within a radius $r$ of the receiver perceive, so that $B_{ii}=1$ for all those birds within this radius. We do this $1000$ times and find $q(1)$ for each matrix, which we refer to as a signaling event. This is meant to simulate a situation in which such that information is present only intermittently and otherwise the birds are moving randomly through space and restructuring their network. 
+To generate a matrix $L$, we distribute the individuals randomly in space (specifically, in a unit square). has a strategy $k_i$ that dictates how many neighbors it has, so that $k_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    Each individual then pays attention to its $k_i$ nearest neighbors.  One individual is chosen to be a receiver; it and all those individuals within a radius $r$ of the receiver perceive, so that $B_{ii}=1$ for all those birds within this radius. We do this $1000$ times and find $q(1)$ for each matrix, which we refer to as a signaling event. This is meant to simulate a situation in which such that information is present only intermittently and otherwise the birds are moving randomly through space and restructuring their network.  If, instead of paying attention to the closest neighbors, a bird choose $k_i$ neighbors at random out of $N$ birds, $N_\text{I}$ of whom are informed, the number of informed neighbors follows a hypergeometric distribution:
+\begin{equation}
+P(j \text{ informed neighbors} )=\frac{{N_\text{I}\choose j}{N-N_\text{I}\choose k_i-j}  }{{N\choose k_i}}. \label{hypergeom}
+\end{equation} 
+This distribution is not an exact description of the probability of $j$ informed neighbors in our model  since it ignores spatial proximity, but it is a useful approximation for considering the advantages and disadvantages of each strategy $k_i$.
 
-We consider signals that provide information about two types of content: predators and food.  If the signal is information that a predator is present, we assume that whichever individual is least aware of the signal will be predated, i.e. the individual $i$ such that $q_i$ is lowest. Then, fitness is proportional to the probability of surviving, i.e. $1$ minus the probability of being the least informed over many signaling events. If the signal is information that resources are available, we assume that whichever individual is most aware of the signal will get access to the resource, i.e. the individual $i$ such that $q_i$ is highest. In this case, fitness is proportional to the probability of getting the resource, i.e. the probability of being the most informed over many signaling events. The behavior that the birds can change to improve their fitness is the number of other birds they pay attention to, $n_i$. In particular, each individual has a strategy $n_i$ that dictates how many neighbors it has, so that $n_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    
+
+We consider signals that provide information about two types of content: predators and food.  If the signal is information that a predator is present, we assume that whichever individual is least aware of the signal will be predated, i.e. the individual $i$ such that $q_i$ is lowest. Then, fitness is proportional to the probability of surviving, i.e. $1$ minus the probability of being the least informed over many signaling events. If the signal is information that resources are available, we consider two levels of resource abundance. If there are scarce resources, we assume that whichever individual is most aware of the signal will get access to the resource, i.e. the individual $i$ such that $q_i$ is highest. In this case, fitness is proportional to the probability of getting the resource, i.e. the probability of being the most informed over many signaling events. If there are abundant resources, we assume that the first four individuals to the resources can share it, so that fitness is proportional to the probability of being one of the four most informed birds. Finally, we consider a combination of predation and resources: fitness is proportional to the $1$ minus the probability of being predated times the probability of being the most informed. The behavior that the birds can change to improve their fitness is the number of other birds they pay attention to, $k_i$. In particular, each individual has a strategy $k_i$ that dictates how many neighbors it has, so that $k_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    
 
 \subsection{Optimization methods }
 To understand what strategies we might expect to find, we are interested in identifying the optimal strategies.  We does this in two ways.  First, using the framework of adaptive dynamics in finite populations, we identify the evolutionarily stable strategy.  This framework assumes that there is a homogeneous population into which a mutant individual tries to invade.  If strategies change on a learning rather than an evolutionary timescale, or if there is just a lot of variation in the population, we might expect individuals to try to optimize their strategies in the context of a heterogeneous population.  This is our second method of optimization. Given a random set of initial strategies over the group, we allow each bird to choose the strategy that would be best given the rest of the strategies being used and repeat this process until the birds reach an equilibrium set of strategies. We repeat this over many initial sets of strategies to find average properties of this optimization process.
@@ -119,11 +149,17 @@ To understand what strategies we might expect to find, we are interested in iden
 \section{Results }
 
 \subsection{Robustness and correlation length are positively related. }
-In a homogeneous flock, where every bird is using the same strategy, as both the strategy and the radius of the signal change, both $\mathscr{H}_2$ and the correlation length are affected.  Figure \ref{compare_props} shows that there is a relationship between two group properties: the $\mathscr{H}_2$ norm and the correlation length of the flock. 
-%%WHY? intuition for why each changes as they do with strategy and radius?!?!?
+In a homogeneous flock, where every bird is using the same strategy, as both the strategy and the radius of the signal change, both $\mathscr{H}_2$ and the correlation length are affected.  Figure \ref{compare_props} shows that both $\mathscr{H}_2$ and correlation length are maximized at intermediate strategies when the radius is low and at low strategies when the radius is high. We prove in the Appendix (Appendix Claim \ref{cov_equivalence}) that if we use a symmetric matrix to calculate $\rho$ and all birds have the same number of neighbors $n$, then the covariance matrices used to calculate $\rho$ and $\lambda$ are identical up to a constant, which suggests that the two properties cannot be optimized independently.
 
 \subsection{There are multiple ESS, which depend on the content of the signal. }
-Surprisingly, even without imposing costs on paying attention to more neighbors, paying attention to the whole flock is not usually the best strategy. The ESS strategy of the number of neighbors to pay attention strongly depends on which selection pressure is being applied.  If a focal bird pays attention to many others, its opinion will be similar to theirs. This will prevent it from being the most informed and hence the first to locate resources. Thus, the uninvadable strategy is to pay attention to few neighbors when selection is due to knowledge about resources. On the other hand, having many neighbors will prevent the focal bird from being the least informed and thus the most likely to be eaten.  Thus, the uninvadable strategy is to pay attention to many neighbors when selection is due to knowledge about predators. Figure \ref{ESS}a shows the ESS strategy when selection is due to knowledge about resources is always lower than the ESS strategy when selection is due to knowledge about predators (Figure \ref{ESS}a).
+Surprisingly, even without imposing costs on paying attention to more neighbors, paying attention to the whole flock is not always the best strategy. The ESS strategy of the number of neighbors to pay attention strongly depends on which selection pressure is being applied.  
+
+Those birds that can perceive the environmental signal will always have better information than those that cannot. Selection, therefore, acts to improve a bird's ability to learn about the signal when it cannot perceive it.  In Appendix Claim \ref{exp_approx} we show that an uninformed bird's opinion can be approximated by $\sum_{\text{informed }j}L_{ij}$, that is the total weight given to informed birds.  Being the most well-informed uninformed bird, therefore, amounts to having the highest proportion of informed neighbors and being the least well-informed amounts to having the smallest proportion of informed neighbors. As described above, the hypergeometric distribution is a good approximation for the probability distribution of the number of informed neighbors a bird with strategy $k_i$ will have. As shown in Figure \ref{hypergeo}, under the hypergeometric distribution, having many neighbors makes it unlikely that few of those neighbors will be uninformed, but it also makes it unlikely that all of them will be uninformed (Figure \ref{hypergeo}).  
+
+These observations explain the ESS number of neighbors we find.
+
+If a focal bird pays attention to many others, its opinion will be similar to theirs. This will prevent it from being the most informed and hence the first to locate resources. Thus, the uninvadable strategy is to pay attention to few neighbors when selection is due to knowledge about resources. On the other hand, having many neighbors will prevent the focal bird from being the least informed and thus the most likely to be eaten.  Thus, the uninvadable strategy is to pay attention to many neighbors when selection is due to knowledge about predators. Figure \ref{ESS}a shows the ESS strategy when selection is due to knowledge about resources is always lower than the ESS strategy when selection is due to knowledge about predators (Figure \ref{ESS}a).
+%%a different explanation: Having many neighbors means that your opinion will be close to the average opinion of the group. Even if some of your many neighbors or informed, others will not be, and your opinion will be somewhere in between. If you have few neighbors, on the other hand, your opinion will often be at the extremes of the group: low, if you have few informed neighbors, and high, if you have many informed neighbors. To avoid being in the bottom of the group, therefore, you should avoid having few neighbors. To try to be in the top, on the other hand, having few neighbors is a good strategy. I think maybe this a more intuitive way to say it?
 
 The ESS strategies when selection is due to knowledge about predators show two interesting features. First, there are many parameters for which there are multiple ESS strategies. It might seem that if a strategy outperforms all others when it is the resident strategy, it should also outperform other strategies as an invader. However, when there are multiple ESS strategies, if we take any two of those ESS strategies, each is uninvadable by the other. This indicates how important the social environment set by the resident strategy is. The pairwise invisibility plot in Figure \ref{ESS}b shows that low strategies are always costly and that high strategies are only costly when the resident strategy is high. 
 
@@ -132,7 +168,7 @@ If a bird has the environmental signal, it will not be predated, regardless of t
 \subsection{The predation ESS is to pay attention to more neighbors when the signal is more public.}
 These opposing forces caused by the costs of not paying attention to informed neighbors  and the costs of paying attention to more uninformed neighbors  also explains the second feature of the ESS strategies: they are non-monotonic with respect to the the radius of the signal, i.e. how public the signal is (Figure \ref{ESS}a). Figure \ref{ESS}a shows that there are essentially three categories of radii: When the radius is low, the signal is private, with only a few birds having true information. When the radius is intermediate, the signal is public, with many birds having true information. When the radius is high, the signal is universal, with essentially all birds in the flock having true information. When the signal is private, paying attention to too few birds is costly because with more neighbors it is more likely to have a truly informed neighbor, but paying attention to too many uninformed birds can also be costly. This leads to a high but not maximal ESS strategy. When the signal is public, the costs of paying attention to uninformed birds are reduced and the ESS strategy increases to become as high as possible. When the signal is universal, not paying attention to informed birds does not impose a cost. Additionally, in a group in which the residents pay attention to all of their neighbors, any mutant strategy can get just as much information by paying attention to fewer neighbors so the maximal strategy is no longer an ESS (Figure \ref{ESS}a).
 
-Figure \ref{ESS_v_H2} shows how the ESS strategy changes as a function of the $\mathscr{H}_2$ robustness.
+%Figure \ref{ESS_v_H2} shows how the ESS strategy changes as a function of the $\mathscr{H}_2$ robustness.
 
 \subsection{Learned strategies }
 The equilibrium strategies when the individuals are allowed to learn are similar to the ESS strategies: learned strategies when selection is due to predation are always higher than learned strategies when selection is due to resources (Figure \ref{greedyopt}). 
@@ -149,11 +185,41 @@ expect ESS strategies to decrease as the signal becomes more public, but we find
 \newpage
 \section{Appendix}
 
-\subsection{Linear algebra background }
+\subsection{Linear algebra claims and theorems }
+
+\begin{claim} 
+\label{exp_approx}
+Suppose. $v(t)$ satisfies $\dot{v}=Av+f$ with $v(0)=v_0$, where $A$ has no $0$ eigenvalues. If $V$ is the matrix of eigenvectors of $A$ and $\Lambda$ is diagonal with the eigenvalues of $A$, then
+\begin{equation} \label{diffeq_solution}
+v(t)=V\exp(t\Lambda)V^{-1}v_0+V\Lambda^{-1}(\exp(t\Lambda)-I)V^{-1}f.
+\end{equation}
+We can approximate $v(t)\approx V\exp(t\Lambda)V^{-1}v_0+V(tI+\frac{t^2}{2}A)V^{-1}f$ if the eigenvalues are not too far from $0$. In the case that $A=L_\text{f}$ and $f=B\vec{1}$, this suggests that for $i$ that cannot perceive the signal, $v_i(t)\approx \frac{t^2}{2}\sum_{\text{informed }j }L_{ij}.$ This approximation is reasonable for $i$ such that $B_{ii}=0$, but worse for $i$ such that $B_{ii}\neq 0$. 
+\end{claim}
+
+\begin{pf}
+First we show that (\ref{diffeq_solution}) solves the differential equation. Note that if $A=V\Lambda V^{-1}$.
+\begin{align*}
+\dot{v}&=V\Lambda \exp(t\Lambda)V^{-1}v_0+V\Lambda^{-1}(\Lambda\exp(t\Lambda))V^{-1}f
+\\&=V\Lambda V^{-1}V\exp(t\Lambda)V^{-1}v_0+V\exp(t\Lambda)V^{-1}f
+\\&=AV\exp(t\Lambda)V^{-1}v_0+V\exp(t\Lambda)V^{-1}f-VV^{-1}f+VV^{-1}f
+\\&=AV\exp(t\Lambda)V^{-1}v_0+V(\exp(t\Lambda)-I)V^{-1}f+f
+\\&=AV\exp(t\Lambda)V^{-1}v_0+V\Lambda V^{-1}V \Lambda^{-1}(\exp(t\Lambda)-I)V^{-1}f+f
+\\&=AV\exp(t\Lambda)V^{-1}v_0+A\Lambda^{-1}(\exp(t\Lambda)-I)V^{-1}f+f
+\\&=Av(t)+f.
+\end{align*}
+If $g(x)=\frac{1}{x}(\exp(ax)-1)$, then $g(x)\approx a+\frac{a^2}{2}x$ for $x$ close to $0$. Then, if the eigenvalues of $A$ are not too far from $0$, $\Lambda^{-1}(\exp(t\Lambda)-I)\approx  tI+\frac{t^2}{2}\Lambda$.  If $A=L_\text{f}$, then all eigenvalues of $A$ are negative.  If $N_\text{I}$ is the number of informed individuals, i.e. $i$ such that $B_{ii}\neq0$, then there are $N_\text{I}$ eigenvalues of $A$ close to $-2$ such that, if  $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is informed.  The rest of the $N-N_\text{I}$ eigenvalues are between $-2$ and $0$ and, if $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is uninformed. Therefore, the eigenvalue approximation is worst for the informed individuals and best for the uninformed individuals. Using the eigenvalue approximation, $v(t)$ becomes 
+\begin{align*}
+v(t)=V\exp(t\Lambda)V^{-1}v_0+tVV^{-1}B\vec{1}+\frac{t^2}{2}V\Lambda V^{-1}B\vec{1}=V\exp(t\Lambda)V^{-1}v_0+tB\vec{1}+\frac{t^2}{2}L_\text{f}B\vec{1}
+\end{align*}
+Ignoring the informed individuals and the initial conditions, this gives $v_i(t)\approx \sum_{\text{informed } j}L_{ij}$.
+\end{pf}
 
 \begin{theorem} \label{lyapeq_theorem}
-Given any positive symmetric matrix $Q>0$ there exists a unique positive symmetric matrix $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Q$ if and only if the system $\dot{x}=Ax$ is globally asymptotically stable.
+Given any positive symmetric matrix $Q>0$ there exists a unique positive symmetric ] matrix $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Q$ if and only if the system $\dot{x}=Ax$ is globally asymptotically stable.
 \end{theorem}
+\begin{pf}
+Proof available elsewhere.
+\end{pf}
 
 \begin{claim} \label{lyapeq_derivation}
 Consider the dynamical system,
@@ -212,18 +278,24 @@ C&=\Sigma-\lim_{t\to\infty}E[y(t)]E[y(t)^T]
 \end{align*}
 \end{pf}
 
-%%ORGANIZE INTRODUCTION TO THE ROTATION MATRICES. 
-We define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk} show that this equivalent to finding $Q$ such that $Q\vec{1}=\vec{0}$, $QQ^T=I_{N-1}$, and $Q^TQ=I_N-\frac{1}{N}\vec{1}_N\vec{1}_N^T$.  Since the rows of $R$ are orthonormal, $RR^T=I$. Further, since the rows of $R$ are orthonormal, $R$ is invertible, which implies that $R^T=R^{-1}$.  Then we can write
+\begin{fact}
+If $V=\sum_iv_i/N$ and $C=\left(E[(v_i-V)(v_j-V)]\right)_{ij}$, then $\sum_{ij}C_{ij}=0$.
+\end{fact}
+\begin{pf}
+\begin{align*}
+\sum_{ij}E[(v_i-V)(v_j-V)]&=\sum_{ij}\left(E[v_iv_j]-E[v_iV]-E[v_jV]+E[VV]\right)
+\\&=\sum_{ij}E[v_iv_j]-N\sum_iE[v_iV]-N\sum_jE[v_jV]+N^2E[VV]
+\\&=\sum_{ij}E[v_iv_j]-\sum_{ij}E[v_iv_j]-\sum_{ij}E[v_iv_j]+\sum_{ij}E[v_iv_j]
+\\&=0
+\end{align*}
+\end{pf}
 
+In the following sections of the Appendix, transforming an opinion vector $x$ will be useful.  To do so, we define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk} show that this equivalent to finding $Q$ such that $Q\vec{1}=\vec{0}$, $QQ^T=I_{N-1}$, and $Q^TQ=I_N-\frac{1}{N}\vec{1}_N\vec{1}_N^T$.  We next define a rotation matrix $R\in\R^N\times\R^N$ such that the last row of $R$ is $\frac{1}{\sqrt{N}}\vec{1}^T$ and the other rows are given by the rows of $Q$. Since the rows of $R$ are orthonormal, $RR^T=I$ and $R$ is invertible, which implies that $R^T=R^{-1}$. If $z=Q^TQx$, then $z_i=v_i-\frac{1}{N}\sum_iv_i$. Similarly, if $\bar{y}=Rx$, then $\bar{y}_N=\frac{1}{\sqrt{N}}\sum_ix_i$ and $y=(\bar{y}_1,\dots,\bar{y}_{N-1})^T=Qx$ gives the component of $v$ that is orthogonal to the consensus vector $\vec{1}$. We can also translate between $y$ and $z$ by noting that $z=Q^Ty$ and $y=QQ^Tz$ or $y$ is given by the first $N-1$ coordinates of $Rz$.
 
-Again, we will use a rotation matrix $R\in\R^N\times\R^N$ such that the last row of $R$ is $\frac{1}{\sqrt{N}}\vec{1}$ and the other rows are normal and orthogonal to $\vec{1}$.
-Above, we found a $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ was orthogonal to $\vec{1}$ and $R\in\R^N\times\R^N$ be the matrix with $\frac{1}{\sqrt{N}}\vec{1}^T$ as its last row and the first $N-1$ rows identical to the rows of $Q$. Then $R$ is a rotation matrix, so $RR^T=R^TR=I$ and $\det(R)=1$. This allows us to
-\[
- \boxed{\bar{y}=Rx$, $y=Qx=\bar{y}_{i=1}^{N-1}$ (or $y=RQ^TQx$), $z=Q^TQx$, $V=\frac{1}{N}\sum_ix_i}
- \]
+\begin{equation} \label{transformations}
+ \boxed{V=\frac{1}{N}\sum_ix_i ,\ z=Q^TQx=x-V\vec{1}, \ \bar{y}=Rx,\ y=Qx=\bar{y}_{i=1}^{N-1}}
+ \end{equation}
  
- Depending on the model framework, we will find either $E[yy^T]$ or $E[zz^T]$. This are interchangeable since $E[yy^t]=E[Rzz^TR^T]=RE[zz^T]R^T$ and $E[zz^T]=E[R^Tyy^TR]=R^TE[yy^T]R$.
-
 
 \subsection{Opinion dynamics with noise }
 In our model, each bird in the flock as an opinion $x_i$, giving an opinion vector $x$. The $\mathscr{H}_2$ robustness of the opinion dynamics is defined by the inverse of the expected distance at equilibrium from the opinion vector to a consensus state in which all birds have the same opinion, i.e. $x_i=\alpha$ for all $i$ and for some $\alpha\in\R$. That is, the dynamics are robust if, at equilibrium, the opinions are close to being in consensus. We can find this distance by rotating the opinion vector into the space orthogonal to the consensus vector, $\vec{1}$.  If $y=Qx$, then $||y||=y^Ty$ describes how far away from consensus $x$ is. Specifically, robustness as in \cite{Young:2010fk} is given by 
@@ -234,7 +306,7 @@ We also define a full rotation matrix $R\in\R^N\times\R^N$ such that $R=\left(\b
 
 Young et al. \cite{Young:2010fk} model opinion dynamics by assuming that each bird averages the differences between its opinion and each of the opinions of its neighbors and changes its opinion to minimize this difference and that each bird's opinion is subject to independent noise with variance proportional to the number of neighbors each bird has. The equations describing these dynamics can be written as 
 \begin{equation}
-\dot{x_i}=\frac{\sum_{\text{neighbors $j$ of $i$ } }(x_j-x_i)}{K_i} +\sqrt{n_i}\xi_i=\sum_j\bar{A}_{ij}x_j-x_i+\sqrt{n_i}\xi_i=\sum_jL_{ij}x_j+\sqrt{n_i}\xi_i.
+\dot{x_i}=\frac{\sum_{\text{neighbors $j$ of $i$ } }(x_j-x_i)}{k_i} +\sqrt{k_i}\xi_i=\sum_j\bar{A}_{ij}x_j-x_i+\sqrt{k_i}\xi_i=\sum_jL_{ij}x_j+\sqrt{k_i}\xi_i.
 \end{equation}
 In vector notation this becomes
 \begin{equation}
@@ -254,7 +326,7 @@ If $\bar{y}=Rx$, then the first $N-1$ coordinates of $\bar{y}$ are $y=Qx$ and th
 \\&=RL_\text{s}R^T\bar{y}+Rv+RD\xi
 \\&=\tilde{L}_\text{s}\bar{y}+\tilde{v}+\tilde{D}\xi 
 \end{align*}
-where $\tilde{L}_\text{s}=RL_\text{s}R^T$, $\tilde{v}=Rv=RB\vec{1}$, and $\tilde{D}=RD$. If $b\neq 0$, $L_\text{s}$ and therefore $\tilde{L}_\text{s}$ have all negative eigenvalues and $\bar{y}=(0, 0, \dots 0, \sqrt{N})^T$ is a globally asymptotically stable equilibrium. Therefore, by Claim \ref{lyapeq_derivation} and Theorem \ref{lyapeq_theorem}, $\lim_{t\to\infty}E[\bar{y}(t)\bar{y}(t)^T]=\Sigma_{\bar{y}}$ where $\tilde{L}_\text{s}\Sigma_{\bar{y}}+\Sigma_{\bar{y}}\tilde{L}_\text{s}^T=-RD^2R^T$. We can  find $\Sigma_y=\lim_{t\to\infty}E[y(t)y(t)^T]$
+where $\tilde{L}_\text{s}=RL_\text{s}R^T$, $\tilde{v}=Rv=RB\vec{1}$, and $\tilde{D}=RD$. If $b\neq 0$, $L_\text{s}$ and therefore $\tilde{L}_\text{s}$ have all negative eigenvalues and $\bar{y}=(0, 0, \dots 0, \sqrt{N})^T$ is a globally asymptotically stable equilibrium. Therefore, by Theorem \ref{lyapeq_theorem} and Claim \ref{lyapeq_derivation}, $\lim_{t\to\infty}E[\bar{y}(t)\bar{y}(t)^T]=\Sigma_{\bar{y}}$ where $\tilde{L}_\text{s}\Sigma_{\bar{y}}+\Sigma_{\bar{y}}\tilde{L}_\text{s}^T=-RD^2R^T$. We can  find $\Sigma_y=\lim_{t\to\infty}E[y(t)y(t)^T]$
 by removing the last row and column of $\Sigma_{\bar{y}}$.
 
 If $b=0$, $L$ has a $0$ eigenvalue corresponding to the eigenvector $\vec{1}$. Therefore, $RLR^T$ also has a $0$ eigenvalue, so we can therefore no longer find the desired $\Sigma_{\bar{y}}$.  Since the last row of $R=\frac{1}{\sqrt{N}}\vec{1}$, all entries of the the last column of $LR^T$ are $0$. Therefore, all entries of the last column of $RLR^T$ are $0$. In other words, the dynamics of the first $N-1$ elements of $\bar{y}$, i.e. $y$, do not depend on the last. This lets us write 
@@ -352,6 +424,7 @@ If $P'=P_\text{s}+\frac{1}{bN_\text{I}}B\vec{1}\vec{1}^TB$, then $P'\vec{1}=-B\v
 
 \subsection{Connecting two frameworks }
 Table \ref{correspondence} shows how to find the covariance of $y$ depending on the framework being used and whether or not a signal is present. 
+
 \begin{claim}\label{cov_equivalence}If we use $P$ instead of $L$ with the noisy dynamics framework and all birds have the same number of neighbors $n$, then $C_y=\frac{2}{n}\Sigma_y$.
 \end{claim}
 \begin{pf}
@@ -372,6 +445,7 @@ QPQ^TC_y+C_yQP^TQ^T&=QPQ^T(-QP^\dagger Q^T)+(-QP^\dagger Q^T)QP^T
 \end{align*}
 since there is a unique solution to this Lyapunov equation.
 \end{pf}
+
 A similar proof shows the equivalence of the two covariance matrices in the presence of a signal, as long as $P_\text{s}$ is used in the noisy dynamical system and all birds have the same number of neighbors.
 %
 %We can also make a connection between the two frameworks by considering the dynamics that minimize the Hamiltonian that gives rise to the Boltzmann distribution. 
@@ -408,7 +482,7 @@ $A$ & adjacency matrix & $A_{ij}=\left\{\begin{array}{l l l}
 \\0 & \text{ otherwise }
 \end{array}\right.$
 \\$\bar{A}$ & normalized adjacency matrix & $\bar{A}_{ij}=\left\{\begin{array}{l l l }
-\frac{1}{K_i} & \text{ if $i$ pays attention to $j$, where $K_i=$ \# of birds $i$ pays attention to}
+\frac{1}{k_i} & \text{ if $i$ pays attention to $j$, where $k_i=$ \# of birds $i$ pays attention to}
 \\ 0 & \text{ otherwise }
 \end{array}\right. $
 \\$B$ & diagonal signal matrix & $B_{ij}=\left\{\begin{array}{l l l}
@@ -439,33 +513,38 @@ $
 \newpage
 \section{Figures }
 \begin{figure}
-\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/H2_v_corrlength.pdf}
-\caption{\label{compare_props} }
+\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/H2_and_corrlength.pdf}
+\caption{\label{compare_props}  Both $\mathscr{H}_2$ and correlation length are maximized at intermediate strategies when there are few informed birds and at low strategies when there are many informed birds. In (a), we show the average $\mathscr{H}_2$ robustness over $1000$ signaling events, where all birds use the same strategy and the signal is available to all birds within a circle of a given radius.  In (b), we show the average correlation length over $1000$ signaling events, where all birds use the same strategy and the signal is available to all birds within a circle of a given radius. }
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/ESSfigure.pdf}
-\caption{\label{ESS} The ESS number of neighbors is always higher if selection is due to predation than due to resources. When selection is due to predation, there can be multiple ESS strategies, which are a non-monotonic function of the radius of the signal. In (a), we show the (possibly multiple) ESS strategies as a function of the radius of the signal. In (b) we show the relative fitness of an invader as a function of the invader and resident strategies when $r=0.1$. The dots show the multiple ESSs. For (c) and (d), we choose a focal resident bird and consider the situation where neither the focal bird nor the invader has the environmental signal.The total of the stacked bars is the total probability that the invader will be predated when neither the focal bird nor the invader have the signal.  We further break down these cases into five cases: there is a single informed bird and neither focal bird, only the focal resident, only the invader, or both pay attention to it or there are multiple informed birds. The horizontal dashed line shows $1/N$, the probability of being predated if the strategies are neutral. In (c), the invader has one fewer neighbor than the resident. In (d), the invader has one more neighbor than the resident. Parameters:  in all panels $N=20$, $\beta=1$, $T=1$, in (b)-(d) $r=0.1$. 
+\caption{\label{ESS} The ESS number of neighbors is always higher if selection is due to predation than due to resources or to both. When selection is due to predation, the (possibly multiple) ESS strategies increase with the radius of the signal. In (a), we show the relative fitness of an invader as a function of the invader and resident strategies when the radius $r=0.1$, where fitness depends on escaping predation. The circles indicate the ESS strategies, i.e. those resident strategies such that no invader has a higher fitness than the resident. In (b), we show the (possibly multiple) ESS strategies as a function of the radius of the signal. The circles show the ESS when selection is due to predation, the squares when selection is due to access to scarce resources, and the diamonds when selection is due to both. The diamonds and squares overlap. There are no ESS when selection is due to access to abundant resources.  Parameters:  in both panels $N=20$, $b=1$, $T=1$. 
+}
+\end{figure}
+
+%\begin{figure}
+%\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf}
+%\caption{\label{ESS_v_H2}
+%%The correlation length of a homogeneous flock depends on both the strategy being used and the radius of the signal, but it depends much more strongly on the radius than the strategy. The ESS number of neighbors is an increasing function of correlation length of a homogeneous group. In (a), we show the average correlation length of a homogeneous flock as a function of the strategy being used and the radius of the signal. In (b), each point corresponds to a value of the radius of signal: the horizontal axis shows the correlation length of a flock paying attention to $N/2$ neighbors for that radius and the vertical axis shows the ESS number of neighbors for that radius. Parameters: $N=20$, $\beta=1$, $T=1$.
+%}
+%\end{figure}
+
+\begin{figure}
+\includegraphics[width=4in]{/Users/eleanorbrush/Desktop/greedyoptneighbors_radius=1.pdf}
+\caption{\label{greedyopt} When the birds perform greedy optimization and change their number of neighbors to improve their own fitness, they settle on strategies close to the ESS strategies for that selection regimes. When selection is due to predation, they settle on high strategies; when selection is due to access to few resources or to both resources and predation, they settle on low strategies; when selection is due to access to abundant resources, they settle in intermediate strategies. Only under selection due to generous access to resources does this optimization lead to an increase in both $\mathscr{H}_2$ robustness and correlation length. The upper row shows results from selection based to predation, the second row shows results from selection based on access to scarce resources, the third row shows results from selection based on both resources and predation, and the last row shows results from selection based on generous to abundant resources. In each panel, the  horizontal axis represents the number of times the birds are allowed to choose optimal strategies. The first column shows one example of how the birds' strategies change over time. The second column shows, for various initial conditions, how the $\mathscr{H}_2$ robustness changes over time, with the black line showing the average of the $20$ gray lines. The third column shows, for various initial conditions, how the correlation length changes over time, with the black line shows the average of the $20$ gray lines. Parameters:  $N=20$, $b=1$, $r=.1$, $T=1$. 
 }
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf}
-\caption{\label{ESS_v_H2}
-%The correlation length of a homogeneous flock depends on both the strategy being used and the radius of the signal, but it depends much more strongly on the radius than the strategy. The ESS number of neighbors is an increasing function of correlation length of a homogeneous group. In (a), we show the average correlation length of a homogeneous flock as a function of the strategy being used and the radius of the signal. In (b), each point corresponds to a value of the radius of signal: the horizontal axis shows the correlation length of a flock paying attention to $N/2$ neighbors for that radius and the vertical axis shows the ESS number of neighbors for that radius. Parameters: $N=20$, $\beta=1$, $T=1$.
-}
-\end{figure}
-
-\begin{figure}
-%\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/greedyoptneighbors.pdf}
-\caption{\label{greedyopt} When the birds choose the optimal number of neighbors, given the strategies the rest of the flock are using, they settle on higher strategies when selection is due to predation than when selection is due to resources. Under selection due to predation, the $\mathscr{H}_2$ robustness and correlation length of the flock tend to decrease, whereas under selection due to resources, $\mathscr{H}_2$ robustness is relatively constant and correlation length tends to increase. The upper row shows results from implementing selection based to predation and the lower row shows results from implementing selection based on resources. In each panel, the  horizontal axis represents the number of times the birds are allowed to choose optimal strategies. The first column shows one example of how the birds' strategies change over time. The second column shows, for many initial conditions, how the $\mathscr{H}_2$ robustness changes over time. The third column shows, for many initial conditions, how the correlation length changes over time. Parameters:  $N=20$, $\beta=1$, $r=.1$, $T=1$. 
-}
+\includegraphics[width=6.83in]{/Users/eleanorbrush/Desktop/hypergeometric.pdf}
+\caption{\label{hypergeo} If a fixed number of birds are informed and birds choose neighbors randomly without regard to spatial proximity, the probability of having any number of informed neighbors follows the hypergeometric distribution. A bird with more neighbors is less likely to have a low proportion of informed neighbors, but is also less likely to have a high proportion of informed neighbors. In (a), we show the hypergeometric distribution, giving the probability of having a number of informed neighbors, normalized by the total number of neighbors, for two strategies, $15$ in blue and $5$ in red. In (b), we consider a group made up of $19$ birds using strategy $15$ and $1$ using strategy $5$. For each bird, we draw a number of informed neighbors from the hypergeometric distribution  $1000$ times and rank the birds according to the proportion of their neighbors that are informed. We show the frequency with which the bird using $5$ neighbors and one of the birds using $15$ neighbors is ranked $1^\text{st}$ through $6^\text{th}$. The bird with $5$ neighbors is ranked $1^\text{st}$ much more often, but is also ranked $6^\text{th}$ more often. Parameters: $N=20$. }
 \end{figure}
 
 
 
 
-\nocite{*}
+%\nocite{*}
 \bibliographystyle{plain}
 \bibliography{info_evo}
 

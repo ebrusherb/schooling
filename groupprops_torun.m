@@ -190,7 +190,53 @@ subplot(1,2,2)
 plot(sigma_y_forced,C_y_forced(1:end-1,1:end-1),'o')
 % plot(sigma_ybar,C_y_forced,'o')
 hold on;plot(get(gca,'xlim'),2*get(gca,'xlim'))
+%%
+figure
+set(gcf,'Color','w')
+v=get(gcf,'Position');
+ratio=v(4)/v(3);
+w=6.83;
+h=.25*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[11.5 3 w h]);
 
+[~,o]=sort(d(receiver,:));
+
+xoffset=.08;
+yoffset=.03;
+
+subplot(1,3,1)
+toplot=dagger(-Pf);
+imagesc(toplot(o,o))
+set(gca,'FontName',fontname,'FontSize',labfontsz,'tickdir','out')
+axis square
+cb=colorbar;
+set(cb,'FontName',fontname,'FontSize',labfontsz)
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+
+subplot(1,3,2)
+imagesc(Cov_forced(o,o))
+set(gca,'FontName',fontname,'FontSize',labfontsz,'tickdir','out')
+axis square
+cb=colorbar;
+set(cb,'FontName',fontname,'FontSize',labfontsz)
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+
+subplot(1,3,3)
+imagesc(Corr_forced(o,o))
+set(gca,'FontName',fontname,'FontSize',labfontsz,'tickdir','out')
+axis square
+cb=colorbar;
+set(cb,'FontName',fontname,'FontSize',labfontsz)
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(c)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+filename=strcat('/Users/eleanorbrush/Desktop/','cov_matrices','.pdf');
+print(filename,'-dpdf','-r300');
 %%
 %checking determinants make sense
 inv_zcov=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;

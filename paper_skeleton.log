@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  20 MAR 2015 17:39
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  14 APR 2015 16:32
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -579,85 +579,95 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 Non-PDF special ignored!
 
-{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
- [4] [5]
-Overfull \hbox (7.52388pt too wide) in paragraph at lines 201--201
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+
+Package amsmath Warning: Foreign command \atopwithdelims;
+(amsmath)                \frac or \genfrac should be used instead
+(amsmath)                 on input line 139.
+
+[3] [4] [5] [6] [7]
+Overfull \hbox (7.52388pt too wide) in paragraph at lines 263--263
 [] 
  []
 
-[6] [7] [8]
-Overfull \hbox (51.03079pt too wide) in paragraph at lines 339--339
+[8] [9] [10]
+Overfull \hbox (51.03079pt too wide) in paragraph at lines 407--407
 [] 
- []
-
-[9] [10]
-Overfull \hbox (9.75453pt too wide) in paragraph at lines 391--397
-[][] 
- []
-
-
-Overfull \hbox (174.72876pt too wide) in paragraph at lines 405--437
-[][] 
  []
 
 [11] [12]
-</Users/eleanorbrush/Desktop/H2_v_corrlength.pdf, id=227, 493.845pt x 246.9225p
-t>
-File: /Users/eleanorbrush/Desktop/H2_v_corrlength.pdf Graphic file (type pdf)
- <use /Users/eleanorbrush/Desktop/H2_v_corrlength.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 442--443
+Overfull \hbox (9.75453pt too wide) in paragraph at lines 461--467
 [][] 
  []
 
-</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=228, 493.845pt x 246.9225pt>
+
+Overfull \hbox (168.97343pt too wide) in paragraph at lines 475--507
+[][] 
+ []
+
+[13] [14]
+</Users/eleanorbrush/Desktop/H2_and_corrlength.pdf, id=245, 493.845pt x 123.461
+24pt>
+File: /Users/eleanorbrush/Desktop/H2_and_corrlength.pdf Graphic file (type pdf)
+
+ <use /Users/eleanorbrush/Desktop/H2_and_corrlength.pdf>
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 512--513
+[][] 
+ []
+
+</Users/eleanorbrush/Desktop/ESSfigure.pdf, id=246, 493.845pt x 123.46124pt>
 File: /Users/eleanorbrush/Desktop/ESSfigure.pdf Graphic file (type pdf)
 
 <use /Users/eleanorbrush/Desktop/ESSfigure.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 447--449
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 517--519
 [][] 
  []
 
 
-</Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf, id=229, 493.845pt x 164.615
-pt>
-File: /Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf Graphic file (type pdf)
-
- <use /Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf>
-Overfull \hbox (47.42667pt too wide) in paragraph at lines 453--456
+</Users/eleanorbrush/Desktop/greedyoptneighbors_radius=1.pdf, id=247, 493.845pt
+ x 658.46pt>
+File: /Users/eleanorbrush/Desktop/greedyoptneighbors_radius=1.pdf Graphic file 
+(type pdf)
+ <use /Users/eleanorbrush/Desktop/greedyoptneighbors_radius=1.pdf>
+</Users/eleanorbrush/Desktop/hypergeometric.pdf, id=248, 493.845pt x 164.615pt>
+File: /Users/eleanorbrush/Desktop/hypergeometric.pdf Graphic file (type pdf)
+<use /Users/eleanorbrush/Desktop/hypergeometric.pdf>
+Overfull \hbox (47.42667pt too wide) in paragraph at lines 536--537
 [][] 
  []
 
-(./paper_skeleton.bbl) [13 </Users/eleanorbrush/Desktop/H2_v_corrlength.pdf>]
-[14 </Users/eleanorbrush/Desktop/ESSfigure.pdf> </Users/eleanorbrush/Desktop/ro
-bustness_vs_ESS.pdf>] [15] (./paper_skeleton.aux) ) 
+(./paper_skeleton.bbl [15 </Users/eleanorbrush/Desktop/H2_and_corrlength.pdf>])
+[16 </Users/eleanorbrush/Desktop/ESSfigure.pdf>] [17 </Users/eleanorbrush/Deskt
+op/greedyoptneighbors_radius=1.pdf>] [18 </Users/eleanorbrush/Desktop/hypergeom
+etric.pdf>] (./paper_skeleton.aux) ) 
 Here is how much of TeX's memory you used:
- 10211 strings out of 493848
- 141113 string characters out of 3149207
- 303388 words of memory out of 3000000
- 13210 multiletter control sequences out of 15000+200000
+ 10235 strings out of 493848
+ 141673 string characters out of 3149207
+ 305602 words of memory out of 3000000
+ 13221 multiletter control sequences out of 15000+200000
  9173 words of font info for 41 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 41i,21n,39p,1939b,355s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2009/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf
--dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2009/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2009/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
-public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
-pe1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/font
-s/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/f
-onts/type1/public/rsfs/rsfs10.pfb>
-Output written on paper_skeleton.pdf (15 pages, 282426 bytes).
+ 41i,21n,39p,1939b,407s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2009/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr5.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmsy7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts
+/symbols/msam10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsf
+onts/symbols/msbm10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/
+amsfonts/symbols/msbm7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/publ
+ic/rsfs/rsfs10.pfb>
+Output written on paper_skeleton.pdf (18 pages, 321424 bytes).
 PDF statistics:
- 331 PDF objects out of 1000 (max. 8388607)
- 76 named destinations out of 1000 (max. 500000)
- 160 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 361 PDF objects out of 1000 (max. 8388607)
+ 88 named destinations out of 1000 (max. 500000)
+ 165 words of extra memory for PDF output out of 10000 (max. 10000000)
 

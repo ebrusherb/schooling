@@ -10,9 +10,9 @@
 \contentsline {subsection}{\numberline {4.3}The predation ESS is to pay attention to more neighbors when the signal is more public.}{5}{subsection.4.3}
 \contentsline {subsection}{\numberline {4.4}Learned strategies }{5}{subsection.4.4}
 \contentsline {section}{\numberline {5}Discussion}{5}{section.5}
-\contentsline {section}{\numberline {6}Appendix}{6}{section.6}
-\contentsline {subsection}{\numberline {6.1}Linear algebra background }{6}{theorem.6.1}
-\contentsline {subsection}{\numberline {6.2}Opinion dynamics with noise }{7}{subsection.6.2}
-\contentsline {subsection}{\numberline {6.3}Probability distribution at equilibrium }{8}{subsection.6.3}
-\contentsline {subsection}{\numberline {6.4}Connecting two frameworks }{10}{subsection.6.4}
-\contentsline {section}{\numberline {7}Figures }{13}{section.7}
+\contentsline {section}{\numberline {6}Appendix}{7}{section.6}
+\contentsline {subsection}{\numberline {6.1}Linear algebra claims and theorems }{7}{theorem.6.1}
+\contentsline {subsection}{\numberline {6.2}Opinion dynamics with noise }{9}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Probability distribution at equilibrium }{10}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Connecting two frameworks }{12}{subsection.6.4}
+\contentsline {section}{\numberline {7}Figures }{15}{section.7}

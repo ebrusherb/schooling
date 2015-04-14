@@ -1,14 +1,15 @@
-function strats=eq_strats(N,fitness,rho)
-%input fitness / rho have residents in rows and invaders in columns
+function eqstrats=eq_strats(N,fitness,rho)
+% input fitness / rho have residents in rows and invaders in columns
+if nargin<3
+    rho=1/N*ones(N,N);
+end
+
 s=size(fitness,2);
 d=diag(fitness);
 range=1:s;
 ESS=[];
 NIS=[];
 branch=[];
-if nargin<3
-    rho=1/N*ones(N,N);
-end
 
 superf=fitness(1:(s-1),2:s);
 superf=diag(superf);
@@ -73,10 +74,10 @@ end
 
 CSS=intersect(ESS,NIS);
 
-strats=cell(1,5);
-strats{1}=converge;
-strats{2}=ESS;
-strats{3}=NIS;
-strats{4}=CSS;
-strats{5}=branch;
+eqstrats=cell(1,5);
+eqstrats{1}=converge;
+eqstrats{2}=ESS;
+eqstrats{3}=NIS;
+eqstrats{4}=CSS;
+eqstrats{5}=branch;
 

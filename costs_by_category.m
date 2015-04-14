@@ -74,7 +74,7 @@ for k = 1:Ls
 end
 
 
-%%
+
 cats=cell(4,Ls);
 cat_indicators=[0 0;0 1;1 0;1 1];
 onerec = cell(Ls,1);

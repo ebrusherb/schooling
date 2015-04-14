@@ -44,7 +44,9 @@ for i=1:nummoves
     problem=find(sigfig(diag(vals),13)==0,1);
     
 %     noise=eye(N);
-    noise=diag(strategy);
+    strategynoise=strategy;
+    strategynoise(strategy==0)=1;
+    noise=diag(strategynoise);
     
     S=.5*(Abar+transpose(Abar));
     P=S;
@@ -57,6 +59,7 @@ for i=1:nummoves
     Cov=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
 
     todivide=repmat(diag(-Cov),1,N).*repmat(reshape(diag(-Cov),1,[]),N,1);
+    todivide(sigfig(Cov,13)==0)=1;
     todivide=power(todivide,.5);
     Corr=-Cov./todivide;
     dvec=[dvec; col(d)]; %#ok<AGROW>
@@ -81,20 +84,25 @@ for i=1:nummoves
         beta(allreceivers)=b;
         B=diag(beta);
         Lf=L-B;
-        Pf=P-B; 
+        Pf=P-B;
+        [~,vals]=eig(Pf);
+        problem2=find(sigfig(diag(vals),13)==0,1);
         Lftilde=Qfull*Lf*transpose(Qfull);
         Bbar=Qfull*B;
         [~,vals]=eig(Lf);
-        problem2=find(sigfig(diag(vals),13)==0,1);
+        problem3=find(sigfig(diag(vals),13)==0,1);
 
-        if ~isempty(problem2)
+        if ~isempty(problem3) || ~isempty(problem2)
             nooneislistening=nooneislistening+1;
             H2vec_forced(i,j)=Inf;
         else
             sigmaz_forced=lyap(Lftilde,Qfull*noise*transpose(Qfull));
             sigmay_forced=sigmaz_forced(1:end-1,1:end-1);
             H_forced=sqrt(trace(sigmay_forced));
+%             if imag(H_forced)==0
             H2vec_forced(i,j)=H_forced;
+%             else H2vec_forced(i,j)=Inf;
+%             end
         end
         
             toinvert=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;
@@ -102,6 +110,7 @@ for i=1:nummoves
             w3=find(sigfig(diag(Lambda),13)==0);
             Cov_forced=W(:,setdiff(1:N,w3))*inv(Lambda(setdiff(1:N,w3),setdiff(1:N,w3)))*transpose(W(:,setdiff(1:N,w3)));
             todivide=repmat(diag(Cov_forced),1,N).*repmat(reshape(diag(Cov_forced),1,[]),N,1);
+            todivide(sigfig(Cov_forced,13)==0)=1;
             todivide=power(todivide,.5);
             Corr_forced=Cov_forced./todivide;
             dvec_forced=[dvec_forced; col(d)]; %#ok<AGROW>
@@ -110,17 +119,16 @@ for i=1:nummoves
 end
 
 if disconnectedcount<nummoves
+    H2vec=col(H2vec);
     meanH2=mean(H2vec(~isinf(H2vec)));
     H2vec_forced=col(H2vec_forced);
     meanH2_forced=mean(H2vec_forced(~isinf(H2vec_forced)));
-    meanrho=mean(1./H2vec);
-    meanrho_forced=mean(1./H2vec_forced);
 else
     meanH2=Inf;
     meanH2_forced=Inf;
-    meanrho=0;
-    meanrho_forced=0;
 end
+meanrho=mean(1./H2vec);
+meanrho_forced=mean(1./H2vec_forced);
 
 deltad=.05;
 dbins=(0:deltad:1.4)+deltad/2;
@@ -130,27 +138,31 @@ avgcorrs_forced=zeros(1,Nbins);
 
 for i=1:Nbins
     w1=find(dvec>=dbins(i)-deltad/2);
-    problem2=find(dvec<dbins(i)+deltad/2);
-    w=intersect(w1,problem2);
+    w2=find(dvec<dbins(i)+deltad/2);
+    w=intersect(w1,w2);
     avgcorrs(i)=mean(corrvec(w));
 end
 
 for i=1:Nbins
     w1=find(dvec_forced>=dbins(i)-deltad/2);
-    problem2=find(dvec_forced<dbins(i)+deltad/2);
-    w=intersect(w1,problem2);
+    w2=find(dvec_forced<dbins(i)+deltad/2);
+    w=intersect(w1,w2);
     avgcorrs_forced(i)=mean(corrvec_forced(w));
 end
 
 f=find(avgcorrs<0,1,'first');
-if isempty(f)
+if avgcorrs(1)==0
+    corrlength=0;
+elseif isempty(f)
     corrlength=max(dvec);
 else
     corrlength=interp1(avgcorrs([f-1 f]),dbins([f-1 f]),0);
 end
 
 f=find(avgcorrs_forced<0,1,'first');
-if isempty(f)
+if avgcorrs_forced(1)==0
+    corrlength=0;
+elseif isempty(f)
     corrlength_forced=max(dvec);
 else
     corrlength_forced=interp1(avgcorrs_forced([f-1 f]),dbins([f-1 f]),0);

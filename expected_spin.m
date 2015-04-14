@@ -12,6 +12,7 @@ if nargin==2
 end
 
 initialconditions=.5*ones(N,1);
+% initialconditions=.5*ones(N,1)+normrnd(0,.01,N,1);
 
 [~,vals]=eig(A);
 w=find(sigfig(diag(vals),13)==0,1);

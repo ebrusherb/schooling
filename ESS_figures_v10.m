@@ -10,17 +10,21 @@ labfontsz=9;
 
 markersz=3;
 lw=2;
+meanlw=3;
+thinlw=1;
 axislw=.5;
 
-qualcols=cbrewer('qual','Set1',5);
-qualcols=qualcols([1 3 2 4 5],:);
+qualcols=cbrewer('qual','Set1',3);
+qualcols=qualcols([3 1 2],:);
+twocols=cbrewer('qual','Set1',2);b
 seqcols = cbrewer('seq','Reds',11);
 seqcols2 = cbrewer('seq','Reds',7);
 seqcols3 = cbrewer('seq','Reds',15);
+seqcols4 = cbrewer('seq','Reds',22);
+greys=cbrewer('seq','Greys',3);
 
 
-xoffset=.1;
-yoffset=.06;
+
 
 %% load ESS data
 
@@ -75,7 +79,33 @@ resstrats_high = 2:19;
 invaderstrats = resstrats_high-1;
 
 [costs_to_low,~] = costs_by_category(N,resstrats_high,invaderstrats,nummoves,radius,b,T);
+%% find probability of being ranked for low and high strategies
+divisions=(2.5:N/5:N);
+Nd=length(divisions);
+      
+low=4;
+high=16;
+strategy1=low*ones(N,1);
+strategy1(1)=high;
+scores=signalingevents_returnscores(strategy1,numsigs_permove,nummoves,radius,b,T);
+rank=zeros(N,size(scores,2));
+for i=1:size(scores,2)
+    [~,~,ranked]=unique(scores(:,i));
+    rank(:,i)=ranked;
+end
+[lowres_low_count,~]=hist(rank(2,:),divisions);
+[lowres_high_count,~]=hist(rank(1,:),divisions);
 
+strategy2=high*ones(N,1);
+strategy2(1)=low;
+scores=signalingevents_returnscores(strategy2,numsigs_permove,nummoves,radius,b,T);
+rank=zeros(N,size(scores,2));
+for i=1:size(scores,2)
+    [~,~,ranked]=unique(scores(:,i));
+    rank(:,i)=ranked;
+end
+[highres_low_count,~]=hist(rank(1,:),divisions);
+[highres_high_count,~]=hist(rank(2,:),divisions);
 
 %% figure: ESS strategies and prob eaten comparison together
 figure
@@ -86,6 +116,10 @@ w=6.83;
 h=.5*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[11.5 3 w h]);
+
+xoffset=.1;
+yoffset=.06;
+
 
 n=size(ESSseaten,2);
 k=1;
@@ -159,21 +193,53 @@ set(gca,'FontName',fontname,'FontSize',labfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
+subplot(2,2,3)
+hold on
+barcols=cbrewer('div','RdBu',4);
+
+width=.2;
+hold on
+bar((1:Nd)-3*width/2,lowres_low_count/nummoves,width,'FaceColor',barcols(1,:),'EdgeColor','k')
+bar((1:Nd)-width/2,lowres_high_count/nummoves,width,'FaceColor',barcols(4,:),'EdgeColor','k')
+bar((1:Nd)+width/2,highres_low_count/nummoves,width,'FaceColor',barcols(2,:),'EdgeColor','k')
+bar((1:Nd)+3*width/2,highres_high_count/nummoves,width,'FaceColor',barcols(3,:),'EdgeColor','k')
+set(gca,'ylim',[0 1])
+[leg,hobj]=legend({'Low','High','Low resident','High resident'},'FontName',fontname,'FontSize',labfontsz);
+legend 'boxoff'
+v=get(leg,'position');
+set(leg,'position',[v(1)-.112 v(2)+.07 v(3) v(4)])
+legend('boxoff')
+textobj=findobj(hobj,'type','patch');
+graycols=cbrewer('div','RdGy',4);
+graycols=graycols([1 2 4 3],:);
+for i=1:2
+    set(textobj(i),'xdata',[.29 .29 .36 .36 .29])
+end
+for i=3:4
+    set(textobj(i),'xdata',[.29 .29 .36 .36 .29],'FaceColor',graycols(i,:))
+end
+xlabel('Rank','FontName',fontname,'FontSize',textfontsz)
+ylabel('Probability','FontName',fontname,'FontSize',textfontsz)
+set(gca,'FontName',fontname,'FontSize',labfontsz)
+set(gca,'xtick',[1:5],'XTickLabel',{'1-4','5-8','9-12','13-16','17-20'})
+
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(c)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
 subplot(2,2,4)
 hold on
-mybar=bar(costs_to_high','stack');
-for k=1:5
+mybar=bar(costs_to_high([1 4 5],:)','stack');
+for k=1:3
   set(mybar(k),'facecolor',qualcols(k,:))
 end
 xlim=get(gca,'xlim');
 plot(xlim,1/N*ones(2,1),'--k','LineWidth',axislw)
-[leg,hobj]=legend(mybar, {'Neither','Resident','Invader','Both','Multiple'},'FontName',fontname,'FontSize',labfontsz);
+[leg,hobj]=legend(mybar, {'Neither','Both','Multiple'},'FontName',fontname,'FontSize',labfontsz);
 v=get(leg,'position');
 set(leg,'position',[v(1)-.2 v(2)+.05 v(3) v(4)])
 legend('boxoff')
 textobj=findobj(hobj,'type','patch');
-for i=1:5
+for i=1:3
     set(textobj(i),'xdata',[.3 .3 .4 .4 .3])
 end
 set(gca,'ylim',[0 1])
@@ -185,38 +251,105 @@ set(gca,'FontName',fontname,'FontSize',labfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(d)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-subplot(2,2,3)
+
+
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+
+filename=strcat('/Users/eleanorbrush/Desktop/','ESSfigure_full','.pdf');
+print(filename,'-dpdf','-r300');
+
+%% figure: ESS strategies as a function of radius
+figure
+set(gcf,'Color','w')
+v=get(gcf,'Position');
+ratio=v(4)/v(3);
+w=6.83;
+h=.25*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[11.5 3 w h]);
+
+xoffset=.1;
+yoffset=.06;
+
+
+n=size(ESSseaten,2);
+k=1;
+t=1;
+
+
+subplot(1,2,1)
+r=2;
+fitnesseaten=storefitnesseaten{t,r};
+imagesc(strats,strats,transpose(fitnesseaten))
+set(gca,'xtick',[1 5:5:15 N-1],'ytick',[1 5:5:15 N-1])
+set(gca,'ydir','normal')
+
+myseqmap=cbrewer('seq', 'YlOrRd',9);
+myseqmap=myseqmap(end:-1:1,:);
+colormap(flipud(seqcols))
+cb=colorbar;
+caxis manual
+caxis([0 1])
+yl=ylabel(cb,'Relative fitness','FontName',fontname,'FontSize',textfontsz);
+v=get(yl,'Position');
+set(yl,'Rotation',270,'Position',[v(1)+.5 v(2:3)])
 hold on
-mybar=bar(costs_to_low([1 3 2 4 5],:)','stack');
-for k=1:5
-  set(mybar(k),'facecolor',qualcols(k,:))
-end
-[leg,hobj]=legend(mybar, {'Neither','Resident','Invader','Both','Multiple'},'FontName',fontname,'FontSize',labfontsz);
-v=get(leg,'position');
-set(leg,'position',[v(1)-.2 v(2)+.05 v(3) v(4)])
-legend('boxoff')
-textobj=findobj(hobj,'type','patch');
-for i=1:5
-    set(textobj(i),'xdata',[.3 .3 .4 .4 .3])
-end
-xlim=get(gca,'xlim');
-plot(xlim,1/N*ones(2,1),'--k','LineWidth',axislw)
-set(gca,'ylim',[0 1])
+plot(ESSseaten{t,r},ESSseaten{t,r},'o','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
 xlabel('Resident strategy','FontName',fontname,'FontSize',textfontsz)
-ylabel('Probability','FontName',fontname,'FontSize',textfontsz)
-set(gca,'xtick',1:2:length(resstrats_high),'xticklabel',min(resstrats_high):2:max(resstrats_high))
+ylabel('Invader strategy','FontName',fontname,'FontSize',textfontsz)
+v=get(gca,'Position');
 set(gca,'FontName',fontname,'FontSize',labfontsz)
 
 apos=get(gca,'Position');
-annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(c)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
+subplot(1,2,2)
+hold on
+
+set(gca,'xlim',[-.05 1.45]);
+xlim=get(gca,'xlim');
+for i=1:n
+    l=size(ESSseaten{t,i},2);
+    if l>0
+        p1=plot(radvals(i)*ones(l,1),ESSseaten{t,i},'o','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
+    end
+    l=size(ESSsgettoeat{t,i},2);
+    if l>0
+        p2=plot(radvals(i)*ones(l,1),ESSsgettoeat{t,i},'s','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
+    end
+    l=size(ESSsboth{t,i},2);
+    if l>0
+        p3=plot(radvals(i)*ones(l,1),ESSsboth{t,i},'d','Color','k','MarkerFaceColor','k','MarkerSize',markersz,'LineWidth',lw);
+    end
+end
+xlab=xlabel('Radius of signal','FontName',fontname,'FontSize',textfontsz);
+ylab=ylabel('ESS','FontName',fontname,'FontSize',textfontsz);
+v=get(ylab,'Position');
+set(ylab,'Position',[xlim(1)-.05*diff(xlim) v(2:3)]);
+set(gca,'xlim',[0 1])
+ylim=get(gca,'Ylim');
+plot(xlim(1)*ones(2,1),ylim,'k','LineWidth',axislw);
+plot(xlim,(ylim(1)-.0)*ones(2,1),'k','LineWidth',axislw);
+
+leg=legend([p1 p2 p3],{'Predation','Resources','Both'},'FontName',fontname,'FontSize',labfontsz);
+legend('boxoff')
+legpos=get(leg,'Position');
+set(leg,'Position',[.82 .47 legpos(3) legpos(4)])
+
+set(gca,'FontName',fontname,'FontSize',labfontsz,'tickdir','out')
+v=get(gca,'Position');
+% set(gca,'Position',[.6 v(2:3) .8])
+% set(gca,'Position',[.6 .25 .3347 .6242])
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset+.02 apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
 set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','ESSfigure','.pdf');
 print(filename,'-dpdf','-r300');
-
 
 %% how ESS depends on robustness
 figure
@@ -226,25 +359,15 @@ h=1/3*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[11.5 3 w h]);
 subplot(1,2,1)
-% toplot=corrlengths_forced;
-% toplot=corrlengths./repmat([1 radvals(2:end)],Lh,1);
-toplot=ones(size(groupconsensus_forced))./groupconsensus_forced;
-toplot_vec=1./groupconsensus_forced;
 
-imagesc(radvals,homogenstrats,toplot)
+imagesc(radvals,homogenstrats,rhos_forced)
 caxis manual
 set(gca,'ydir','normal')
-
-% a=min(min(toplot))-1;
-A=max(max(toplot))-1;
-% A=max(abs(a),abs(A))+1;
-% caxis([0 max(A+1,.5)])
-% caxis([-A A])
 
 colormap(seqcols)
 cb=colorbar;
 
-ylab=ylabel(cb,'Normalized robustness','FontName',fontname,'FontSize',labfontsz);
+ylab=ylabel(cb,'Robustness','FontName',fontname,'FontSize',labfontsz);
 set(ylab,'Rotation',270);
 v=get(ylab,'Position');
 set(ylab,'Position',[v(1)+.1 v(2) v(3)])
@@ -266,10 +389,11 @@ t=1;
 n=size(ESSseaten,2);
 for i=1:12
     l=length(ESSseaten{t,i});
-    plot(toplot_vec(i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
+    plot(corrlengths_forced(12,i)*ones(l,1),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
+%     plot(corrlengths_forced(ESSseaten{t,i},i),ESSseaten{t,i},'ok','MarkerFaceColor','k','LineWidth',lw,'MarkerSize',markersz)
 end
 set(gca,'ylim',[13 20])
-xlabel('Normalized robustness','FontName',fontname,'FontSize',textfontsz)
+xlabel('Robustness','FontName',fontname,'FontSize',textfontsz)
 ylabel('ESS','FontName',fontname,'FontSize',textfontsz)
 
 set(gca,'FontName',fontname,'FontSize',labfontsz)
@@ -282,7 +406,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/robustness_vs_ESS.pdf';
-print(filename,'-dpdf','-r300')
+% print(filename,'-dpdf','-r300')
 
 %% H2 / correlation length relationship
 figure
@@ -292,17 +416,20 @@ h=1/2*w;
 set(gcf,'Units','inches');
 set(gcf,'Position',[11.5 3 w h]);
 
-stratvals=6:19;
+xoffset=.12;
+yoffset=.06;
+
+stratvals=1:19;
 
 subplot(2,2,1)
-imagesc(radvals,stratvals,ones(size(groupconsensus_forced))./groupconsensus_forced)
+imagesc(radvals,stratvals,rhos_forced)
 set(gca,'ydir','normal')
 set(gca,'FontName',fontname,'FontSize',labfontsz)
 caxis manual
 colormap(seqcols)
 cb=colorbar;
 set(cb,'FontName',fontname,'FontSize',labfontsz)
-ylab=ylabel(cb,'Normalized robustness','FontName',fontname,'FontSize',labfontsz);
+ylab=ylabel(cb,'Robustness','FontName',fontname,'FontSize',labfontsz);
 set(ylab,'Rotation',270);
 v=get(ylab,'Position');
 set(ylab,'Position',[v(1)+.1 v(2) v(3)])
@@ -335,26 +462,33 @@ annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String',
 
 subplot(2,2,3:4)
 hold on
-radvals=0:.1:1.4;
-toplot=1:2:length(0:.1:1);
 
+% toplot=1:2:length(0:.1:1);
+toplot=1:2:14;
+
+k=6;
 for i=1:length(toplot)
-    plot(ones(14,1)./groupconsensus_forced(:,toplot(i)),corrlengths_forced(:,toplot(i)),'-o','Color',seqcols2(8-i,:),'MarkerSize',markersz,'LineWidth',lw)
+    if i<8
+    k=6;
+    else k=1;
+    end
+    plot(1./H2s_forced(k:end,toplot(i)),corrlengths_forced(k:end,toplot(i)),'-o','Color',seqcols4(20-i,:),'MarkerSize',markersz,'LineWidth',lw)
 end
 
 leglabs=cell(length(toplot),1);
 for i=1:length(toplot)
     leglabs{i}=num2str(radvals(toplot(i)));
 end
+set(gca,'FontName',fontname,'FontSize',labfontsz)
 % 
-% toplot=1:14;
+% toplot=2:18;
 % 
 % for i=1:length(toplot)
-%     plot(ones(1,15)./groupconsensus_forced(toplot(i),:),corrlengths_forced(toplot(i),:),'-o','Color',seqcols3(16-i,:),'MarkerSize',markersz,'LineWidth',lw)
+%     plot(rhos_forced(toplot(i),:),corrlengths_forced(toplot(i),:)/max(corrlengths_forced(toplot(i),:)),'-o','Color',seqcols4(21-i,:),'MarkerSize',markersz,'LineWidth',lw)
 % end
 % 
 % 
-% set(gca,'ylim',[0 .5])
+% % set(gca,'ylim',[0 .5])
 % set(gca,'FontName',fontname,'FontSize',labfontsz)
 % 
 % box off
@@ -379,7 +513,7 @@ set(gca,'Position',[apos(1) .15 apos(3:4)])
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(c)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-xlabel('Normalized robustness','FontName',fontname,'FontSize',textfontsz)
+xlabel('Robustness','FontName',fontname,'FontSize',textfontsz)
 ylabel('Correlation length','FontName',fontname,'FontSize',textfontsz)
 
 axpos=get(gca,'position');
@@ -391,3 +525,94 @@ set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/H2_v_corrlength.pdf';
 print(filename,'-dpdf','-r300')
+
+%% H2 / correlation length heat maps
+figure
+set(gcf,'Color','w')
+w=6.83;
+h=1/4*w;
+set(gcf,'Units','inches');
+set(gcf,'Position',[11.5 3 w h]);
+
+xoffset=.08;
+yoffset=.06;
+
+stratvals=1:19;
+
+subplot(1,2,1)
+imagesc(radvals,stratvals,rhos_forced)
+set(gca,'ydir','normal')
+set(gca,'FontName',fontname,'FontSize',labfontsz)
+set(gca,'ytick',[1 10 19],'yticklabel',[1 10 19])
+caxis manual
+colormap(seqcols)
+cb=colorbar;
+set(cb,'FontName',fontname,'FontSize',labfontsz)
+ylab=ylabel(cb,'Robustness','FontName',fontname,'FontSize',labfontsz);
+set(ylab,'Rotation',270);
+v=get(ylab,'Position');
+set(ylab,'Position',[v(1)+.1 v(2) v(3)])
+
+xlabel('Radius','FontName',fontname,'FontSize',textfontsz)
+ylabel('Strategy','FontName',fontname,'FontSize',textfontsz)
+
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(a)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+
+subplot(1,2,2)
+imagesc(radvals,stratvals,corrlengths_forced)
+set(gca,'ydir','normal')
+set(gca,'FontName',fontname,'FontSize',labfontsz)
+set(gca,'ytick',[1 10 19],'yticklabel',[1 10 19])
+caxis manual
+colormap(seqcols)
+cb=colorbar;
+set(cb,'FontName',fontname,'FontSize',labfontsz)
+ylab=ylabel(cb,'Correlation length','FontName',fontname,'FontSize',labfontsz);
+set(ylab,'Rotation',270);
+v=get(ylab,'Position');
+set(ylab,'Position',[v(1)+.1 v(2) v(3)])
+
+xlabel('Radius','FontName',fontname,'FontSize',textfontsz)
+ylabel('Strategy','FontName',fontname,'FontSize',textfontsz)
+
+apos=get(gca,'Position');
+annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String','(b)','FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
+
+
+set(gcf,'PaperSize',[w h]);
+set(gcf,'PaperPosition',[0 0 w h]);
+
+filename='/Users/eleanorbrush/Desktop/H2_and_corrlength.pdf';
+print(filename,'-dpdf','-r300')
+
+%% fitness heatmaps
+j=j+1;i=1;
+
+subplot(1,4,1)
+fitness=storefitnesseaten{i,j};
+imagesc(strats,strats,transpose(log(fitness)));set(gca,'ydir','normal');
+m=min(min(log(fitness)));M=max(max(log(fitness)));
+M=max(abs(m),M);caxis manual;caxis([-M M])
+colorbar
+
+subplot(1,4,2)
+fitness=storefitnessgettoeat{i,j};
+imagesc(strats,strats,transpose(log(fitness)));set(gca,'ydir','normal');
+m=min(min(log(fitness)));M=max(max(log(fitness)));
+M=max(abs(m),M);caxis manual;caxis([-M M])
+colorbar
+
+subplot(1,4,3)
+fitness=storefitnessboth{i,j};
+imagesc(strats,strats,transpose(log(fitness)));set(gca,'ydir','normal');
+m=min(min(log(fitness)));M=max(max(log(fitness)));
+M=max(abs(m),M);caxis manual;caxis([-M M])
+colorbar
+
+subplot(1,4,4)
+fitness=storefitnessgenerous{i,j};
+imagesc(strats,strats,transpose(log(fitness)));set(gca,'ydir','normal');
+m=min(min(log(fitness)));M=max(max(log(fitness)));
+M=max(abs(m),M);caxis manual;caxis([-M M])
+colorbar

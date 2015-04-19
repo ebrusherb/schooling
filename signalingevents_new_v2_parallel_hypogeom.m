@@ -1,4 +1,4 @@
-function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_new_v2_parallel_hypogeom(strategy,numsigs_permove,nummoves,radius,b,T)
+function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_new_v2_parallel_hypogeom(strategy,numsigs_permove,nummoves,m,b,T)
 N=max(size(strategy));
 
 numsigs_tot=numsigs_permove*nummoves;
@@ -25,17 +25,12 @@ parfor i=1:nummoves
 %             M(ind,ind)=0;
 %         end
 %     end
-    receivers=randsample(N,numsigs_permove,'true');
+%     receivers=randsample(N,numsigs_permove,'true');
     for j=1:numsigs_permove
         beta=zeros(N,1);
-        receiver=receivers(j);
-        numreceivers=sum(d(receiver,:)<=radius);
-        if numreceivers>=N-1
-            allreceivers=ones(N,1);
-        else allreceivers=zeros(N,1);
-            allreceivers([receiver randsample(setdiff(1:N,receiver),numreceivers,'false')])=1;
-        end
+%         receiver=receivers(j);
 %         allreceivers=d(receiver,:)<=radius;
+        allreceivers=randsample(N,m,'false');
         beta(logical(allreceivers))=b;
         v=real(expected_spin(M,T,beta));
        

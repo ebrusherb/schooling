@@ -10,7 +10,7 @@ scores=zeros(N,numsigs_permove,nummoves);
 for i=1:nummoves
     
     for j=1:numsigs_permove
-        draw=hygernd(N-1,m,strategy);
+        draw=hygernd(N,m,strategy);
         freq=draw./strategy;
         
         scores(:,j,i)=freq;

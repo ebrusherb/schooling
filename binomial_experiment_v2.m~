@@ -1,12 +1,12 @@
 N=20;
 k2=15;
-k1=5;
-radius=.1;
+k1=17;
+% radius=.1;
 strategy=k2*ones(N-1,1);
 strategy=[k1;strategy];
 nummoves=1000;
-m=15;
-p=(m)/N;
+m=3;
+% p=(m)/N;
 freqs=zeros(N,nummoves);
 ranks=zeros(N,nummoves);
 for i=1:nummoves
@@ -77,7 +77,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/hypergeometric.pdf';
-print(filename,'-dpdf','-r300')
+% print(filename,'-dpdf','-r300')
 
 %%
 N=50;
@@ -211,3 +211,15 @@ for j=0:min(k,m)
 %     binom(j+1)=nchoosek(k,j)*power(p,j)*power(1-p,k-j);
     hypo(j+1)=hygepdf(j,N,m,k);
 end
+
+%%
+strategy=17*ones(N,1);
+strategy(1)=15;
+m=9;
+
+probless=0;
+for k=0:m
+   toadd=hygepdf(k,N-1,m,strategy(1))*(1-hygecdf(k/strategy(1)*strategy(2),N-1,m,strategy(2)))^(N-1);
+   probless=probless+toadd;
+end
+

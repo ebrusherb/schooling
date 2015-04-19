@@ -1,12 +1,12 @@
 N=20;
 k2=15;
-k1=5;
-radius=.1;
+k1=17;
+% radius=.1;
 strategy=k2*ones(N-1,1);
 strategy=[k1;strategy];
 nummoves=1000;
-m=15;
-p=(m)/N;
+m=3;
+% p=(m)/N;
 freqs=zeros(N,nummoves);
 ranks=zeros(N,nummoves);
 for i=1:nummoves
@@ -77,7 +77,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/hypergeometric.pdf';
-print(filename,'-dpdf','-r300')
+% print(filename,'-dpdf','-r300')
 
 %%
 N=50;

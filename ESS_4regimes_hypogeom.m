@@ -12,36 +12,36 @@ b=1;
 strats=1:1:(N-1);
 L=length(strats);
 
-Tvals=[1 .01 10];
+Tvals=[1];
 Nt=length(Tvals);
 
-radvals=[0:.1:1.4]; %#ok<NBRAK>
+mvals=[1:2:N]; %#ok<NBRAK>
 % radvals=.1;
-Nr=length(radvals);
+Nm=length(mvals);
 
-ESSseaten=cell(Nt,Nr);
-ESSsgettoeat=cell(Nt,Nr);
-ESSsboth=cell(Nt,Nr);
-ESSsgenerous=cell(Nt,Nr);
+ESSseaten=cell(Nt,Nm);
+ESSsgettoeat=cell(Nt,Nm);
+ESSsboth=cell(Nt,Nm);
+ESSsgenerous=cell(Nt,Nm);
 
-storefitnesseaten=cell(Nt,Nr);
-storerhoeaten=cell(Nt,Nr);
+storefitnesseaten=cell(Nt,Nm);
+storerhoeaten=cell(Nt,Nm);
 
-storefitnessgettoeat=cell(Nt,Nr);
-storerhogettoeat=cell(Nt,Nr);
+storefitnessgettoeat=cell(Nt,Nm);
+storerhogettoeat=cell(Nt,Nm);
 
-storefitnessboth=cell(Nt,Nr);
-storerhoboth=cell(Nt,Nr);
+storefitnessboth=cell(Nt,Nm);
+storerhoboth=cell(Nt,Nm);
 
-storefitnessgenerous=cell(Nt,Nr);
-storerhogenerous=cell(Nt,Nr);
+storefitnessgenerous=cell(Nt,Nm);
+storerhogenerous=cell(Nt,Nm);
 
 t0=tic;
 
 for q=1:Nt
-    for p=1:Nr
+    for p=1:Nm
         T=Tvals(q);
-        radius=radvals(p);
+        m=mvals(p);
 
         fitnesseaten=zeros(L,L);
         rhoeaten=zeros(L,L);
@@ -77,7 +77,7 @@ for q=1:Nt
 
             strategy=resident*ones(1,N);
             strategy(N+1-(1:k))=invader;
-            [probeaten, probgettoeat, both, generous]=signalingevents_new_v2_parallel_hypogeom(strategy,numsigs_permove,nummoves,radius,b,T);
+            [probeaten, probgettoeat, both, generous]=signalingevents_new_v2_parallel_hypogeom(strategy,numsigs_permove,nummoves,m,b,T);
 
             perfeaten=1-probeaten;
             featen(ind)=mean(perfeaten(N+1-(1:k)));
@@ -180,7 +180,7 @@ t=toc(t0);
 disp(t);
 
 filename=strcat('/home/brush/schooling_consensus/ESS_4regimes_hypogeom','_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
-save(filename,'strats','radvals','Tvals','storefitnesseaten','storerhoeaten','ESSseaten','storefitnessgettoeat','storerhogettoeat','ESSsgettoeat','storefitnessboth','storerhoboth','ESSsboth','storefitnessgenerous','storerhogenerous','ESSsgenerous');
+save(filename,'strats','mvals','Tvals','storefitnesseaten','storerhoeaten','ESSseaten','storefitnessgettoeat','storerhogettoeat','ESSsgettoeat','storefitnessboth','storerhoboth','ESSsboth','storefitnessgenerous','storerhogenerous','ESSsgenerous');
 
 delete(dellapool);
 

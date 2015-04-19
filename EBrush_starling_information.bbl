@@ -1,0 +1,21 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bialek:2012fk}
+William Bialek, Andrea Cavagna, Irene Giardina, Thierry Mora, Edmondo
+  Silvestri, Massimiliano Viale, and Aleksandra~M. Walczak.
+\newblock Statistical mechanics for natural flocks of birds.
+\newblock {\em Proceedings of the National Academy of Science},
+  109(13):4786--4791, March 2012.
+
+\bibitem{Young:2013kx}
+George~F. Young, Luca Scardovi, Andrea Cavagna, Irene Giardina, and Naomi~E.
+  Leonard.
+\newblock Starling flock networks manage uncertainty in consensus at low cost.
+\newblock {\em PLOS Computational Biology}, 9, 2013.
+
+\bibitem{Young:2010fk}
+George~Forrest Young, Luca Scardovi, and Naomi~Ehrich Leonard.
+\newblock Robustness of noisy consensus dynamics with directed communication.
+\newblock {\em Proceedings of the American Control Conference}, 2010.
+
+\end{thebibliography}

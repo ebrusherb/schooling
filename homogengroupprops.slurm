@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=20
 #SBATCH -t 00:30:00
 #SBATCH -J homogen
-#SBATCH -o homogen.out
+#SBATCH -o homogen.out%A
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-user=brush@princeton.edu

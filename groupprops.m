@@ -1,6 +1,6 @@
-% function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount, meanrho, meanrho_forced]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
+function [meanH2, meanH2_forced, corrlength, corrlength_forced, disconnectedcount, meanrho, meanrho_forced]=groupprops(strategy,numsigs_permove,nummoves,radius,b,T) %#ok<INUSD>
 
-% N=max(size(strategy));
+N=max(size(strategy));
 
 dvec=[];
 corrvec=[];
@@ -40,8 +40,8 @@ for i=1:nummoves
   
     L=Abar-eye(N);
     Ltilde=Q*L*transpose(Q);
-    [~,vals]=eig(Ltilde);
-    problem=find(sigfig(diag(vals),13)==0,1);
+    [~,L_vals]=eig(Ltilde);
+    L_vals_zeros=find(sigfig(diag(L_vals),13)==0,1);
     
 %     noise=eye(N);
     strategynoise=strategy;
@@ -52,10 +52,10 @@ for i=1:nummoves
     P=S;
     P(1:N+1:end)=-sum(S,2);
     [W,Lambda]=eig(P);
-    w=find(sigfig(diag(Lambda),13)==0);
+    Lambda_zeros=find(sigfig(diag(Lambda),13)==0);
     
-    Wtilde=W(:,setdiff(1:N,w));
-    Lambdatilde=Lambda(setdiff(1:N,w),setdiff(1:N,w));
+    Wtilde=W(:,setdiff(1:N,Lambda_zeros));
+    Lambdatilde=Lambda(setdiff(1:N,Lambda_zeros),setdiff(1:N,Lambda_zeros));
     Cov=Wtilde*inv(Lambdatilde)*transpose(Wtilde); %#ok<*MINV>
 
     todivide=repmat(diag(-Cov),1,N).*repmat(reshape(diag(-Cov),1,[]),N,1);
@@ -65,7 +65,7 @@ for i=1:nummoves
     dvec=[dvec; col(d)]; %#ok<AGROW>
     corrvec=[corrvec; col(Corr)]; %#ok<AGROW>
     
-    if length(w)>1 || ~isempty(problem)
+    if length(Lambda_zeros)>1 || ~isempty(L_vals_zeros)
         H2vec(i)=Inf;
         disconnectedcount=disconnectedcount+numsigs_permove;
     else
@@ -85,14 +85,14 @@ for i=1:nummoves
         B=diag(beta);
         Lf=L-B;
         Pf=P-B;
-        [~,vals]=eig(Pf);
-        problem2=find(sigfig(diag(vals),13)==0,1);
+        [~,Pf_vals]=eig(Pf);
+        Pf_vals_zeros=find(sigfig(diag(Pf_vals),13)==0,1);
         Lftilde=Qfull*Lf*transpose(Qfull);
-        Bbar=Qfull*B;
-        [~,vals]=eig(Lf);
-        problem3=find(sigfig(diag(vals),13)==0,1);
+%         Bbar=Qfull*B;
+        [~,Lf_vals]=eig(Lf);
+        Lf_vals_zeros=find(sigfig(diag(Lf_vals),13)==0,1);
 
-        if ~isempty(problem3) || ~isempty(problem2)
+        if ~isempty(Lf_vals_zeros) || ~isempty(Pf_vals_zeros)
             nooneislistening=nooneislistening+1;
             H2vec_forced(i,j)=Inf;
         else
@@ -107,8 +107,8 @@ for i=1:nummoves
         
             toinvert=-Pf-1/(b*sum(allreceivers))*B*ones(N,1)*ones(1,N)*B;
             [W,Lambda]=eig(toinvert);
-            w3=find(sigfig(diag(Lambda),13)==0);
-            Cov_forced=W(:,setdiff(1:N,w3))*inv(Lambda(setdiff(1:N,w3),setdiff(1:N,w3)))*transpose(W(:,setdiff(1:N,w3)));
+            Lambda_zeros=find(sigfig(diag(Lambda),13)==0);
+            Cov_forced=W(:,setdiff(1:N,Lambda_zeros))*inv(Lambda(setdiff(1:N,Lambda_zeros),setdiff(1:N,Lambda_zeros)))*transpose(W(:,setdiff(1:N,Lambda_zeros)));
             todivide=repmat(diag(Cov_forced),1,N).*repmat(reshape(diag(Cov_forced),1,[]),N,1);
             todivide(sigfig(Cov_forced,13)==0)=1;
             todivide=power(todivide,.5);

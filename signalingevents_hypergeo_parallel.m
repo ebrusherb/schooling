@@ -1,13 +1,13 @@
-% function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_hypergeo_parallel(strategy,numsigs_permove,nummoves,m)
-% N=max(size(strategy));
+function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_hypergeo_parallel(strategy,numsigs_permove,nummoves,m)
+N=max(size(strategy));
 
 numsigs_tot=numsigs_permove*nummoves;
 
 
 scores=zeros(N,numsigs_permove,nummoves);
 
-% parfor i=1:nummoves
-for i=1:nummoves
+parfor i=1:nummoves
+% for i=1:nummoves
     
     for j=1:numsigs_permove
         draw=hygernd(N-1,m,strategy);

@@ -9,39 +9,39 @@ nummoves=str2num(getenv('nummoves'));%#ok<ST2NM>
 N=20;
 b=1;
 
-strats=1:1:(N-1);
-L=length(strats);
+strats_hyper=1:1:(N-1);
+L=length(strats_hyper);
 
-Tvals=[1]; %#ok<NBRAK>
-Nt=length(Tvals);
+Tvals_hyper=[1]; %#ok<NBRAK>
+Nt=length(Tvals_hyper);
 
-radvals=0:.1:1.2; 
+radvals_hyper=[0:.02:.1 .2:.1:1.1]; 
 % radvals=.1;
-Nr=length(radvals);
+Nr=length(radvals_hyper);
 
-ESSseaten=cell(Nt,Nr);
-ESSsgettoeat=cell(Nt,Nr);
-ESSsboth=cell(Nt,Nr);
-ESSsgenerous=cell(Nt,Nr);
+ESSseaten_hyper=cell(Nt,Nr);
+ESSsgettoeat_hyper=cell(Nt,Nr);
+ESSsboth_hyper=cell(Nt,Nr);
+ESSsgenerous_hyper=cell(Nt,Nr);
 
-storefitnesseaten=cell(Nt,Nr);
-storerhoeaten=cell(Nt,Nr);
+storefitnesseaten_hyper=cell(Nt,Nr);
+storerhoeaten_hyper=cell(Nt,Nr);
 
-storefitnessgettoeat=cell(Nt,Nr);
-storerhogettoeat=cell(Nt,Nr);
+storefitnessgettoeat_hyper=cell(Nt,Nr);
+storerhogettoeat_hyper=cell(Nt,Nr);
 
-storefitnessboth=cell(Nt,Nr);
-storerhoboth=cell(Nt,Nr);
+storefitnessboth_hyper=cell(Nt,Nr);
+storerhoboth_hyper=cell(Nt,Nr);
 
-storefitnessgenerous=cell(Nt,Nr);
-storerhogenerous=cell(Nt,Nr);
+storefitnessgenerous_hyper=cell(Nt,Nr);
+storerhogenerous_hyper=cell(Nt,Nr);
 
 t0=tic;
 
 for q=1:Nt
     for p=1:Nr
-        T=Tvals(q);
-        radius=radvals(p);
+        T=Tvals_hyper(q);
+        radius=radvals_hyper(p);
 
         fitnesseaten=zeros(L,L);
         rhoeaten=zeros(L,L);
@@ -72,8 +72,8 @@ for q=1:Nt
             [u,v,k]=ind2sub([L,L,N-1],ind);
             % rows are residents, columns are invaders, transpose to plot
             % normally
-            resident=strats(u); %#ok<PFBNS>
-            invader=strats(v);
+            resident=strats_hyper(u); %#ok<PFBNS>
+            invader=strats_hyper(v);
 
             strategy=resident*ones(1,N);
             strategy(N+1-(1:k))=invader;
@@ -150,29 +150,29 @@ for q=1:Nt
             rhogenerous(ind)=1/(1+sum(tosum));
         end  
         
-        storefitnesseaten{q,p}=fitnesseaten;
-        storerhoeaten{q,p}=rhoeaten;
+        storefitnesseaten_hyper{q,p}=fitnesseaten;
+        storerhoeaten_hyper{q,p}=rhoeaten;
         
-        storefitnessgettoeat{q,p}=fitnessgettoeat;
-        storerhogettoeat{q,p}=rhogettoeat;
+        storefitnessgettoeat_hyper{q,p}=fitnessgettoeat;
+        storerhogettoeat_hyper{q,p}=rhogettoeat;
         
-        storefitnessboth{q,p}=fitnessboth;
-        storerhoboth{q,p}=rhoboth;
+        storefitnessboth_hyper{q,p}=fitnessboth;
+        storerhoboth_hyper{q,p}=rhoboth;
         
-        storefitnessgenerous{q,p}=fitnessgenerous;
-        storerhogenerous{q,p}=rhogenerous;
+        storefitnessgenerous_hyper{q,p}=fitnessgenerous;
+        storerhogenerous_hyper{q,p}=rhogenerous;
 
         eqstratseaten=eq_strats(N,fitnesseaten,rhoeaten);
-        ESSseaten{q,p}=eqstratseaten{2};
+        ESSseaten_hyper{q,p}=eqstratseaten{2};
 
         eqstratsgettoeat=eq_strats(N,fitnessgettoeat,rhogettoeat);
-        ESSsgettoeat{q,p}=eqstratsgettoeat{2};
+        ESSsgettoeat_hyper{q,p}=eqstratsgettoeat{2};
         
         eqstratsboth=eq_strats(N,fitnessboth,rhoboth);
-        ESSsboth{q,p}=eqstratsboth{2};
+        ESSsboth_hyper{q,p}=eqstratsboth{2};
         
         eqstratsgenerous=eq_strats(N,fitnessgenerous,rhogenerous);
-        ESSsgenerous{q,p}=eqstratsgenerous{2};
+        ESSsgenerous_hyper{q,p}=eqstratsgenerous{2};
     end
 end
 
@@ -180,7 +180,7 @@ t=toc(t0);
 disp(t);
 
 filename=strcat('/home/brush/schooling_consensus/ESS_4regimes_hypogeom','_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
-save(filename,'strats','radvals','Tvals','storefitnesseaten','storerhoeaten','ESSseaten','storefitnessgettoeat','storerhogettoeat','ESSsgettoeat','storefitnessboth','storerhoboth','ESSsboth','storefitnessgenerous','storerhogenerous','ESSsgenerous');
+save(filename,'strats_hyper','radvals_hyper','Tvals_hyper','storefitnesseaten_hyper','storerhoeaten_hyper','ESSseaten_hyper','storefitnessgettoeat_hyper','storerhogettoeat_hyper','ESSsgettoeat_hyper','storefitnessboth_hyper','storerhoboth_hyper','ESSsboth_hyper','storefitnessgenerous_hyper','storerhogenerous_hyper','ESSsgenerous_hyper');
 
 delete(dellapool);
 

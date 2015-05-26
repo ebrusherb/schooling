@@ -16,13 +16,13 @@ axislw=.5;
 
 qualcols=cbrewer('qual','Set1',3);
 qualcols=qualcols([3 1 2],:);
-twocols=cbrewer('qual','Set1',2);b
+twocols=cbrewer('qual','Set1',2);
 seqcols = cbrewer('seq','Reds',11);
 seqcols2 = cbrewer('seq','Reds',7);
 seqcols3 = cbrewer('seq','Reds',15);
 seqcols4 = cbrewer('seq','Reds',22);
 greys=cbrewer('seq','Greys',3);
-
+Ncols=cbrewer('qual','Set1',20);
 
 
 
@@ -30,7 +30,7 @@ greys=cbrewer('seq','Greys',3);
 
 load /Users/eleanorbrush/Desktop/ESS_nummoves=1000_numpermove=1.mat
 
-load /Users/eleanorbrush/Desktop/greedyopt_simultaneous_T=1_nummoves=1000_numpermove=1_rad=0.2_timesteps=100.mat
+% load /Users/eleanorbrush/Desktop/greedyopt_simultaneous_T=1_nummoves=1000_numpermove=1_rad=0.2_timesteps=100.mat
 
 load /Users/eleanorbrush/Desktop/homogengroupprops.mat
 %% find number of receivers for different radius
@@ -349,7 +349,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','ESSfigure','.pdf');
-print(filename,'-dpdf','-r300');
+% print(filename,'-dpdf','-r300');
 
 %% how ESS depends on robustness
 figure
@@ -584,7 +584,7 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename='/Users/eleanorbrush/Desktop/H2_and_corrlength.pdf';
-print(filename,'-dpdf','-r300')
+% print(filename,'-dpdf','-r300')
 
 %% fitness heatmaps
 j=j+1;i=1;

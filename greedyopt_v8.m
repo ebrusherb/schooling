@@ -87,7 +87,7 @@ for num=1:its
         changeorder=randsample(1:N,N,'false');
         changeorder_eaten(num,:,t)=changeorder;     
         for i=changeorder
-            [probeaten, ~,~,~]=signalingevents_new_v2_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            [probeaten, ~,~,~]=signalingevents_4regimes_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
             perf=1-probeaten;
             
             choosestrat=zeros(1,3);
@@ -99,7 +99,7 @@ for num=1:its
                 upone=strategy;
                 upone(i)=strategy(i)+1;
 
-                [probeaten, ~,~,~]=signalingevents_new_v2_parallel(upone,numsigs_permove,nummoves,radius,b,T);
+                [probeaten, ~,~,~]=signalingevents_4regimes_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=1-probeaten(i);
             end
             
@@ -109,7 +109,7 @@ for num=1:its
                 downone=strategy;
                 downone(i)=strategy(i)-1;
 
-                [probeaten, ~,~,~]=signalingevents_new_v2_parallel(downone,numsigs_permove,nummoves,radius,b,T);
+                [probeaten, ~,~,~]=signalingevents_4regimes_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=1-probeaten(i);   
             end 
             
@@ -168,7 +168,7 @@ for num=1:its
         changeorder=randsample(1:N,N,'false');
         changeorder_gettoeat(num,:,t)=changeorder;     
         for i=changeorder
-            [~, probgettoeat,~,~]=signalingevents_new_v2_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            [~, probgettoeat,~,~]=signalingevents_4regimes_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
             perf=probgettoeat;
             
             choosestrat=zeros(1,3);
@@ -180,7 +180,7 @@ for num=1:its
                 upone=strategy;
                 upone(i)=strategy(i)+1;
 
-                [~, probgettoeat,~,~]=signalingevents_new_v2_parallel(upone,numsigs_permove,nummoves,radius,b,T);
+                [~, probgettoeat,~,~]=signalingevents_4regimes_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=probgettoeat(i);
             end
 
@@ -190,7 +190,7 @@ for num=1:its
                 downone=strategy;
                 downone(i)=strategy(i)-1;
 
-                [~, probgettoeat,~,~]=signalingevents_new_v2_parallel(downone,numsigs_permove,nummoves,radius,b,T);
+                [~, probgettoeat,~,~]=signalingevents_4regimes_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=1-probgettoeat(i);   
             end 
 
@@ -247,7 +247,7 @@ for num=1:its
         changeorder=randsample(1:N,N,'false');
         changeorder_both(num,:,t)=changeorder;     
         for i=changeorder
-            [~,~,both, ~]=signalingevents_new_v2_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            [~,~,both, ~]=signalingevents_4regimes_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
             perf=both;
             
             choosestrat=zeros(1,3);
@@ -259,7 +259,7 @@ for num=1:its
                 upone=strategy;
                 upone(i)=strategy(i)+1;
 
-                [~,~,both, ~]=signalingevents_new_v2_parallel(upone,numsigs_permove,nummoves,radius,b,T);
+                [~,~,both, ~]=signalingevents_4regimes_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=both(i);
             end
             
@@ -269,7 +269,7 @@ for num=1:its
                 downone=strategy;
                 downone(i)=strategy(i)-1;
 
-                [~,~,both, ~]=signalingevents_new_v2_parallel(downone,numsigs_permove,nummoves,radius,b,T);
+                [~,~,both, ~]=signalingevents_4regimes_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=both(i);   
             end 
             
@@ -328,7 +328,7 @@ for num=1:its
         changeorder=randsample(1:N,N,'false');
         changeorder_generous(num,:,t)=changeorder;     
         for i=changeorder
-            [~,~,~,generous]=signalingevents_new_v2_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
+            [~,~,~,generous]=signalingevents_4regimes_parallel(strategy,numsigs_permove,nummoves,radius,b,T);
             perf=generous;
             
             choosestrat=zeros(1,3);
@@ -340,7 +340,7 @@ for num=1:its
                 upone=strategy;
                 upone(i)=strategy(i)+1;
 
-                [~,~,~,generous]=signalingevents_new_v2_parallel(upone,numsigs_permove,nummoves,radius,b,T);
+                [~,~,~,generous]=signalingevents_4regimes_parallel(upone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(3)=generous(i);
             end
             
@@ -350,7 +350,7 @@ for num=1:its
                 downone=strategy;
                 downone(i)=strategy(i)-1;
 
-                [~,~,~,generous]=signalingevents_new_v2_parallel(downone,numsigs_permove,nummoves,radius,b,T);
+                [~,~,~,generous]=signalingevents_4regimes_parallel(downone,numsigs_permove,nummoves,radius,b,T);
                 choosestrat(1)=generous(i);   
             end 
             
@@ -396,8 +396,8 @@ delete(dellapool);
 clear dellapool dellacluster
 
 filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_rad=',num2str(radius),'_timesteps=',num2str(timesteps),'.mat');
-% save(filename,'evolution_eaten','evolution_gettoeat','changeorder_eaten','changeorder_gettoeat','disconnected_gettoeat','radvals','maxt_eaten','maxt_gettoeat')
-save(filename)
+% save(filename)
+save(filename,'changeorder_both','changeorder_eaten','changeorder_generous','changeorder_gettoeat','evolution_both','evolution_eaten','evolution_generous','evolution_gettoeat','maxt_both','maxt_eaten','maxt_generous','maxt_gettoeat','radvals')
 'Greedy opt is done. Group props are not.' %#ok<NOPTS>
 
 % for ir=1:Nr
@@ -479,9 +479,9 @@ end
 
 clear num t meanH2 meanH2_forced corrlength corrlength_forced disconnectedcount meanrho meanrho_forced
 
-filename=strcat('/home/brush/schooling_consensus/greedyopt','_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'_rad=',num2str(radius),'_timesteps=',num2str(timesteps),'.mat');
-% save(filename,'evolution_eaten','H2s_eaten','H2sforced_eaten','corrlengths_eaten','corrlengthsforced_eaten','rhos_eaten','rhosforced_eaten','evolution_gettoeat','H2s_gettoeat','H2sforced_gettoeat','corrlengths_gettoeat','corrlengthsforced_gettoeat','rhos_gettoeat','rhosforced_gettoeat','evolution_both','H2s_both','H2sforced_both','corrlengths_both','corrlengthsforced_both','rhos_both','rhosforced_both','evolution_generous','H2s_generous','H2sforced_generous','corrlengths_generous','corrlengthsforced_generous','rhos_generous','rhosforced_generous','disconnected_eaten','disconnected_gettoeat','disconnected_both','disconnected_generous','radvals','maxt_eaten','maxt_gettoeat','maxt_both','maxt_generous','changeorder_eaten','changeorder_gettoeat','changeorder_both','changeorder_generous','radius','b','T','nummoves','numsigs_permove','N')
-save(filename)
+filename=strcat('/home/brush/schooling_consensus/greedyopt','_timesteps=',num2str(timesteps),'_rad=',num2str(radius),'_T=',num2str(T),'_nummoves=',num2str(nummoves),'_numpermove=',num2str(numsigs_permove),'.mat');
+save(filename,'changeorder_both','changeorder_eaten','changeorder_generous','changeorder_gettoeat','evolution_both','evolution_eaten','evolution_generous','evolution_gettoeat','maxt_both','maxt_eaten','maxt_generous','maxt_gettoeat','radvals','H2s_eaten','H2s_generous','H2s_gettoeat','H2s_both','H2sforced_both','H2sforced_eaten','H2sforced_generous','H2sforced_gettoeat','corrlengths_both','corrlengths_eaten','corrlengths_generous','corrlengths_gettoeat','corrlengthsforced_both','corrlengthsforced_eaten','corrlengthsforced_generous','corrlengthsforced_gettoeat','rhos_both','rhos_eaten','rhos_generous','rhos_gettoeat','rhosforced_both','rhosforced_eaten','rhosforced_generous','rhosforced_gettoeat')
+% save(filename)
 'Greedy opt is done. Group props are too.' %#ok<NOPTS>
 
 

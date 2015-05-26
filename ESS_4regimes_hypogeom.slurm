@@ -2,7 +2,7 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 120:00:00
+#SBATCH -t 130:00:00
 #SBATCH -J ESSjob_4_hypogeom
 #SBATCH -o ESS_4regimes_hypogeom.out
 #SBATCH --mail-type=begin

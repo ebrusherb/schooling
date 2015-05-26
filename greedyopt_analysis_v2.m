@@ -113,9 +113,9 @@ set(gca,'FontName',fontname,'FontSize',textfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String',letters{6},'FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-
+i=9;
 subplot(4,3,7)
-plot(1:timesteps,reshape(evolution_both(1,:,:),N,[]),'LineWidth',thinlw)
+plot(1:timesteps,reshape(evolution_both(i,:,:),N,[]),'LineWidth',thinlw)
 box off
 set(gca,'xlim',[0 M])
 set(gca,'xtick',0:25:M,'ytick',0:5:N,'tickdir','out')
@@ -147,9 +147,9 @@ set(gca,'FontName',fontname,'FontSize',textfontsz)
 apos=get(gca,'Position');
 annotation('textbox',[apos(1)-xoffset apos(2)+apos(4)+yoffset .01 .04],'String',letters{9},'FitBoxToText','on','FontSize',textfontsz,'FontName',fontname,'EdgeColor','none','VerticalAlignment','middle','HorizontalAlignment','left')
 
-
+i=10;
 subplot(4,3,10)
-plot(1:timesteps,reshape(evolution_generous(1,:,:),N,[]),'LineWidth',thinlw)
+plot(1:timesteps,reshape(evolution_generous(i,:,:),N,[]),'LineWidth',thinlw)
 box off
 set(gca,'xlim',[0 M])
 set(gca,'xtick',0:25:M,'ytick',0:5:N,'tickdir','out')
@@ -186,4 +186,4 @@ set(gcf,'PaperSize',[w h]);
 set(gcf,'PaperPosition',[0 0 w h]);
 
 filename=strcat('/Users/eleanorbrush/Desktop/','greedyoptneighbors_radius=',num2str(radius*10),'.pdf');
-print(filename,'-dpdf','-r300');
+% print(filename,'-dpdf','-r300');

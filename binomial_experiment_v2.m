@@ -1,12 +1,12 @@
 N=20;
-k2=15;
-k1=17;
+k2=17;
+k1=16;
 % radius=.1;
 strategy=k2*ones(N-1,1);
 strategy=[k1;strategy];
 nummoves=1000;
-m=3;
-% p=(m)/N;
+m=2;
+% p=(m)/N; 
 freqs=zeros(N,nummoves);
 ranks=zeros(N,nummoves);
 for i=1:nummoves
@@ -211,3 +211,71 @@ for j=0:min(k,m)
 %     binom(j+1)=nchoosek(k,j)*power(p,j)*power(1-p,k-j);
     hypo(j+1)=hygepdf(j,N,m,k);
 end
+
+%%
+N=50;
+strategy=47*ones(N,1);
+strategy(1)=45;
+m=9;
+k=15;
+toadd=zeros(m+1,1);
+for l=0:m
+   toadd(l+1)=hygepdf(l,N-1,m,strategy(1))*power(1-hygecdf(l,N-1,m,strategy(1)),k-1)*power(1-hygecdf(l/strategy(1)*strategy(2),N-1,m,strategy(2)),N-k);
+end
+probless=sum(toadd);
+%%
+N=20;
+resident=17;
+invader=13;
+m=9;
+k=1;
+
+toadd=zeros(m+1,1);
+for l=0:m
+   toadd(l+1)=hygepdf(l,N-1,m,invader)*power(1-hygecdf(l,N-1,m,invader),k-1)*power(1-hygecdf(floor(l/invader*resident),N-1,m,resident),N-k);
+end
+probleast=sum(toadd);
+toadd2=zeros(m+1,1);
+for l=0:m
+   toadd2(l+1)=hygepdf(l,N-1,m,resident)*power(1-hygecdf(l,N-1,m,resident),N-k-1)*power(1-hygecdf(floor(l/resident*invader),N-1,m,invader),k);
+end
+probleast2=sum(toadd2);
+probeaten=zeros(1,N);
+probeaten(1:k)=probleast;
+probeaten((k+1):end)=(1-probleast*k)/(N-k);
+
+toadd3=zeros(m+1,1);
+for l=0:m
+%                toadd(l+1)=hygepdf(l,N-1,m,invader)*power(hygecdf(l-1,N-1,m,invader),k-1)*power(hygecdf(l/invader*resident,N-1,m,resident),N-k);
+   toadd3(l+1)=hygepdf(l,N-1,m,invader)*power(hygecdf(l-1,N-1,m,invader),k-1)*power(hygecdf((l-1)/invader*resident,N-1,m,resident),N-k); %l-1 because (l-1)/invader*resident isn't going to be an integer anyway
+end
+probmost=sum(toadd3);
+probgettoeat=zeros(1,N);
+probgettoeat(1:k)=probmost;
+probgettoeat((k+1):end)=(1-probmost*k)/(N-k);
+%%
+N=20;
+resident=1;
+invader=1;
+m=9;
+k=1;
+toadd=zeros(m+1,1);
+for l=0:m
+   toadd(l+1)=hygepdf(l,N-1,m,invader)*power(1-hygecdf(l,N-1,m,invader),k-1)*power(1-hygecdf(floor(l/invader*resident),N-1,m,resident),N-k);
+   toadd(l+1)=toadd(l+1)+hygepdf(l,N-1,m,invader)*sum(power(hygepdf(l,N-1,m,invader),1:(k-1))./(2:k))*power(1-hygecdf(floor(l/invader*resident),N-1,m,resident),N-k);
+end
+probleast=sum(toadd);
+probeaten=zeros(1,N);
+probeaten(1:k)=probleast;
+probeaten((k+1):end)=(1-probleast*k)/(N-k);
+
+toadd2=zeros(m+1,1);
+for l=0:m
+%                toadd(l+1)=hygepdf(l,N-1,m,invader)*power(hygecdf(l-1,N-1,m,invader),k-1)*power(hygecdf(l/invader*resident,N-1,m,resident),N-k);
+   toadd2(l+1)=hygepdf(l,N-1,m,invader)*power(hygecdf(l-1,N-1,m,invader),k-1)*power(hygecdf(floor(l/invader*resident),N-1,m,resident),N-k);
+end
+probmost=sum(toadd2);
+probgettoeat=zeros(1,N);
+probgettoeat(1:k)=probmost;
+probgettoeat((k+1):end)=(1-probmost*k)/(N-k);
+

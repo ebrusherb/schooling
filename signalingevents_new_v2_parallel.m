@@ -14,7 +14,7 @@ parfor i=1:nummoves
     M=zeros(N);
     for ind=1:N
         [~, order]=sort(d(ind,:));
-        neighbors=order(2:strategy(ind)+1);
+        neighbors=order(2:strategy(ind)+1); %#ok<PFBNS>
         M(ind,neighbors)=1/strategy(ind);
         M(ind,ind)=-sum(M(ind,neighbors));
     end
@@ -94,7 +94,7 @@ maxscorer_generous=zeros(N,size(scores,2));
 for i=1:size(scores,2)
     [x,~,z]=unique(scores(:,i));
     [~,o]=sort(x);
-    cutoff_now=min(cutoff,length(x)-1);
+%     cutoff_now=min(cutoff,length(x)-1);
 %     maxscorer_generous(o(z)>=o(end-cutoff_now),i)=1/numsigs_tot;
     choose=zeros(N,1);
     count=0;

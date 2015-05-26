@@ -12,10 +12,10 @@ b=1;
 strats=1:1:(N-1);
 L=length(strats);
 
-Tvals=[1]; %#ok<NBRAK>
+Tvals=[1];
 Nt=length(Tvals);
 
-radvals=0:.1:1.2; 
+radvals=0:.1:1.2; %#ok<NBRAK>
 % radvals=.1;
 Nr=length(radvals);
 

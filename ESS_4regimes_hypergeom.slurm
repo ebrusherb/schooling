@@ -2,9 +2,9 @@
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH -t 130:00:00
-#SBATCH -J ESSjob_4_hypogeom_really
-#SBATCH -o ESS_4regimes_hypogeom_really.out
+#SBATCH -t 40:00:00
+#SBATCH -J ESSjob_4_hypergeom
+#SBATCH -o ESS_4regimes_hypergeom.out%A
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-user=brush@princeton.edu
@@ -27,6 +27,6 @@ export PROCS=${SLURM_CPUS_ON_NODE}
 export numsigs=1
 export nummoves=1000
 
-${EXEC}${OPTS} < ESS_4regimes_hypogeom_really.m
+${EXEC}${OPTS} < ESS_4regimes_hypergeom.m
 
 rm -rf /scratch/network/brush/tmp/$SLURM_JOB_ID

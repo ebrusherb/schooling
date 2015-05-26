@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction }{}
+\BOOKMARK [1][-]{section.2}{Model }{}
+\BOOKMARK [2][-]{subsection.2.1}{Modeling interactions and group-level properties }{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Individual-level fitness }{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{Optimization methods }{section.2}
+\BOOKMARK [1][-]{section.3}{Results }{}
+\BOOKMARK [2][-]{subsection.3.1}{Robustness and correlation length are positively related. }{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{The ESS number of neighbors depend on the content of the signal. }{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{The predation ESS increases as the signal becomes more public.}{section.3}
+\BOOKMARK [2][-]{subsection.3.4}{The birds construct an optimal network when they learn strategies to optimize access to abundant resources. }{section.3}
+\BOOKMARK [1][-]{section.4}{Discussion}{}
+\BOOKMARK [1][-]{section.5}{Appendix}{}
+\BOOKMARK [2][-]{theorem.5.1}{Linear algebra claims and theorems }{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Opinion dynamics with noise }{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Probability distribution at equilibrium }{section.5}
+\BOOKMARK [2][-]{subsection.5.4}{Connecting two frameworks }{section.5}
+\BOOKMARK [1][-]{section.6}{Figures }{}
+\BOOKMARK [1][-]{section.7}{Tables}{}

@@ -1,4 +1,4 @@
-function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_new_v2_parallel_hypogeom(strategy,numsigs_permove,nummoves,radius,b,T)
+function [probeaten, probgettoeat, both, probgettoeat_generous]=signalingevents_4regimes_parallel_hypergeom(strategy,numsigs_permove,nummoves,radius,b,T)
 N=max(size(strategy));
 
 numsigs_tot=numsigs_permove*nummoves;
@@ -6,8 +6,8 @@ numsigs_tot=numsigs_permove*nummoves;
 
 scores=zeros(N,numsigs_permove,nummoves);
 
-% parfor i=1:nummoves
-for i=1:nummoves
+parfor i=1:nummoves
+% for i=1:nummoves
     positions=unifrnd(0,1,N,2);
     d=squareform(pdist(positions));
 
@@ -15,7 +15,7 @@ for i=1:nummoves
     for ind=1:N
 %         [~, order]=sort(d(ind,:));
 %         neighbors=order(2:strategy(ind)+1);
-        neighbors=randsample(setdiff(1:N,ind),strategy(ind),'false');
+        neighbors=randsample(setdiff(1:N,ind),strategy(ind),'false'); %#ok<PFBNS>
         M(ind,neighbors)=1/strategy(ind);
         M(ind,ind)=-sum(M(ind,neighbors));
     end

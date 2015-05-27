@@ -1,0 +1,45 @@
+This is BibTeX, Version 0.99c (TeX Live 2009)
+The top-level auxiliary file: paper_skeleton.aux
+The style file: plainnat.bst
+Database file #1: info_evo.bib
+You've used 3 entries,
+            2773 wiz_defined-function locations,
+            614 strings with 5544 characters,
+and the built_in function-call counts, 1679 in all, are:
+= -- 132
+> -- 144
+< -- 0
++ -- 48
+- -- 45
+* -- 158
+:= -- 277
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 24
+chr.to.int$ -- 3
+cite$ -- 6
+duplicate$ -- 61
+empty$ -- 106
+format.name$ -- 48
+if$ -- 332
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 3
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 44
+preamble$ -- 1
+purify$ -- 21
+quote$ -- 0
+skip$ -- 52
+stack$ -- 0
+substring$ -- 33
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 33
+warning$ -- 0
+while$ -- 10
+width$ -- 0
+write$ -- 45

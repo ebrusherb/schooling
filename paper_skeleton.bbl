@@ -1,82 +1,28 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem{Ballerini:2007uq}
-M.~Ballerini, N.~Cabibbo, R.~Candelier, A.~Cavagna, E.~Cisbani, I.~Giardina,
-  V.~Lecomte, A.~Orlandi, G.~Parisi, A.~Procaccini, M.~Viale, and
-  V.~Zdravkovic.
-\newblock Interaction ruling animal collective behavior depends on topological
-  rather than metric distance: Evidence from a field study.
-\newblock {\em Proceedings of the National Academy of Science},
-  105(4):1232--1237, January 2008.
-
-\bibitem{Bialek:2013fk}
-William Bialek, Andrea Cavagna, Irene Giardina, Thierry Mora, Oliver Pohl,
-  Edmondo Silvestri, Massimiliano Viale, and Aleksandra Walczak.
-\newblock Social interactions dominate speed control in driving natural flocks
-  toward criticality.
-\newblock {\em arXiv}, 2013.
-
-\bibitem{Bialek:2012fk}
+\bibitem[Bialek et~al.(2012)Bialek, Cavagna, Giardina, Mora, Silvestri, Viale,
+  and Walczak]{Bialek:2012fk}
 William Bialek, Andrea Cavagna, Irene Giardina, Thierry Mora, Edmondo
   Silvestri, Massimiliano Viale, and Aleksandra~M. Walczak.
 \newblock Statistical mechanics for natural flocks of birds.
-\newblock {\em Proceedings of the National Academy of Science},
-  109(13):4786--4791, March 2012.
+\newblock \emph{Proceedings of the National Academy of Science}, 109\penalty0
+  (13):\penalty0 4786--4791, March 2012.
 
-\bibitem{Bode:2010ys}
-Nikolai~W.F. Bode, Daniel~W. Franks, and A.~Jamie Wood.
-\newblock Limited interactions in flocks: relating model simulations to
-  empirical data.
-\newblock {\em Journal of The Royal Society Interface}, page rsfi20100397,
-  2010.
-
-\bibitem{Cavagna:2009kx}
-Andrea Cavagna, Alessio Cimarelli, Irene Giardina, Giorgio Parisi, Raffaele
-  Santagati, Fabio Stefanini, and Massimiliano Viale.
-\newblock Scale-free correlations in starling flocks.
-\newblock {\em Proceedings of the National Academy of Science},
-  107(26):11685--11870, 2009.
-
-\bibitem{Landeau:1986fk}
-Laurie Landeau and John Terborgh.
-\newblock Oddity and the 'confusion effect' in predation.
-\newblock {\em Animal Behaviour}, 34(5):1372--1380, 1986.
-
-\bibitem{Lukeman:2010vn}
-Ryan Lukeman, Yue-Zian Li, and Leah Edelstein-Keshet.
-\newblock Inferring individual rules from collective behavior.
-\newblock {\em Proceedings of the National Academy of Science},
-  107(28):12576--12580, 2010.
-
-\bibitem{Shang:2014uq}
-Yilun Shang and Roland Bouffanais.
-\newblock Influence of the number of topologically interacting neighbors on
-  swarm dynamics.
-\newblock {\em Scientific reports}, 4, 2014.
-
-\bibitem{Strandburg-Peshkin:2013fk}
-Ariana Strandburg-Peshkin, Colin~R. Twomey, Nikolai~W.F. Bode, Albert~B. Kao,
-  Yael Katz, Christos~C. Ioannou, Sara~B. Rosenthal, Colin~J. Torney, Hai~Shan
-  Wu, Simon~A. Levin, and Iain~D. Couzin.
-\newblock Visual sensory networks and effective information transfer in animal
-  groups.
-\newblock {\em Current Biology}, 23(17):R709--R711, 2013.
-
-\bibitem{Torney:2015fk}
-Colin~J. Torney, Tommaso Lorenzi, Iain~D. Couzin, and Simon~A. Levin.
-\newblock Social information use and the evolution of unresponsiveness in
-  collective systems.
-\newblock {\em Journal of The Royal Society Interface}, 12(103):20140893, 2015.
-
-\bibitem{Young:2013kx}
+\bibitem[Young et~al.(2013)Young, Scardovi, Cavagna, Giardina, and
+  Leonard]{Young:2013kx}
 George~F. Young, Luca Scardovi, Andrea Cavagna, Irene Giardina, and Naomi~E.
   Leonard.
 \newblock Starling flock networks manage uncertainty in consensus at low cost.
-\newblock {\em PLOS Computational Biology}, 9, 2013.
+\newblock \emph{PLOS Computational Biology}, 9, 2013.
 
-\bibitem{Young:2010fk}
+\bibitem[Young et~al.(2010)Young, Scardovi, and Leonard]{Young:2010fk}
 George~Forrest Young, Luca Scardovi, and Naomi~Ehrich Leonard.
 \newblock Robustness of noisy consensus dynamics with directed communication.
-\newblock {\em Proceedings of the American Control Conference}, 2010.
+\newblock \emph{Proceedings of the American Control Conference}, 2010.
 
 \end{thebibliography}

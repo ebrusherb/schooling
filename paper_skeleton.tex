@@ -16,6 +16,8 @@
 \usepackage{booktabs}
 \usepackage[pdftex]{hyperref}
 \usepackage{lscape}
+\usepackage[numbers,sort&compress]{natbib}
+\DeclareRobustCommand{\cite}[1]{\citep{#1}}
 \captionsetup{justification=RaggedRight, singlelinecheck=false}
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 \newcommand{\argmax}{\text{argmax}}
@@ -31,6 +33,8 @@
 
 \pagestyle{empty}
 
+  \setcounter{tocdepth}{1}
+
 \begin{document}
 
 
@@ -41,6 +45,7 @@
 \end{center}
 
 \tableofcontents
+
 %
 %\section{Abstract}
 %Birds in flocks, like animals in many types of social groups, can use their peers to learn about the environment and update their opinions about where to move in that environment.  Previous work on starlings has measured the number of other birds an individuals pays attention to and shown that this number of ``neighbors" leads to a social network that is conducive to the whole flock reaching consensus.  It is unclear, however, why an individual would change its behavior, i.e. the number of neighbors it learns from, to achieve this outcome.  Individual birds should optimize how well they learn about the environment. There are (at least) two features of the environment that are important to an individual bird's fitness---the location of a predator and the location of resources---and it can try to learn about these from its peers. In this work, we identify the optimal strategies for birds under selection pressure dictated by these types of information and explore the relationship between the robustness measure and the correlation length of the flock, a measure commonly used to describe how close a flock's structure is to criticality.
@@ -78,81 +83,189 @@ Questions:
 
 \section{Model }
 
-\subsection{Modeling interactions and group-level properties }
-There are two ways to describe equilibrium properties of a flock sharing information over a network.  The first is to write down a set of differential equations with noise to describe how each bird's opinion changes over time and then to analyze the distribution of these opinions after the dynamics have reached equilibrium \cite{Young:2010fk,Young:2013kx}. The second is to write down an explicitly probability distribution of the opinions at equilibrium and to analyze this distribution. WIth either approach, we consider a vector of opinions $v$ where $v_i$ a a scalar that represents the $i^\text{th}$'s bird opinion about an unspecified behavior, for example where or how fast to fly. Both approaches rely on a network of connections between the birds, which we will describe first. Let $A$ be the adjacency matrix such that 
-
-\begin{equation}
+\subsection{Opinion dynamics } 
+In our model, each bird has a scalar value, $v_i$, that represents its opinion about the environment. Each bird also has a strategy, $k_i$, that represents the number of its peers whose opinions it observes, which it uses to update its own opinion. Specifically, a bird observes the $k_i$ nearest birds, which form the neighborhood $\mathscr{N}_i$, and the focal bird changes its opinion to be close to the average of its neighbors':
+\begin{equation*}
+\dot{v_i}=\frac{1}{k_i}\sum_{j \in \mathscr{N}_i}(v_j-v_i).
+\end{equation*}
+The strategy of choosing $k_i$ nearest neighbors will be the focus of our analysis. It will be useful to write down the matrices describing the interaction between pairs of birds.  If 
+\begin{equation*}
 A_{ij}=\left\{\begin{array}{l l l}
-1 & \text{ if $i$ pays attention to $j$ }
+\frac{1}{k_i} & \text{ if $j$ is in $\mathscr{N}_i$ }
 \\0 & \text{ otherwise }
-\end{array}\right.
-\end{equation}
-If $k_i$ is the number of neighbors node $i$ has, then $k_i=\sum_kA_{ik}$. We assume that having more neighbors means paying less attention to each so we normalize $A$ to find $\bar{A}$: $\bar{A}_{ij}=\frac{A_{ij}}{k_i}$.
-
-
-The Laplacian of this matrix is given by $L=\bar{A}-I$, which is symmetric only if $A$ is.  We can symmetrize the interactions by defining $S=\frac{1}{2}(A+A^T)$ and $P$ such that $P_{ij}=S_{ij}$ for $j\neq i$ and $P_{ii}=-\sum_kS_{ik}$. Then $L$ and $P$ share the properties that $L\vec{1}=P\vec{1}=\vec{0}$ and that each is negative semi-definite, with the difference being that $P$ is necessarily symmetric.  It is more common to use $L$ in a dynamics system approach, so that 
+\end{array}\right. \text{ and }  L_{ij}=\left\{\begin{array}{l l l}
+A_{ij} & \text{ if $j\neq i$ }
+\\-\sum_l A_{il} & \text{ if $j=i$ }
+\end{array}\right.,
+\end{equation*}
+then $L$ can be used to write a system of differential equations describing the vector of opinions $v=(v_1,\dots,v_N)$:
+\begin{equation*}
+\dot{v}=Lv.
+\end{equation*}
+As written, the system will reach consensus with each $v_i=\alpha$ for some $\alpha\in\R$, the exact value of which depends on the initial conditions $v(0)$. To incorporate environmental information, we assume that there is an environmental signal such that birds that can perceive the signal change their opinions to be close to $1$. Thus, having an opinion closer to $1$ means a bird is more informed and having an opinion farther from $1$ means a bird is less informed. The opinion dynamics of a bird that do not receive the signal are unchanged: $v_i=\sum_jL_{ij}v_j$. To describe the importance of the environmental signal, we introduce a parameter $b$, so that the opinion dynamics of a bird that \emph{do} receive the signal are given by
+\begin{equation*}
+\dot{v}_i=\sum_jL_{ij}v_j+b(1-v_i).
+\end{equation*}
+If $B$ is the diagonal matrix with $B_{ii}=b$ if $i$ can perceive the signal and $B_{ii}=0$ otherwise, and $L_\text{s}=L-B$, then
 \begin{equation}
-\dot{v}_i=\frac{1}{k_i}\sum_i\left(v_j-v_i\right)+\sqrt{k_i}\xi_i
+\dot{v}=Lv+B(\vec{1}-v)=L_\text{s}v+B\vec{1}. \label{opdynamics_signal}
 \end{equation}
-\begin{equation}
-\dot{v}=Lv+D\xi \label{opinion_dynamics}
-\end{equation} 
-where $D$ is a diagonal matrix with entires $\{\sqrt{k_i}\}$ and $E[\xi(t)]=\vec{0}$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[v(0)\xi(t)^T]=\vec{0}$. This describes a system in which each bird changes averages the differences between its own opinions and those of its neighbors and changes its opinion to minimize these differences. Our choice of $D$ assumes that birds with more neighbors make noisier estimates of how to change their opinions. 
-
-The Boltzmann distribution in statistical physics is a standard way in which to write an equilibrium distribution. In physics, those states with the highest energy are least likely. In our system, those sets of opinions that are least in consensus will be less likely. Specifically, we will use the following expression to represent the ``energy'' of an opinion vector
-\begin{equation}
-H(v)=-v^TPv \label{Hamiltonian}
-\end{equation}
-and the Boltzmann distribution
-\begin{equation}
-P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}H(v)\right) \label{Boltzmann}
-\end{equation}
-where $Z=\int_\R^N\exp\left(-\frac{1}{2}H(v)\right)dv$.
-
-With the dynamical approach, in the absence of noise, the system would reach consensus with each $v_i=\alpha$ for some $\alpha\in\R$. Similarly, with the statistical physics approach, consensus states with each $v_i=\alpha$ are most likely. However, all consensus values $\alpha$ are equally likely. It is therefore difficult to describe correlations between the bird's opinions at equilibrium. It becomes easier, however, to consider deviations from consensus. If all $v_i$ are equal, then $v=\alpha\vec{1}$. To consider deviations from this consensus state, it is useful to define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk,Young:2013kx} that this is equivalent to a $Q$ such that $QQ^T=I_{N-1}$ and $Q^TQ=I_N-\frac{1}{N}\vec{1}\vec{1}^T$. To simply consider absolute deviations from the average opinion of the flock, we can define $z=v-\langle v\rangle \vec{1}=Q^TQv$, where $\langle v \rangle =\frac{v_i}{N}$. To consider the component of the opinion vector that is orthogonal to consensus, we can define $y=Qv=Qz$. Let $\Sigma_z=\lim_{t\to\infty}E[zz^T]$ and $\Sigma_y=\lim_{t\to\infty}E[yy^T]$ using the dynamical approach and $C_z=E[zz^T]$ and $C_y=E[yy^T]$ using the statistical physics approach. Since $y=Qz$ and $z=Q^Ty$, in either case, we can translate easily between $\Sigma_z$ and $\Sigma_y$ or between $C_z$ and $C_y$. In the Appendix, we derive equations for each of these covariance matrices and summarize the expression for the $y$ covariance matrices in Table \ref{correspondence}.  The first thing to note is that, if instead of using $L$ we use $P$ in the dynamical approach and all birds have the same number of neighbors, then $C_y=2\Sigma_y$, as shown in Claim \ref{cov_equivalence}. There is therefore a close correspondence between the two approaches.
-
-These covariance matrices allow us to define two group properties. The first is $\mathscr{H}_2$ robustness, as used in \cite{Young:2010fk,Young:2013kx}. This is a measure of the robustness of the consensus state in which all birds have the same opinion to noise at equilibrium. Specifically, 
-\begin{equation}
-\rho=\frac{1}{\lim_{t\to\infty}E[||y||]}=\frac{1}{\lim_{t\to\infty}\Tr(\Sigma_y)}. \label{H2def}
-\end{equation}
-The second property is the correlation length of the flock. This is the distance over which birds' opinions tend to be positively correlated with each other. If we know the distances between the birds and the covariance matrix $C_z$, we can plot the correlations $\{E[z_iz_j]\}$ between each pair of birds' deviations from consensus against the distance between the birds and then identify the correlation length $\lambda$ by finding the distance at which these correlations become $0$.
-
-So far, we have considered birds whose opinions only depend on the opinions of the rest of the flock. We can additionally incorporate environmental information by assuming that there is an environmental signal such that more informed birds have opinions closer to $1$. If we let $B$ be a matrix with $B_ii=1$ if $i$ can perceive the signal and $0$ otherwise, then the dynamical system becomes
-\begin{equation}
-\dot{v}=Lv+B(\vec{1}-v)+D\xi =L_\text{s}v+B\vec{1}+D\xi \label{opinion_dynamics2}
-\end{equation}
-where $L_\text{s}=L-B$. Similarly, the statistical physics model becomes
-\begin{equation}
-P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}(v-\vec{1})^T(-P+B)(v-\vec{1})\right)=\frac{1}{Z}\exp\left(\frac{1}{2}(v-\vec{1})^T(-P_\text{s})(v-\vec{1})\right)
-\end{equation}
-where $P_\text{s}=P-B$. Again, we can find the covariance matrices $\Sigma_z$, $\Sigma_y$, $C_z$, and $C_y$. As was the case without a signal, if we use $P$ in the dynamical approach and all birds have the same number of neighbors, then we find that $C_y=2\Sigma_y$ (Claim \ref{cov_equivalence}). We define $\rho$ and $\lambda$ as above using the matrices $\Sigma_y$ and $C_z$ in the presence of a signal.
+Note that $L\vec{1}=\vec{0}$, so $L$ has (at least) one eigenvalue equal to $0$. If at least one bird receives an environmental signal, then generally $L_\text{s}$ will have all negative non-zero eigenvalues. Then Claim \ref{exp_approx} in the Appendix shows the solution $v(t)$ to this set of ODEs.
 
 
 \subsection{Individual-level fitness }
-To find the optimal strategies from the individuals' perspectives, we need a measure of individual-level fitness. We use the dynamical system to describe how well each bird learns about the environmental signal. For a given matrix $L$, the expected opinion $q_i$ of each individual satisfies the equations
-\begin{equation}
-\dot{q}=L_\text{s}q+B\vec{1}. \label{expected_opinion}
-\end{equation}
-To generate a matrix $L$, we distribute the individuals randomly in space (specifically, in a unit square). has a strategy $k_i$ that dictates how many neighbors it has, so that $k_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    Each individual then pays attention to its $k_i$ nearest neighbors.  One individual is chosen to be a receiver; it and all those individuals within a radius $r$ of the receiver perceive, so that $B_{ii}=1$ for all those birds within this radius. We do this $1000$ times and find $q(1)$ for each matrix, which we refer to as a signaling event. This is meant to simulate a situation in which such that information is present only intermittently and otherwise the birds are moving randomly through space and restructuring their network.  If, instead of paying attention to the closest neighbors, a bird choose $k_i$ neighbors at random out of $N$ birds, $N_\text{I}$ of whom are informed, the number of informed neighbors follows a hypergeometric distribution:
-\begin{equation}
-P(j \text{ informed neighbors} )=\frac{{N_\text{I}\choose j}{N-N_\text{I}\choose k_i-j}  }{{N\choose k_i}}. \label{hypergeom}
-\end{equation} 
-This distribution is not an exact description of the probability of $j$ informed neighbors in our model  since it ignores spatial proximity, but it is a useful approximation for considering the advantages and disadvantages of each strategy $k_i$. {\red NOTE: I'M RUNNING AN ANALYSIS WHERE FITNESS IS BASED SOLELY ON THIS DISTRIBUTION, NOT ON THE FULL SPATIAL STRUCTURE OF THE MODEL.  I SHOULD HAVE RESULTS SOON. I EXPECT THEM TO BE SIMILAR TO THE FULL MODEL, BUT I WANTED TO MAKE SURE AND TO USE IT AS A WAY OF EXPLAINING THE FULL MODEL RESULTS.}
+To find the optimal strategies from the individuals' perspectives, we need a measure of individual-level fitness. In our model, birds with more information about the environment have higher fitness.   A signaling event is determined by the interaction matrix $A$ and by which birds receive the signal. For a single signaling event, the receivers and the birds to whom they are closest will generally be the most informed. To assess the fitness consequences of the number of nearest neighbors $k_i$, we need to determine how well birds with different strategies perform over many signaling events.
 
+We assume that signals appear relatively rarely compared to the timescale on which the birds in a flock move. Specifically, at each signaling event, we will assign all birds a new position by drawing a position randomly from a unit square. Each bird then pays attention to its $k_i$ nearest neighbors, which determines the adjacency matrix $A$ and therefore the matrix $L$. To determine which birds receive the signal, we pick a focal bird at random. Then, all birds within a radius $r$ of the focal bird receive the signal, which determines the matrix $B$.   To fully specify the opinion dynamics, we assume that $v_i(0)=0.5$ when the signal appears for all birds. Eq. (\ref{opdynamics_signal}) then determines the opinion dynamics. We assume that the fitness consequences of the opinion dynamics occur a short time after the signal appears. Specifically, fitness is determined at time $t=1$, i.e. by $v_i(1)$. We repeat this process $1000$ times to model many independent signaling events.
 
-We consider signals that provide information about two types of content: predators and food.  If the signal is information that a predator is present, we assume that whichever individual is least aware of the signal will be predated, i.e. the individual $i$ such that $q_i$ is lowest. Then, fitness is proportional to the probability of surviving, i.e. $1$ minus the probability of being the least informed over many signaling events. If the signal is information that resources are available, we consider two levels of resource abundance. If there are scarce resources, we assume that whichever individual is most aware of the signal will get access to the resource, i.e. the individual $i$ such that $q_i$ is highest. In this case, fitness is proportional to the probability of getting the resource, i.e. the probability of being the most informed over many signaling events. If there are abundant resources, we assume that the first four individuals to the resources can share it, so that fitness is proportional to the probability of being one of the four most informed birds. Finally, we consider a combination of predation and resources: fitness is proportional to the $1$ minus the probability of being predated times the probability of being the most informed. The behavior that the birds can change to improve their fitness is the number of other birds they pay attention to, $k_i$. In particular, each individual has a strategy $k_i$ that dictates how many neighbors it has, so that $k_i=\sum_{j\neq i}{\bf I}(A_{ij}\neq 0)$.    
+Birds that receive the signal will always be well informed. It is their performance when they do \emph{not} receive the signal that In Claim \ref{exp_approx} in the Appendix, we show that, for $i$ that do not receive the signal, 
+\begin{align*}
+v_i(1)&\approx v_{i}(0)+\frac{1}{2}\frac{\text{$\#$ of $i$'s neighbors that receive the signal}}{k_i}
+\\&=\frac{1}{2}\left(1+\frac{\text{$\#$ of $i$'s neighbors that receive the signal}}{k_i}\right).
+\end{align*}
+%Therefore, the probability of having an opinion $x$ is 
+%\begin{equation*}
+%P\big(v_i(1) =x\big)=P\big(\text{$i$ has $(2x-1)k_i$  informed neighbors}\big).
+%\end{equation*}
+%for $x=\frac{1}{2},\frac{1}{2}\frac{k_i+1}{k_1},\dots,\frac{1}{2}\frac{k_i+k_i}{k_i}=1$.
+To improve its performance, a bird should increase the probability of having a high proportion of informed neighbors. If $N_\text{r}$ birds receive the signal in a flock of size $N$ and each bird chooses $k_i$ neighbors at random (instead of its closet neighbors), the number of informed neighbors bird $i$ has follows a hypergeometric distribution:
+\begin{align}
+P(\text{$i$ has $j$  informed neighbors} )&=\frac{{N_\text{I}\choose j}{N-N_\text{I}\choose k_i-j}  }{{N\choose k_i}} \label{hypergeom}
+\end{align} 
+This gives us an approximation of the distribution $P(v_i(1)=x)$ as a function of $k_i$, which will be useful in considering the advantages and disadvantages of each strategy. 
 
+How exactly environmental information is translated into fitness depends on what the information is about. We consider signals that provide information about two types of content, predators and food, which lets us consider four selection regimes.  If the signal is information that a predator is present, we assume that whichever individual is least informed about the signal will be predated. The probability of bird $i$ being eaten is therefore 
+\begin{equation*}
+P(\text{$i$ is eaten})=\frac{\# \text{ of signaling events in which } v_i(1)=\min_i\{v_i(1)\}}{1000}.
+\end{equation*}
+The probability of $i$ surviving is $P(\text{$i$ survives})=1-P(\text{$i$ is eaten})$ and $i$'s fitness is proportional to this probability. If the signal is information that resources are available, we consider two levels of resource abundance. If there are scarce resources, we assume that whichever individual is most informed will get access to the resource. The probability that bird $i$ gets to eat is therefore 
+\begin{equation*}
+P(\text{$i$ gets to eat})=\frac{\# \text{ of signaling events in which } v_i(1)=\max_i\{v_i(1)\}}{1000}
+\end{equation*}
+and $i$'s fitness is proportional to this probability.  If there are abundant resources, we assume that the first four individuals to the resources can share it, so that the probability that bird $i$ gets the resource is the probability of that $v_i(1)$ is one of the four highest opinions over all signaling events and $i$'s fitness is proportional to this probability.  Finally, we consider a combination of predation and access to scarce resources. To do well, a bird must both survive and get to eat. In this case, $i$'s fitness is proportional to $P(\text{$i$ survives})\times P(\text{$i$ gets to eat})$. 
+
+  
 \subsection{Optimization methods }
-To understand what strategies we might expect to find, we are interested in identifying the optimal strategies.  We does this in two ways.  First, using the framework of adaptive dynamics in finite populations, we identify the evolutionarily stable strategy.  This framework assumes that there is a homogeneous population into which a mutant individual tries to invade.  If strategies change on a learning rather than an evolutionary timescale, or if there is just a lot of variation in the population, we might expect individuals to try to optimize their strategies in the context of a heterogeneous population.  This is our second method of optimization. Given a random set of initial strategies over the group, we allow each bird to choose the strategy that would be best given the rest of the strategies being used and repeat this process until the birds reach an equilibrium set of strategies. We repeat this over many initial sets of strategies to find average properties of this optimization process.
+We use two different methods for analyzing the evolutionary dynamics of the strategies $k_i$.  First, we identify the evolutionarily stable strategy.  The ESS is that strategy such that, if all members of the group use it, no other strategy can invade. Equivalently, if all members of the group use the ESS, no individual has an incentive to use another strategy. The probability of a new strategy invading the group depends on the relative fitness of the invader and resident strategies. The details on to find the ESS in a finite group are provided in the Appendix. Assuming the group all uses the same strategy allows us to exhaustively search over all strategies to find the ESS. However, it is a rather strict constraint. Our second method of optimization allows us to consider how the birds should optimize their strategies in the context of a heterogeneous population.  Given a random set of initial strategies, we allow each bird to choose the strategy that would give it the highest fitness, given the rest of the strategies being used. We repeat this process until the birds reach an equilibrium set of strategies. We repeat this over many initial sets of strategies to find average properties of this greedy optimization process.
+
+\subsection{Group-level properties }
+In our model, the information each bird can gather from its neighbors about an environmental signal has direct consequences on its fitness.  It may also be the case that being in a flock whose members have the same opinion is beneficial.  There are two ways to measure how well a flock can reach consensus, correlation length and $\mathscr{H}_2$ robustness, both of which require that we introduce noise into the opinion dynamics of the flock.  
+
+In the absence of an environmental signal, the flock will eventually reach a consensus state such that $\lim_{t\to\infty}v(t)=\alpha\vec{1}$ for some $\alpha\in\R$, where $\alpha$ depends on the initial conditions. In the presence of an environmental signal, $\lim_{t\to\infty}v(t)=\vec{1}$. If we introduce noise into the opinion dynamics, the steady state opinion vector will no longer be deterministic but will instead be described by a probability distribution.  We will take the distribution of the steady state opinion vector, $\lim_{t\to\infty}v(t)$, to be known for the moment and will come back to it shortly.
+
+Since the consensus value $\alpha$ is not always well-defined and since we are interested in the group's ability to reach consensus, but not the actual value of consensus, we subtract the average opinion from the opinion vector. If $V=\sum_iv_i/N$, then we define $z=v-V\vec{1}$. At steady state, $\lim_{t\to\infty}E[z(t)]=\vec{0}$ as long as the flock is connected. If we know the distribution of opinion vectors at steady state, we can also find the distribution of $z$ at steady state, and therefore the covariance matrix $C_z=\lim_{t\to\infty}E[z(t)z(t)^T]$.  The correlation matrix $\bar{C}$ is defined by $\bar{C}_{ij}=C_{zij}/\sqrt{C_{zii}C_{zjj}}$. By plotting the correlations $\{\bar{C}_{ij}\}$ against the distance between the birds, we can find the correlation length $\lambda$ at which the correlations cross $0$. (As shown in Fact \ref{sum_cov}, $\sum_{ij}C_{zij}=0$, so there must be a distance at which the covariances and hence the correlations drop below $0$.)
+
+The second group-level property, $\mathscr{H}_2$ robustness requires another manipulation of the opinion vector. We define a rotation matrix $R\in\R^N\times\R^N$ such that the last row of $R$ is equal to $\frac{1}{\sqrt{N}}\vec{1}^T$ and each of the first $N-1$ rows are normal and orthogonal to $\vec{1}$.  We will denote the first $N-1$ rows of $R$ as $Q\in\R^{N-1}\times\R^N$. 
+%Note that since $R^TR=RR^T=I_N$, $Q^TQ=I_N-\frac{1}{N}\vec{1}\vec{1}^T$ and $QQ^T=I_{N-1}$. 
+We now define $\bar{y}=Rz$. Then $\bar{y}_N=0$ and if $y=(\bar{y}_1\dots\bar{y}_{N-1})^T$ then $y=Qz=Q(v-V\vec{1})=Qv$, so that $y$ represents the component of $v$ that is orthogonal to the consensus vector $\vec{1}$ \cite{Young:2010fk,Young:2013kx}. The $\mathscr{H}_2$ robustness $\rho$ is defined as 
+\begin{equation*}
+\rho=\frac{1}{\lim_{t\to\infty}\sqrt{E[y(t)^Ty(t)]}}.
+\end{equation*}
+$\rho$ measures how far away from consensus the opinion vector is on average at steady state. The close relationship between these two measures is discussed in more detail in the Appendix.
+%Since $y=Qz$, if the same distribution of the opinion vector is used to find both $C_z$ and $E[||y||]$, then $E[||y||]=E[y^Ty]=\Tr(E[y^Ty])=\Tr(E[yy^T])=Tr(QC_zQ^T)$, so the two group properties are closely related. 
+
+What we have not specified so far is how to find the distribution of the opinion vector at steady state, which is needed to find both $\rho$ and $\lambda$. The same probability distribution could be used to find both. However, the two measures come from two different bodies of literature, $\lambda$ from statistical physics and $\rho$ from control theory, and the conventional probability distribution for each measure is different. 
+
+The Boltzmann distribution is the standard way in which to write an equilibrium distribution in statistical physics. In physics, those states with the highest energy are least likely. In our system, those sets of opinions that are least in consensus will be less likely. The distribution is only well-defined if there are symmetric interactions. Since $L$ is only symmetric if $A$ is, we symmetrize $A$ by defining $S=\frac{1}{2}(A+A^T)$ and 
+\begin{equation*}
+P_{ij}=\left\{\begin{array}{ll} S_{ij} & \text{ if $j\neq i$}
+\\ -\sum_lS_{il} & \text{ if $j=i$}
+\end{array}\right..
+\end{equation*}
+If $A$ is symmetric, then $S=A$ and $P=L$. To incorporate the environmental signal, we can define $P_\text{s}=P-B$.
+We can then use the following expressions to represent the ``energy'' of an opinion vector:
+%\begin{equation*}
+$H(v)=-v^TPv \text{ without the signal and } H_\text{s}(v)=-(v-\vec{1})^TP_\text{s}(v-\vec{1}) \text{ with the signal. }$%\label{Hamiltonian}
+%\end{equation*}
+This gives the Boltzmann distributions
+\begin{equation*}
+P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}H(v)\right) \text{ without the signal and } P_\text{s}(v)=\frac{1}{Z_\text{s}}\exp\left(-\frac{1}{2}H_\text{s}(v)\right) \text{ with the signal. }\label{Boltzmann}
+\end{equation*}
+where $Z=\int_\R^N\exp\left(-\frac{1}{2}H(v)\right)dv$ and $Z_\text{s}=\int_\R^N\exp\left(-\frac{1}{2}H_\text{s}(v)\right)dv$. Given these probability distributions, we can find $C_z$ with and without the signal, and therefore the correlation length $\lambda$ with and without the signal. Details on these calculations are provided in the Appendix.
+
+In control theory, it is conventional to write down the noisy dynamics leading to a steady state distribution rather than to assume the form of the steady state distribution.  Specifically, we consider the noisy opinion dynamics of the form 
+\begin{equation*}
+\dot{v}=Lv+K\xi \text{ without the signal and } \dot{v}=L_\text{s}v+B\vec{1}+D\xi \text{ with the signal,}
+\end{equation*}
+where $\xi$ such that $E[\xi(t)]=\vec{0}$ and $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$ and $D$ is a diagonal matrix with $\sqrt{k_i}$ along the diagonal. This choice of $D$ assumes that a bird with more neighbors makes noisier estimates of the many opinions it is trying to estimate. \citet{Young:2010fk} showed that if $\Sigma_y=\lim_{t\to\infty}E[y(t)y(t)^T]$ than, in the absence of the signal $\Sigma_y$ satisfies the Lyapunov equation 
+\begin{equation*}
+\bar{L}\sigma_y+\sigma_y\bar{L}=-QD^2Q^T,
+\end{equation*}
+where $\bar{L}=QLQ^T$. A proof of this claim and details on how to calculate $\Sigma_y$ with a signal present are provided in the appendix. Once we find $\Sigma_y$, then 
+\begin{equation*}
+\rho=\frac{1}{\lim_{t\to\infty}\sqrt{E[y(t)^Ty(t)]}}=
+%\frac{1}{\lim_{t\to\infty}\sqrt{E[\Tr(y(t)^Ty(t))]}}=
+\frac{1}{\lim_{t\to\infty}\sqrt{E[\Tr(y(t)y(t)^T)]}}=
+\frac{1}{\lim_{t\to\infty}\sqrt{E[\Tr(\Sigma_y)]}}.
+\end{equation*}
+
+%%%%%%%%%%
+%The first measurement of the flock's ability to reach consensus is what has been called the $\mathscr{H}_2$ robustness of the network, which measures how far away from consensus the flock is at equilibrium.  Specifically, we consider the noisy opinion dynamics of the form 
+%\begin{equation*}
+%\dot{v}_i=\sum_jL_{ij}v_j+\sqrt{k_i}\xi_i,
+%\end{equation*}
+%where $\xi_i$ is a random variable such that the vector $\xi(t)$ satisfies $E[\xi(t)]=\vec{0}$ and $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$ where $I$ is the $N\times N$ identity matrix.  In the absence of noise, the system would reach consensus with each $v_i=\alpha$ for some $\alpha\in\R$.  To consider deviations from this consensus state, it is useful to define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk,Young:2013kx} that this is equivalent to a $Q$ such that $QQ^T=I_{N-1}$ and $Q^TQ=I_N-\frac{1}{N}\vec{1}\vec{1}^T$. 
+%
+%There are two ways to describe equilibrium properties of a flock sharing information over a network.  The first is to write down a set of differential equations with noise to describe how each bird's opinion changes over time and then to analyze the distribution of these opinions after the dynamics have reached equilibrium \cite{Young:2010fk,Young:2013kx}. The second is to write down an explicitly probability distribution of the opinions at equilibrium and to analyze this distribution. With either approach, we consider a vector of opinions $v$ where $v_i$ a a scalar that represents the $i^\text{th}$ bird's opinion about an unspecified behavior, for example where or how fast to fly. Both approaches rely on a network of connections between the birds, which we will describe first. Let $A$ be the adjacency matrix such that 
+%
+%\begin{equation}
+%A_{ij}=\left\{\begin{array}{l l l}
+%1 & \text{ if $i$ pays attention to $j$ }
+%\\0 & \text{ otherwise }
+%\end{array}\right.
+%\end{equation}
+%If $k_i$ is the number of neighbors node $i$ has, then $k_i=\sum_kA_{ik}$. We assume that having more neighbors means paying less attention to each so we normalize $A$ to find $\bar{A}$: $\bar{A}_{ij}=\frac{A_{ij}}{k_i}$.
+%
+%
+%The Laplacian of this matrix is given by $L=\bar{A}-I$, which is symmetric only if $A$ is.  We can symmetrize the interactions by defining $S=\frac{1}{2}(A+A^T)$ and $P$ such that $P_{ij}=S_{ij}$ for $j\neq i$ and $P_{ii}=-\sum_kS_{ik}$. Then $L$ and $P$ share the properties that $L\vec{1}=P\vec{1}=\vec{0}$ and that each is negative semi-definite, with the difference being that $P$ is necessarily symmetric.  It is more common to use $L$ in a dynamics system approach, so that 
+%\begin{equation}
+%\dot{v}_i=\frac{1}{k_i}\sum_i\left(v_j-v_i\right)+\sqrt{k_i}\xi_i
+%\end{equation}
+%\begin{equation}
+%\dot{v}=Lv+D\xi \label{opinion_dynamics}
+%\end{equation} 
+%where $D$ is a diagonal matrix with entires $\{\sqrt{k_i}\}$ and $E[\xi(t)]=\vec{0}$, $E[\xi(t)\xi(s)^T]=\frac{1}{2}\delta(t-s)I$, and $E[v(0)\xi(t)^T]=\vec{0}$. This describes a system in which each bird changes averages the differences between its own opinions and those of its neighbors and changes its opinion to minimize these differences. Our choice of $D$ assumes that birds with more neighbors make noisier estimates of how to change their opinions. 
+%
+%The Boltzmann distribution in statistical physics is a standard way in which to write an equilibrium distribution. In physics, those states with the highest energy are least likely. In our system, those sets of opinions that are least in consensus will be less likely. Specifically, we will use the following expression to represent the ``energy'' of an opinion vector
+%\begin{equation}
+%H(v)=-v^TPv \label{Hamiltonian}
+%\end{equation}
+%and the Boltzmann distribution
+%\begin{equation}
+%P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}H(v)\right) \label{Boltzmann}
+%\end{equation}
+%where $Z=\int_\R^N\exp\left(-\frac{1}{2}H(v)\right)dv$.
+%
+%With the dynamical approach, in the absence of noise, the system would reach consensus with each $v_i=\alpha$ for some $\alpha\in\R$. Similarly, with the statistical physics approach, consensus states with each $v_i=\alpha$ are most likely. However, all consensus values $\alpha$ are equally likely. It is therefore difficult to describe correlations between the bird's opinions at equilibrium. It becomes easier, however, to consider deviations from consensus. If all $v_i$ are equal, then $v=\alpha\vec{1}$. To consider deviations from this consensus state, it is useful to define a matrix $Q\in\R^{N-1}\times\R^N$ such that each row of $Q$ is orthogonal to $\vec{1}$ and the rows are pairwise orthogonal. Young et al. show in \cite{Young:2010fk,Young:2013kx} that this is equivalent to a $Q$ such that $QQ^T=I_{N-1}$ and $Q^TQ=I_N-\frac{1}{N}\vec{1}\vec{1}^T$. To simply consider absolute deviations from the average opinion of the flock, we can define $z=v-\langle v\rangle \vec{1}=Q^TQv$, where $\langle v \rangle =\frac{v_i}{N}$. To consider the component of the opinion vector that is orthogonal to consensus, we can define $y=Qv=Qz$. Let $\Sigma_z=\lim_{t\to\infty}E[zz^T]$ and $\Sigma_y=\lim_{t\to\infty}E[yy^T]$ using the dynamical approach and $C_z=E[zz^T]$ and $C_y=E[yy^T]$ using the statistical physics approach. Since $y=Qz$ and $z=Q^Ty$, in either case, we can translate easily between $\Sigma_z$ and $\Sigma_y$ or between $C_z$ and $C_y$. In the Appendix, we derive equations for each of these covariance matrices and summarize the expression for the $y$ covariance matrices in Table \ref{correspondence}.  The first thing to note is that, if instead of using $L$ we use $P$ in the dynamical approach and all birds have the same number of neighbors, then $C_y=2\Sigma_y$, as shown in Claim \ref{cov_equivalence}. There is therefore a close correspondence between the two approaches.
+%
+%These covariance matrices allow us to define two group properties. The first is $\mathscr{H}_2$ robustness, as used in \cite{Young:2010fk,Young:2013kx}. This is a measure of the robustness of the consensus state in which all birds have the same opinion to noise at equilibrium. Specifically, 
+%\begin{equation}
+%\rho=\frac{1}{\lim_{t\to\infty}E[||y||]}=\frac{1}{\lim_{t\to\infty}\Tr(\Sigma_y)}. \label{H2def}
+%\end{equation}
+%The second property is the correlation length of the flock. This is the distance over which birds' opinions tend to be positively correlated with each other. If we know the distances between the birds and the covariance matrix $C_z$, we can plot the correlations $\{E[z_iz_j]\}$ between each pair of birds' deviations from consensus against the distance between the birds and then identify the correlation length $\lambda$ by finding the distance at which these correlations become $0$.
+%
+%So far, we have considered birds whose opinions only depend on the opinions of the rest of the flock. We can additionally incorporate environmental information by assuming that there is an environmental signal such that more informed birds have opinions closer to $1$. If we let $B$ be a matrix with $B_{ii}=1$ if $i$ can perceive the signal and $0$ otherwise, then the dynamical system becomes
+%\begin{equation}
+%\dot{v}=Lv+B(\vec{1}-v)+D\xi =L_\text{s}v+B\vec{1}+D\xi \label{opinion_dynamics2}
+%\end{equation}
+%where $L_\text{s}=L-B$. Similarly, the statistical physics model becomes
+%\begin{equation}
+%P(v)=\frac{1}{Z}\exp\left(-\frac{1}{2}(v-\vec{1})^T(-P+B)(v-\vec{1})\right)=\frac{1}{Z}\exp\left(\frac{1}{2}(v-\vec{1})^T(-P_\text{s})(v-\vec{1})\right)
+%\end{equation}
+%where $P_\text{s}=P-B$. Again, we can find the covariance matrices $\Sigma_z$, $\Sigma_y$, $C_z$, and $C_y$. As was the case without a signal, if we use $P$ in the dynamical approach and all birds have the same number of neighbors, then we find that $C_y=2\Sigma_y$ (Claim \ref{cov_equivalence}). We define $\rho$ and $\lambda$ as above using the matrices $\Sigma_y$ and $C_z$ in the presence of a signal.
+%
+%
+%  
+
 
 \section{Results }
 
 \subsection{Robustness and correlation length are positively related. }
 In a homogeneous flock, where every bird is using the same strategy, as both the strategy and the radius of the signal change, both $\mathscr{H}_2$ and the correlation length are affected.  Figure \ref{compare_props} shows that both $\mathscr{H}_2$ and correlation length are maximized at intermediate strategies when the radius is low and at low strategies when the radius is high. We prove in the Appendix (Appendix Claim \ref{cov_equivalence}) that if we use a symmetric matrix to calculate $\rho$ and all birds have the same number of neighbors $n$, then the covariance matrices used to calculate $\rho$ and $\lambda$ are identical up to a constant, which suggests that the two properties cannot be optimized independently.
 
-\subsection{The ESS number of neighbors depend on the content of the signal. }
+\subsection{The ESS number of neighbors depends on the content of the signal. }
 
-Those birds that can perceive the environmental signal will always have better information than those that cannot. Selection, therefore, acts to improve a bird's ability to learn about the signal when it cannot perceive it.  In Appendix Claim \ref{exp_approx} we show that an uninformed bird's opinion can be approximated by $\sum_{\text{informed }j}L_{ij}$, that is the total weight given to informed birds.  Being the most well-informed uninformed bird, therefore, amounts to having the highest proportion of informed neighbors and being the least well-informed amounts to having the smallest proportion of informed neighbors. As described above, the hypergeometric distribution is a good approximation for the probability distribution of the number of informed neighbors a bird with strategy $k_i$ will have. As shown in Figure \ref{hypergeo}, under the hypergeometric distribution, having many neighbors makes it unlikely that few of those neighbors will be uninformed, but it also makes it unlikely that all of them will be uninformed (Figure \ref{hypergeo}).  Consequently, a bird with more neighbors will be less likely to be the least informed, but will also be less likely to be the best informed.
+Those birds that can perceive the environmental signal will always have better information than those that cannot. Selection, therefore, acts to improve a bird's ability to learn about the signal when it cannot perceive it.  In Appendix Claim \ref{exp_approx} we show that an uninformed bird's opinion can be approximated by $v_i(1)\approx v(0)+\frac{1}{2}\sum_{\text{informed }j}L_{ij}$.  Being the most well-informed uninformed bird, therefore, amounts to having the highest proportion of informed neighbors and being the least well-informed amounts to having the smallest proportion of informed neighbors. As described above, the hypergeometric distribution is a good approximation for the probability distribution of the number of informed neighbors a bird with strategy $k_i$ will have. As shown in Figure \ref{hypergeo}, under the hypergeometric distribution, having many neighbors makes it unlikely that few of those neighbors will be uninformed, but it also makes it unlikely that all of them will be uninformed (Figure \ref{hypergeo}).  Consequently, a bird with more neighbors will be less likely to be the least informed, but will also be less likely to be the best informed.
 
 These observations explain the ESS number of neighbors we find, which depends on which selection pressure is being applied. Figure \ref{ESS} shows that the ESS number of neighbors when selection is due to access to scarce resources is always $1$. The ESS number of neighbors when selection is due to both access to resources and predation is also always $1$. On the other hand, the ESS number of neighbors when selection is due to predation is always high, although not necessarily as high as possible. There is no ESS when selection is due to access to abundant resources.
 
@@ -176,6 +289,9 @@ Learned strategies when selection is due to predation are high and learned strat
 
 %it is by no means guaranteed that selection acting on individuals' learning abilities will lead them to use strategies that are optimal from the group's perspective, but it is possible.
 
+%caveats: scalar opinion, agnostic to what that opinion refers to in reality, static network as flock responds to environmental signal 
+
+%expect our results to hold for metric neighborhoods as well as topological networks
 \newpage
 \section{Appendix}
 
@@ -187,7 +303,7 @@ Suppose. $v(t)$ satisfies $\dot{v}=Av+f$ with $v(0)=v_0$, where $A$ has no $0$ e
 \begin{equation} \label{diffeq_solution}
 v(t)=V\exp(t\Lambda)V^{-1}v_0+V\Lambda^{-1}(\exp(t\Lambda)-I)V^{-1}f.
 \end{equation}
-We can approximate $v(t)\approx V\exp(t\Lambda)V^{-1}v_0+V(tI+\frac{t^2}{2}A)V^{-1}f$ if the eigenvalues are not too far from $0$. In the case that $A=L_\text{f}$ and $f=B\vec{1}$, this suggests that for $i$ that cannot perceive the signal, $v_i(t)\approx \frac{t^2}{2}\sum_{\text{informed }j }L_{ij}.$ This approximation is reasonable for $i$ such that $B_{ii}=0$, but worse for $i$ such that $B_{ii}\neq 0$. 
+We can approximate $v(t)\approx V\exp(t\Lambda)V^{-1}v_0+V(tI+\frac{t^2}{2}A)V^{-1}f$ if the eigenvalues are not too far from $0$. In the case that $A=L_\text{f}$ and $f=B\vec{1}$, this suggests that for $i$ that cannot perceive the signal,  for small $t$, $v_i(t)\approx v_i(0)+\frac{t^2}{2}\sum_{\text{informed }j }L_{ij}.$ This approximation is reasonable for $i$ such that $B_{ii}=0$, but worse for $i$ such that $B_{ii}\neq 0$. 
 \end{claim}
 
 \begin{pf}
@@ -201,15 +317,17 @@ First we show that (\ref{diffeq_solution}) solves the differential equation. Not
 \\&=AV\exp(t\Lambda)V^{-1}v_0+A\Lambda^{-1}(\exp(t\Lambda)-I)V^{-1}f+f
 \\&=Av(t)+f.
 \end{align*}
-If $g(x)=\frac{1}{x}(\exp(ax)-1)$, then $g(x)\approx a+\frac{a^2}{2}x$ for $x$ close to $0$. Then, if the eigenvalues of $A$ are not too far from $0$, $\Lambda^{-1}(\exp(t\Lambda)-I)\approx  tI+\frac{t^2}{2}\Lambda$.  If $A=L_\text{f}$, then all eigenvalues of $A$ are negative.  If $N_\text{I}$ is the number of informed individuals, i.e. $i$ such that $B_{ii}\neq0$, then there are $N_\text{I}$ eigenvalues of $A$ close to $-2$ such that, if  $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is informed.  The rest of the $N-N_\text{I}$ eigenvalues are between $-2$ and $0$ and, if $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is uninformed. Therefore, the eigenvalue approximation is worst for the informed individuals and best for the uninformed individuals. Using the eigenvalue approximation, $v(t)$ becomes 
+If $g(x)=\frac{1}{x}(\exp(ax)-1)$, then $g(x)\approx a+\frac{a^2}{2}x$ for $x$ close to $0$. Then, if the eigenvalues of $A$ are not too far from $0$, $\Lambda^{-1}(\exp(t\Lambda)-I)\approx  tI+\frac{t^2}{2}\Lambda$.  If $A=L_\text{f}$, then all eigenvalues of $A$ are negative.  If $N_\text{I}$ is the number of informed individuals, i.e. $i$ such that $B_{ii}\neq0$, then there are $N_\text{I}$ eigenvalues of $A$ close to $-2$ such that, if  $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is informed.  The rest of the $N-N_\text{I}$ eigenvalues are between $-2$ and $0$ and, if $k$ is the index of one of these eigenvalues, $V_{ik}$ is large if and only if $i$ is uninformed. 
+%NEEDS SUPPORT
+Therefore, the eigenvalue approximation is worst for the informed individuals and best for the uninformed individuals. Using the eigenvalue approximation, $v(t)$ becomes 
 \begin{align*}
 v(t)=V\exp(t\Lambda)V^{-1}v_0+tVV^{-1}B\vec{1}+\frac{t^2}{2}V\Lambda V^{-1}B\vec{1}=V\exp(t\Lambda)V^{-1}v_0+tB\vec{1}+\frac{t^2}{2}L_\text{f}B\vec{1}
 \end{align*}
-Ignoring the informed individuals and the initial conditions, this gives $v_i(t)\approx \sum_{\text{informed } j}L_{ij}$.
+Assuming $t$ is small, for uninformed individuals, this gives $v_i(t)\approx v_i(0)+ \frac{t^2}{2}\sum_{\text{informed } j}L_{ij}$.
 \end{pf}
 
 \begin{theorem} \label{lyapeq_theorem}
-Given any positive symmetric matrix $Q>0$ there exists a unique positive symmetric ] matrix $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Q$ if and only if the system $\dot{x}=Ax$ is globally asymptotically stable.
+Given any positive symmetric matrix $Q>0$ there exists a unique positive symmetric matrix $\Sigma>0$ satisfyying $A\Sigma+\Sigma A^T=Q$ if and only if the system $\dot{x}=Ax$ is globally asymptotically stable.
 \end{theorem}
 \begin{pf}
 Proof available elsewhere.
@@ -272,7 +390,7 @@ C&=\Sigma-\lim_{t\to\infty}E[y(t)]E[y(t)^T]
 \end{align*}
 \end{pf}
 
-\begin{fact}
+\begin{fact} \label{sum_cov}
 If $V=\sum_iv_i/N$ and $C=\left(E[(v_i-V)(v_j-V)]\right)_{ij}$, then $\sum_{ij}C_{ij}=0$.
 \end{fact}
 \begin{pf}
@@ -294,7 +412,7 @@ In the following sections of the Appendix, transforming an opinion vector $x$ wi
 \subsection{Opinion dynamics with noise }
 In our model, each bird in the flock as an opinion $x_i$, giving an opinion vector $x$. The $\mathscr{H}_2$ robustness of the opinion dynamics is defined by the inverse of the expected distance at equilibrium from the opinion vector to a consensus state in which all birds have the same opinion, i.e. $x_i=\alpha$ for all $i$ and for some $\alpha\in\R$. That is, the dynamics are robust if, at equilibrium, the opinions are close to being in consensus. We can find this distance by rotating the opinion vector into the space orthogonal to the consensus vector, $\vec{1}$.  If $y=Qx$, then $||y||=y^Ty$ describes how far away from consensus $x$ is. Specifically, robustness as in \cite{Young:2010fk} is given by 
 \begin{equation}
-r=\lim_{t\to\infty}\frac{1}{E[||y||]}=\lim_{t\to\infty}\frac{1}{\Tr E[yy^T]}. \label{H2_robustness}
+\rho=\lim_{t\to\infty}\frac{1}{E[||y||]}=\lim_{t\to\infty}\frac{1}{\Tr E[yy^T]}. \label{H2_robustness}
 \end{equation}
 We also define a full rotation matrix $R\in\R^N\times\R^N$ such that $R=\left(\begin{array}{cc} Q \\ \frac{1}{\sqrt{N}}\vec{1}^T \end{array}\right)$.
 
@@ -454,7 +572,8 @@ A similar proof shows the equivalence of the two covariance matrices in the pres
 
 \newpage
 %\nocite{*}
-\bibliographystyle{plain}
+%\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{info_evo}
 
 \newpage
